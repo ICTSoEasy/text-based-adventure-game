@@ -1,0 +1,21 @@
+trigger_verb,trigger_item,trigger_room,condition_item,condition_not_item,condition_room_item,effect_type,effect_target,effect_value,message,delay,once
+USE,HAMMER,9,,,, PRINT_MSG,,,You bash away at the wall with your hammer,2,True
+USE,HAMMER,9,,,,ADD_EXIT,9,NORTH:8,The wall comes down!,0,True
+USE,HAMMER,9,,,,ADD_EXIT,8,SOUTH:9,,0,True
+USE,HAMMER,9,,,,SET_ROOM_DESC,9,"The port midships is the port side of the middle of the ship. The foremast and mainast stretch way, way, way above you. A rough hole has been bashed in the North wall.",,0,True
+USE,HAMMER,9,,,,SET_ROOM_DESC,8,"The starboard midships is the starboard side of the middle of the ship, smack between the main mast and the foremast. Just ripe for anything falling from the masts to land on your noggin. A rough hole has been bashed in the South wall.",,0,True
+USE,KNIFE,,,,SACKS,PRINT_MSG,,,The sacks disintegrate into scraps. There was nothing in them after all!,0,True
+USE,KNIFE,,,,SACKS,SET_ITEM_SHORT_DESC,SACKS,scraps,,0,True
+USE,KNIFE,,,,SACKS,SET_ITEM_LONG_DESC,SACKS,scraps of cloth that may once have been sacks.,,0,True
+MOVE,,23,,,,PRINT_MSG,,,In fact... it is *really* slippy here!,2,False
+MOVE,,23,,,,PRINT_MSG,,,A bit ... tooo.... slippppppyyy......,2,False
+MOVE,,23,,,,PRINT_MSG,,,SPLASH!,2,False
+MOVE,,23,,,,PRINT_MSG,,,What is that triangle in the water?,2,False
+MOVE,,23,,,,PRINT_MSG,,,CHOMP!!,2,False
+MOVE,,23,,,,LOSE,,,,0,False
+MOVE,,1,COIN,,,PRINT_MSG,,,You ponder,2,False
+MOVE,,1,COIN,,,PRINT_MSG,,,You reach into your pocket and pull out the golden coin.,2,False
+MOVE,,1,COIN,,,PRINT_MSG,,,You flick the coin in the air and... WHIZZZZZZ!,2,False
+MOVE,,1,COIN,,,PRINT_MSG,,,"You find yourself teleported to the nicest of pirate islands, surrounded by gold and rum and ... gold...",2,False
+MOVE,,1,COIN,,,WIN,,,YOU WIN! Well done :),0,False
+MOVE,,1,,COIN,,PRINT_MSG,,,"This feels like a really opportune kind of place. You're just sure that with a little money in your pocket you could really make something of yourself from here.",0,False

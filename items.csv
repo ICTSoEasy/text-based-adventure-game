@@ -1,0 +1,7 @@
+id,short_desc,long_desc,gettable,room_id
+1,hammer,"It's got a wooden handle and a heavy bit on the end. It's heavy enough to smash a wall down, or break your toe if you're not careful!",True,15
+2,anvil,"A huge piece of iron the sailors use when mending chain. Probably too big to move - it's a miracle the ship is still afloat really!",False,15
+3,belaying-pin,"A bit of wood for belaying ropes. Can you see any ropes that need belaying?",True,15
+4,knife,"A really sharp knife, the kind sailors hold between their teeth when swinging from ropes to help them go OOOoooarrrrr properly.",True,5
+5,sacks,"Bulging sacks. How interesting - I wonder what is in them...",False,12
+6,coin,"A lovely blingy gold coin! With this in your pocket and the right opportunity you just feel sure you could get off this boat!",True,9

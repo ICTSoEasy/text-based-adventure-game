@@ -44,7 +44,14 @@ class Room:
 
     #This allows us to add a new exit direction which points to the ID of whatever room we wish
     def addExit(self,exitDirection,exitID):
+        if self.exits is None:
+            self.exits = {}
         self.exits.update({exitDirection:exitID})
+
+    #This allows us to remove an exit direction
+    def removeExit(self,exitDirection):
+        if exitDirection in self.exits:
+            del self.exits[exitDirection]
 
     #This will give us a list of things the room contains
     def getContains(self):

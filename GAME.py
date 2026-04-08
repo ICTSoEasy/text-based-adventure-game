@@ -11,6 +11,7 @@ class Game:
         self.items = {} #empty list
         self.status = False #not in play
         self.player = None #No player until we add them
+        self.puzzles = None #Puzzle engine, set up in CREATE
 
     #This will tell us whether we are in play or not
     def getPlayStatus(self):
@@ -48,6 +49,19 @@ class Game:
     #This will take an id, and return the room object with that id
     def getRoom(self,id):
         return self.rooms[id]
+
+    #Find an item by name (uppercase) across all rooms and player inventory
+    def findItem(self, name):
+        name = name.upper()
+        for room in self.rooms.values():
+            item = room.ifContains(name)
+            if item:
+                return item
+        if self.player:
+            item = self.player.hasItem(name)
+            if item:
+                return item
+        return None
 
     #A 'tick' is a round of the game. The game does any
     #house keeping it may need and then gives the player
