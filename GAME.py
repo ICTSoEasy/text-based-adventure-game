@@ -2,13 +2,15 @@
 class Game:
     #Initiaslisation happens when you take this description and make it into
     #an object.
-    # - self - all class definitions need this so that it can look at it's own properties & methods
+    # - self - all class definitions need this so that it can look at
+    #   it's own properties & methods
     # - rooms will be the dictionary of rooms - these will start as empty
     # - items will be the dictionary of items not held in a room - these will start as empty
     def __init__(self):
         self.rooms = {} #empty list
         self.items = {} #empty list
         self.status = False #not in play
+        self.player = None #No player until we add them
 
     #This will tell us whether we are in play or not
     def getPlayStatus(self):
@@ -19,16 +21,8 @@ class Game:
         self.status = not self.status
 
     #This will add an object to the items dictionary
-    def addItem(self,item):
-        pass
-
-    #This will move an item to a room from the holding list
-    def moveItemToRoom(self,itemId,roomId):
-        pass
-
-    #This will move an item from a room to the holding list
-    def moveItemToRoom(self,itemId,roomId):
-        pass
+    def addItem(self,room,item):
+        self.rooms[room].putIn(item)
 
     #This will add a room to the rooms list
     #It stores it under it's own ID for ease of access
@@ -47,3 +41,17 @@ class Game:
     def addRoomLongDescription(self,room,desc):
         self.rooms[room].setLongDesc(desc)
 
+    #This will add the player to the game
+    def addPlayer(self,player):
+        self.player = player
+
+    #This will take an id, and return the room object with that id
+    def getRoom(self,id):
+        return self.rooms[id]
+
+    #A 'tick' is a round of the game. The game does any
+    #house keeping it may need and then gives the player
+    #an opportunity to do it's thing.
+    def tick(self):
+        print('tick')
+        self.player.getCommand()

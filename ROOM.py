@@ -2,13 +2,14 @@
 class Room:
     #Initiiaslisation happens when you take this description and make it into
     #an object.
-    # - self - all class definitions need this so that it can look at it's own properties & methods
+    # - self - all class definitions need this so that it can look at
+    #   it's own properties & methods
     # - id - we will give it a number to identify itt by
     # - shortDesc will be the 'name' of the room
     # - exits will be a list of exits from the room
     # - contains will be a list of the things contained in the room
     # - longDesc will be the longer description which we will only see if we actually look around.
-    #   as this is not strictly neccesary, we start it as nothing and then set it later if we
+    #   as this is not strictly necessary, we start it as nothing and then set it later if we
     #   so wish.
     def __init__(self, id, shortDesc, exits, contains):
         self.id = id
@@ -20,7 +21,6 @@ class Room:
     #This will look at itself and give us back the ID
     def getId(self):
         return self.id #just give back whatever the ID is
-
 
     #This will look at itself and give us back the short description
     def getShortDesc(self):
@@ -40,33 +40,28 @@ class Room:
 
     #This give us a list of exits
     def getExits(self):
-        pass
-
-    #This allows us to test if exit exists in our list of known exits
-    def checkExitExists(self,exit):
-        pass
+        return self.exits
 
     #This allows us to add a new exit direction which points to the ID of whatever room we wish
     def addExit(self,exitDirection,exitID):
-        pass
-
-    #This allows us to remove an exit
-    def removeExit(self,exitDirection):
-        pass
+        self.exits.update({exitDirection:exitID})
 
     #This will give us a list of things the room contains
     def getContains(self):
-        pass
+        return self.contains
 
     #This will let us test if a particular item is in the room
-    def ifContains(self,contains):
-        pass
+    def ifContains(self,lookingFor):
+        items = self.getContains()
+        for item in items:
+            if item.getShortDesc().upper() == lookingFor:
+                return item
+        return None
 
-    #This lets us rmove an item from the room
+    #This lets us remove an item from the room
     def remove(self,item):
-        pass
+        self.contains.remove(item)
 
     #This lets us put an item in to the room
     def putIn(self,item):
-        pass
-
+        self.contains.append(item)
