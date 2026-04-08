@@ -68,22 +68,27 @@
 
     .csv-table {
       font-family: 'Courier New', monospace;
-      font-size: 0.6em;
+      font-size: 0.52em;
       border-collapse: collapse;
       width: 100%;
       color: #ccc;
+      table-layout: fixed;
     }
     .csv-table th {
       background: #2a2a3a;
       color: var(--amber);
-      padding: 4px 8px;
+      padding: 3px 6px;
       border: 1px solid #444;
+      word-break: break-word;
+      font-size: 0.9em;
     }
     .csv-table td {
-      padding: 4px 8px;
+      padding: 3px 6px;
       border: 1px solid #333;
+      word-break: break-word;
     }
     .csv-table tr:nth-child(even) td { background: #1a1a2a; }
+    .csv-table .dim { color: #555; font-style: italic; }
 
     .big-cmd {
       font-family: 'Courier New', monospace;
@@ -135,6 +140,14 @@
       flex-direction: column;
       justify-content: center;
     }
+
+    /* Prevent content overflow */
+    .reveal .slides section {
+      overflow: hidden;
+    }
+    .reveal p { margin: 0.4em 0; }
+    .reveal h2 { margin-bottom: 0.3em; font-size: 1.4em; }
+    .reveal h3 { margin-bottom: 0.3em; font-size: 1.1em; }
   </style>
 </head>
 <body>
@@ -491,22 +504,42 @@
     <section>
       <h3>How puzzles work</h3>
       <p>Each row is one <strong>effect</strong>. A puzzle can have multiple rows.</p>
-      <p style="font-size:0.8em; color:var(--dim);">trigger → conditions → effect</p>
-      <br>
-      <div class="two-col" style="font-size:0.8em;">
+      <p style="font-size:0.75em; color:var(--dim);">trigger → conditions → effect</p>
+      <div class="two-col" style="font-size:0.78em; margin-top: 0.3em;">
         <div>
           <p><strong>Triggers</strong></p>
-          <p><span class="tag">USE item</span><br><span class="tag">MOVE to room</span><br><span class="tag">GET item</span><br><span class="tag">DROP item</span></p>
+          <p>
+            <span class="tag">USE item</span>
+            <span class="tag">MOVE to room</span>
+            <span class="tag">GET item</span>
+            <span class="tag">DROP item</span>
+          </p>
+          <br>
+          <p><strong>Conditions</strong></p>
+          <p style="font-size:0.85em; color:#ccc;">
+            <code>condition_item</code> — must be carrying<br>
+            <code>condition_not_item</code> — must not carry<br>
+            <code>condition_room_item</code> — item in room
+          </p>
         </div>
         <div>
           <p><strong>Effects</strong></p>
           <p>
             <span class="tag orange">ADD_EXIT</span>
-            <span class="tag orange">REMOVE_EXIT</span><br>
-            <span class="tag orange">SET_ROOM_DESC</span><br>
-            <span class="tag orange">WIN</span>
-            <span class="tag orange">LOSE</span><br>
+            <span class="tag orange">REMOVE_EXIT</span>
+            <span class="tag orange">SET_ROOM_DESC</span>
+            <span class="tag orange">SET_ITEM_SHORT_DESC</span>
+            <span class="tag orange">SET_ITEM_LONG_DESC</span>
             <span class="tag orange">PRINT_MSG</span>
+            <span class="tag orange">WIN</span>
+            <span class="tag orange">LOSE</span>
+          </p>
+          <br>
+          <p><strong>Options</strong></p>
+          <p style="font-size:0.85em; color:#ccc;">
+            <code>message</code> — text to print<br>
+            <code>delay</code> — pause in seconds<br>
+            <code>once</code> — True / False
           </p>
         </div>
       </div>
@@ -514,71 +547,122 @@
 
     <section>
       <h3>Puzzle: unlock a door</h3>
-      <p style="font-size:0.75em; color:var(--dim);">USE KEY in room 3 → adds exit NORTH to room 4</p>
+      <p style="font-size:0.72em; color:var(--dim);">USE KEY in room 3 → print message, add exit NORTH to room 4</p>
       <table class="csv-table">
+        <colgroup>
+          <col style="width:12%"><col style="width:10%"><col style="width:12%">
+          <col style="width:16%"><col style="width:12%"><col style="width:16%">
+          <col style="width:8%"><col style="width:7%">
+        </colgroup>
         <tr>
           <th>trigger_verb</th><th>trigger_item</th><th>trigger_room</th>
-          <th>condition_item</th><th>condition_not_item</th><th>condition_room_item</th>
           <th>effect_type</th><th>effect_target</th><th>effect_value</th>
-          <th>message</th><th>delay</th><th>once</th>
+          <th>message</th><th>once</th>
         </tr>
         <tr>
           <td>USE</td><td>KEY</td><td>3</td>
-          <td></td><td></td><td></td>
-          <td>PRINT_MSG</td><td></td><td></td>
-          <td>The lock clicks open!</td><td>0</td><td>True</td>
+          <td>PRINT_MSG</td><td class="dim">—</td><td class="dim">—</td>
+          <td>The lock clicks open!</td><td>True</td>
         </tr>
         <tr>
           <td>USE</td><td>KEY</td><td>3</td>
-          <td></td><td></td><td></td>
           <td>ADD_EXIT</td><td>3</td><td>NORTH:4</td>
-          <td></td><td>0</td><td>True</td>
+          <td class="dim">—</td><td>True</td>
         </tr>
       </table>
       <br>
-      <div class="tip"><code>once: True</code> means the puzzle only fires once — the wall stays broken, the door stays open.</div>
+      <div class="tip"><code>once: True</code> — fires once only. The door stays open. The wall stays broken.</div>
     </section>
 
     <section>
       <h3>Puzzle: win condition</h3>
-      <p style="font-size:0.75em; color:var(--dim);">MOVE to room 8 while carrying the gem → WIN</p>
+      <p style="font-size:0.72em; color:var(--dim);">MOVE to room 8 while carrying the gem → WIN</p>
       <table class="csv-table">
+        <colgroup>
+          <col style="width:14%"><col style="width:14%">
+          <col style="width:16%"><col style="width:14%">
+          <col style="width:30%"><col style="width:12%">
+        </colgroup>
         <tr>
-          <th>trigger_verb</th><th>trigger_item</th><th>trigger_room</th>
-          <th>condition_item</th><th>condition_not_item</th><th>condition_room_item</th>
-          <th>effect_type</th><th>effect_target</th><th>effect_value</th>
-          <th>message</th><th>delay</th><th>once</th>
+          <th>trigger_verb</th><th>trigger_room</th>
+          <th>condition_item</th><th>effect_type</th>
+          <th>message</th><th>once</th>
         </tr>
         <tr>
-          <td>MOVE</td><td></td><td>8</td>
-          <td>GEM</td><td></td><td></td>
-          <td>WIN</td><td></td><td></td>
-          <td>You win! 🎉</td><td>0</td><td>False</td>
+          <td>MOVE</td><td>8</td>
+          <td>GEM</td><td>WIN</td>
+          <td>You escaped! You win! 🎉</td><td>False</td>
         </tr>
       </table>
       <br>
-      <div class="tip"><code>condition_item</code> = player must be carrying this item for the effect to fire.</div>
+      <div class="tip"><code>condition_item</code> — player must be <strong>carrying</strong> this for the effect to fire.</div>
+      <br>
+      <div class="tip"><code>condition_not_item</code> — fires only if player is <strong>not</strong> carrying this.</div>
     </section>
 
     <section>
       <h3>Puzzle: instant death</h3>
-      <p style="font-size:0.75em; color:var(--dim);">MOVE to room 5 → dramatic message → LOSE</p>
+      <p style="font-size:0.72em; color:var(--dim);">MOVE to room 5 → dramatic pause → LOSE</p>
       <table class="csv-table">
+        <colgroup>
+          <col style="width:15%"><col style="width:12%">
+          <col style="width:14%"><col style="width:38%">
+          <col style="width:9%"><col style="width:12%">
+        </colgroup>
         <tr>
           <th>trigger_verb</th><th>trigger_room</th>
-          <th>effect_type</th><th>message</th><th>delay</th><th>once</th>
+          <th>effect_type</th><th>message</th>
+          <th>delay</th><th>once</th>
         </tr>
         <tr>
           <td>MOVE</td><td>5</td>
-          <td>PRINT_MSG</td><td>The floor gives way!</td><td>2</td><td>False</td>
+          <td>PRINT_MSG</td><td>The floor gives way beneath you...</td>
+          <td>2</td><td>False</td>
         </tr>
         <tr>
           <td>MOVE</td><td>5</td>
-          <td>LOSE</td><td></td><td>0</td><td>False</td>
+          <td>LOSE</td><td class="dim">—</td>
+          <td>0</td><td>False</td>
         </tr>
       </table>
       <br>
+      <div class="tip"><code>delay</code> — pause in seconds before the next effect. Great for drama.</div>
+      <br>
       <div class="activity">Add at least one puzzle: a win condition, a locked exit, or a death trap. (15 mins)</div>
+    </section>
+
+    <section>
+      <h3>Puzzle: transform an item</h3>
+      <p style="font-size:0.72em; color:var(--dim);">USE KNIFE in a room containing SACKS → change the item's description</p>
+      <table class="csv-table">
+        <colgroup>
+          <col style="width:12%"><col style="width:12%">
+          <col style="width:18%"><col style="width:20%">
+          <col style="width:12%"><col style="width:26%">
+        </colgroup>
+        <tr>
+          <th>trigger_verb</th><th>trigger_item</th>
+          <th>condition_room_item</th><th>effect_type</th>
+          <th>effect_target</th><th>effect_value / message</th>
+        </tr>
+        <tr>
+          <td>USE</td><td>KNIFE</td>
+          <td>SACKS</td><td>PRINT_MSG</td>
+          <td class="dim">—</td><td>The sacks fall apart!</td>
+        </tr>
+        <tr>
+          <td>USE</td><td>KNIFE</td>
+          <td>SACKS</td><td>SET_ITEM_SHORT_DESC</td>
+          <td>SACKS</td><td>scraps</td>
+        </tr>
+        <tr>
+          <td>USE</td><td>KNIFE</td>
+          <td>SACKS</td><td>SET_ITEM_LONG_DESC</td>
+          <td>SACKS</td><td>Scraps of old cloth.</td>
+        </tr>
+      </table>
+      <br>
+      <div class="tip"><code>condition_room_item</code> — this item must be <strong>in the room</strong> for the effect to fire.</div>
     </section>
   </section>
 
@@ -692,6 +776,9 @@
     slideNumber: true,
     transition: 'fade',
     transitionSpeed: 'fast',
+    width: 1100,
+    height: 700,
+    margin: 0.04,
     plugins: []
   });
 </script>
