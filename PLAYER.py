@@ -119,7 +119,8 @@ class Player:
             print(f'Something went wrong: {e}')
 
     def getCommand(self):
-        command = input('What do you want to do? ').upper()
+        prompt = self.game.settings.get('input_prompt', 'What do you want to do? ')
+        command = input(prompt).upper()
         commands = command.split(' ')
         while True:
             if len(commands) == 1:

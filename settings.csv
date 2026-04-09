@@ -4,3 +4,4 @@ starting_room,1,Room number where the player starts
 show_exits,false,Show available exits when looking at a room
 typewriter_speed,0.02,Typewriter effect speed in seconds per character (0 = off)
 debug,false,Show loading messages and tick counter; always shows exits
+input_prompt,,Prompt shown before each command input (blank for none)

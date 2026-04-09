@@ -1,7 +1,14 @@
 import csv
+import re
 from ROOM import Room
 from THING import Thing
 from PUZZLES import PuzzleEngine
+
+def _process_message(text):
+    """Process escape sequences and magic commands in message text."""
+    text = text.replace('\\n', '\n').replace('\\t', '\t')
+    text = re.sub(r'\{sp:(\d+)\}', lambda m: ' ' * int(m.group(1)), text)
+    return text
 
 def _coerce(value):
     """Convert a CSV string value to bool, int, float, or str."""
@@ -22,7 +29,7 @@ def Create(game):
 
     with open('messages.csv', newline='', encoding='utf-8') as f:
         reader = csv.DictReader(f)
-        game.messages = {row['id']: row['text'].replace('\\n', '\n') for row in reader}
+        game.messages = {row['id']: _process_message(row['text']) for row in reader}
     if debug: print('Loaded messages')
 
     if debug: print('Loading rooms...')
