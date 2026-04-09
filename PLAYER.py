@@ -114,7 +114,7 @@ class Player:
             module = importlib.import_module(f'commands.{verb.lower()}')
             module.execute(self, noun)
         except ModuleNotFoundError:
-            print('Unknown command. Type HELP for help.')
+            print(self.game.messages.get('unknown_command', 'Unknown command.'))
         except Exception as e:
             print(f'Something went wrong: {e}')
 
