@@ -67,5 +67,6 @@ class Game:
     #house keeping it may need and then gives the player
     #an opportunity to do it's thing.
     def tick(self):
-        print('tick')
+        if getattr(self, 'settings', {}).get('debug', False):
+            print(f'[tick]')
         self.player.getCommand()

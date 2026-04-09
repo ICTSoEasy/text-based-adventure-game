@@ -39,7 +39,7 @@ class Player:
         print(room.getLongDesc())
         for thing in room.getContains():
             print('A', thing.getShortDesc(), 'is here.')
-        if self.game.settings.get('show_exits', True):
+        if self.game.settings.get('show_exits', True) or self.game.settings.get('debug', False):
             exits = room.getExits()
             keys = ', '.join(exits.keys()) if exits else 'None!'
             print('Exits:', keys)

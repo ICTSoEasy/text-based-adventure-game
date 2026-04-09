@@ -23,6 +23,9 @@ def run(stdscr):
     player.setGame(game)
     game.addPlayer(player)
 
+    if 'welcome' in game.messages:
+        print(game.messages['welcome'])
+
     game.flipPlayStatus()
     while game.getPlayStatus():
         game.tick()
