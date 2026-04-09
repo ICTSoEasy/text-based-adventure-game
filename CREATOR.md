@@ -139,6 +139,7 @@ The puzzle engine connects player actions to game events. Each row is one effect
 |--------|--------|-------|-------------|
 | `PRINT_MSG` | *(blank)* | *(blank)* | Display the `message` column text |
 | `SHOW_MESSAGE` | message id | *(blank)* | Display a named message from `messages.csv` |
+| `TELEPORT` | *(blank)* | room id | Move the player to a room and show its description |
 | `ADD_EXIT` | room id | `DIRECTION:room_id` | Add an exit to a room |
 | `REMOVE_EXIT` | room id | `DIRECTION` | Remove an exit from a room |
 | `SET_ROOM_DESC` | room id | new description | Change a room's long description |

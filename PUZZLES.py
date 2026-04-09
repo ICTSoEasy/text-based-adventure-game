@@ -109,6 +109,10 @@ class PuzzleEngine:
             if item:
                 item.setShortDesc(value)
 
+        elif effect == 'TELEPORT':
+            player.setRoom(int(value))
+            player.look()
+
         elif effect == 'SET_ITEM_LONG_DESC':
             item = self.game.findItem(target.upper())
             if item:
