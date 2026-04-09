@@ -1,4 +1,5 @@
 import importlib
+import importlib.util
 import random
 
 class Player:
@@ -110,13 +111,15 @@ class Player:
             print('- Nothing!')
 
     def doCommand(self, verb, noun):
-        try:
-            module = importlib.import_module(f'commands.{verb.lower()}')
-            module.execute(self, noun)
-        except ModuleNotFoundError:
-            print(self.game.messages.get('unknown_command', 'Unknown command. Type HELP for help.'))
-        except Exception as e:
-            print(f'Something went wrong: {e}')
+        for name in [f'commands.{verb.lower()}', f'commands._{verb.lower()}']:
+            if importlib.util.find_spec(name):
+                try:
+                    module = importlib.import_module(name)
+                    module.execute(self, noun)
+                except Exception as e:
+                    print(f'Something went wrong: {e}')
+                return
+        print(self.game.messages.get('unknown_command', 'Unknown command. Type HELP for help.'))
 
     def getCommand(self):
         prompt = self.game.settings.get('input_prompt', 'What do you want to do? ')
