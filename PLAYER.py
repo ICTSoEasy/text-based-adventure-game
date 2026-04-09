@@ -111,7 +111,12 @@ class Player:
             print('- Nothing!')
 
     def doCommand(self, verb, noun):
-        for name in [f'commands.{verb.lower()}', f'commands._{verb.lower()}']:
+        # - prefix means developer command: -cheat → commands._cheat
+        if verb.startswith('-'):
+            candidates = [f'commands._{verb[1:].lower()}']
+        else:
+            candidates = [f'commands.{verb.lower()}', f'commands._{verb.lower()}']
+        for name in candidates:
             if importlib.util.find_spec(name):
                 try:
                     module = importlib.import_module(name)

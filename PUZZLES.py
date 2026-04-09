@@ -114,6 +114,10 @@ class PuzzleEngine:
             if item:
                 item.setLongDesc(value)
 
+        elif effect == 'TELEPORT':
+            player.setRoom(int(value))
+            player.look()
+
         elif effect == 'SHOW_MESSAGE':
             msg = self.game.messages.get(target)
             if msg:
