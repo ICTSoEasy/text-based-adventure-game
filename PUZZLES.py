@@ -114,6 +114,13 @@ class PuzzleEngine:
             if item:
                 item.setLongDesc(value)
 
+        elif effect == 'SHOW_MESSAGE':
+            msg = self.game.messages.get(target)
+            if msg:
+                print(msg)
+            else:
+                print(f'[Message not found: {target}]')
+
         elif effect == 'WIN':
             player.game.flipPlayStatus()
 

@@ -1,8 +1,6 @@
 DESCRIPTION = 'YES - affirmative response'
 
 def execute(player, noun):
-    msg = player.game.messages.get('instructions')
-    if msg:
-        print(msg)
-    else:
+    if not player.game.puzzles.trigger(player, 'YES', None, player.getRoom()):
         print('OK.')
+
