@@ -19,4 +19,15 @@ MOVE,,1,COIN,,,PRINT_MSG,,,You flick the coin in the air and... WHIZZZZZZ!,2,FAL
 MOVE,,1,COIN,,,PRINT_MSG,,,"You find yourself teleported to the nicest of pirate islands, surrounded by gold and rum and ... gold...",2,FALSE
 MOVE,,1,COIN,,,WIN,,,YOU WIN! Well done :),0,FALSE
 MOVE,,1,,COIN,,PRINT_MSG,,,This feels like a really opportune kind of place. You're just sure that with a little money in your pocket you could really make something of yourself from here.,0,FALSE
-YES,,1,,,,SHOW_MESSAGE,instructions,,,0,FALSE
+YES,,1,,,,SHOW_MESSAGE,instructions,,,0,FALSEHILL,,1,,,,TELEPORT,,2,,0,false
+HILL,,2,,,,TELEPORT,,1,,0,false
+ROAD,,1,,,,TELEPORT,,2,,0,false
+ROAD,,2,,,,TELEPORT,,1,,0,false
+VALLEY,,1,,,,TELEPORT,,4,,0,false
+VALLEY,,4,,,,TELEPORT,,1,,0,false
+BUILDING,,1,,,,TELEPORT,,3,,0,false
+FOREST,,1,,,,TELEPORT,,5,,0,false
+FOREST,,2,,,,TELEPORT,,5,,0,false
+GULLY,,1,,,,TELEPORT,,8,,0,false
+GULLY,,4,,,,TELEPORT,,7,,0,false
+STREAM,,4,,,,TELEPORT,,7,,0,false

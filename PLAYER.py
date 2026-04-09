@@ -111,7 +111,14 @@ class Player:
             print('- Nothing!')
 
     def doCommand(self, verb, noun):
-        for name in [f'commands.{verb.lower()}', f'commands._{verb.lower()}']:
+        v = verb.lower()
+        candidates = [
+            f'commands.{v}',
+            f'commands.game.{v}',
+            f'commands.aliases.{v}',
+            f'commands.hidden.{v}',
+        ]
+        for name in candidates:
             if importlib.util.find_spec(name):
                 try:
                     module = importlib.import_module(name)
