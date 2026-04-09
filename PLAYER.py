@@ -111,7 +111,8 @@ class Player:
             print('- Nothing!')
 
     def doCommand(self, verb, noun):
-        v = verb.lower()
+        # Remap Python keywords that can't be module names
+        v = {'in': 'enter', 'return': 'back'}.get(verb.lower(), verb.lower())
         candidates = [
             f'commands.{v}',
             f'commands.game.{v}',
