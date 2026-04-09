@@ -1,0 +1,5 @@
+setting,value,description
+game_name,Colossal Cave Adventure,Name of the game shown at startup
+starting_room,1,Room number where the player starts
+show_exits,false,Show available exits when looking at a room
+typewriter_speed,0.02,Typewriter effect speed in seconds per character (0 = off)

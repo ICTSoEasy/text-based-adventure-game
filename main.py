@@ -16,8 +16,10 @@ def run(stdscr):
     game = Game()
     Create(game)
 
+    terminal.typewriter_speed = game.settings.get('typewriter_speed', 0.02)
+
     player = Player()
-    player.setRoom(15)
+    player.setRoom(game.settings.get('starting_room', 1))
     player.setGame(game)
     game.addPlayer(player)
 

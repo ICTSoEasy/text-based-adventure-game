@@ -3,8 +3,21 @@ from ROOM import Room
 from THING import Thing
 from PUZZLES import PuzzleEngine
 
+def _coerce(value):
+    """Convert a CSV string value to bool, int, float, or str."""
+    if value.lower() == 'true':  return True
+    if value.lower() == 'false': return False
+    try: return int(value)
+    except ValueError: pass
+    try: return float(value)
+    except ValueError: pass
+    return value
+
 def Create(game):
-    print('Adding rooms')
+    with open('settings.csv', newline='', encoding='utf-8') as f:
+        reader = csv.DictReader(f)
+        game.settings = {row['setting']: _coerce(row['value']) for row in reader}
+
     with open('rooms.csv', newline='', encoding='utf-8') as f:
         reader = csv.DictReader(f)
         for row in reader:
@@ -19,7 +32,6 @@ def Create(game):
             game.addRoom(Room(int(row['id']), row['short_desc'], exits, []))
             game.addRoomLongDescription(int(row['id']), row['long_desc'])
 
-    print('Adding items')
     with open('items.csv', newline='', encoding='utf-8') as f:
         reader = csv.DictReader(f)
         for row in reader:
@@ -27,7 +39,6 @@ def Create(game):
             thing = Thing(int(row['id']), row['short_desc'], row['long_desc'], gettable)
             game.addItem(int(row['room_id']), thing)
 
-    print('Loading puzzles')
     puzzles = PuzzleEngine(game)
     puzzles.load('puzzles.csv')
     game.puzzles = puzzles
