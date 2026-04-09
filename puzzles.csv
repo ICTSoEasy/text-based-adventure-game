@@ -20,13 +20,3 @@ MOVE,,1,COIN,,,PRINT_MSG,,,"You find yourself teleported to the nicest of pirate
 MOVE,,1,COIN,,,WIN,,,YOU WIN! Well done :),0,FALSE
 MOVE,,1,,COIN,,PRINT_MSG,,,This feels like a really opportune kind of place. You're just sure that with a little money in your pocket you could really make something of yourself from here.,0,FALSE
 YES,,1,,,,SHOW_MESSAGE,instructions,,,0,FALSE
-NO,,1,,,,SHOW_MESSAGE,no_instructions,,,0,FALSEXYZZY,,3,,,,PRINT_MSG,,,>>Fweep!<<,0,false
-XYZZY,,3,,,,TELEPORT,,11,,0,false
-XYZZY,,11,,,,PRINT_MSG,,,>>Fweep!<<,0,false
-XYZZY,,11,,,,TELEPORT,,3,,0,false
-PLUGH,,3,,,,PRINT_MSG,,,A hollow voice says "PLUGH".,0,false
-PLUGH,,3,,,,TELEPORT,,33,,0,false
-PLUGH,,33,,,,PRINT_MSG,,,A hollow voice says "PLUGH".,0,false
-PLUGH,,33,,,,TELEPORT,,3,,0,false
-PLOVER,,100,,,,TELEPORT,,92,,0,false
-PLOVER,,92,,,,TELEPORT,,100,,0,false
