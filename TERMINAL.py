@@ -124,7 +124,7 @@ class Terminal:
         result = raw.decode('utf-8', errors='replace')
 
         try:
-            self.text_win.addstr(f'\n> {result}\n\n', curses.color_pair(1))
+            self.text_win.addstr(f'\n\n> {result}\n\n', curses.color_pair(1))
         except curses.error:
             pass
         self.text_win.refresh()
