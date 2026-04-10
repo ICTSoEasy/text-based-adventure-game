@@ -130,12 +130,16 @@ The puzzle engine connects player actions to game events. Each row is one effect
 | `condition_not_item` | Player must NOT be carrying this item |
 | `condition_room_item` | This item must be present in the current room |
 | `condition_item_state` | `item_name:state` — named item must be in this state (e.g. `grate:0`). Blank = any state |
+| `condition_item_turns_eq` | `item_name:value` — named item's turns remaining must equal value (e.g. `lamp:50`). Fires on exactly that turn. Blank = no check |
+| `condition_location_dark` | `true` = only fire when the player's location is dark; `false` = only fire when lit. Blank = either |
+| `condition_counter_gte` | `counter_name:value` — named counter must be ≥ value (e.g. `dark_moves:2`). Blank = no check |
 | `effect_type` | What happens (see below) |
 | `effect_target` | What the effect acts on |
 | `effect_value` | Value for the effect |
 | `message` | Text to display when this fires |
 | `delay` | Seconds to pause before this effect (for dramatic timing) |
 | `once` | `true` = fire only once ever; `false` = fire every time |
+| `chance_pct` | Integer 1–100. If set, the row only fires that percentage of the time (e.g. `35` = 35% chance). Blank = always fires |
 
 ### Effect Types
 
@@ -151,6 +155,8 @@ The puzzle engine connects player actions to game events. Each row is one effect
 | `SET_ITEM_STATE` | item name | state number | Set the state of all items with that name (controls which `room_desc` is shown) |
 | `SET_ITEM_SHORT_DESC` | item name | new short desc | Change an item's short (command) name |
 | `SET_ITEM_LONG_DESC` | item name | new long desc | Change an item's description |
+| `INCREMENT_COUNTER` | counter name | *(blank)* | Add 1 to a named counter (created at 0 if it doesn't exist) |
+| `RESET_COUNTER` | counter name | *(blank)* | Reset a named counter to 0 |
 | `WIN` | *(blank)* | *(blank)* | End the game with a win |
 | `LOSE` | *(blank)* | *(blank)* | Kill the player |
 
@@ -264,6 +270,16 @@ __Adventure example:__ There is a lamp in room 3 which you need to TAKE then ON 
    - Each turn the lamp is lit, `turns_remaining` decrements by 1
    - When it hits 0, `making_light` is set to 0 and `state` drops back to 0 — the lamp goes out
    - `isLocationLit()` checks both the player's inventory and the current room, so a dropped lamp still lights the room it's left in
+
+5. **Add warning messages.** Use FORCE puzzle rows with `condition_item_turns_eq` to warn the player before the lamp dies. Set `condition_item_state=lamp:1` so warnings only fire while the lamp is lit. For example:
+   - `lamp:50` → "Your lamp is getting dim."
+   - `lamp:30` → "Your lamp is running very low."
+   - `lamp:1` → "Your lamp has run out of power." (fires on the last lit turn, just before the engine extinguishes it)
+
+6. **Add dark room danger.** Without a light source, players should risk death after wandering in the dark. The Adventure original fires a 35% death chance per move after the player's first move in darkness. Set this up with three FORCE rows:
+   - `condition_location_dark=true` → `INCREMENT_COUNTER dark_moves` — counts moves spent in the dark
+   - `condition_location_dark=false` → `RESET_COUNTER dark_moves` — resets when light is found
+   - `condition_counter_gte=dark_moves:2`, `chance_pct=35` → `LOSE` — 35% death chance from the second dark move onward (the first move is always safe)
 
 __TEST__
 This test code should turn on debug, pick up the lamp, go somewhere dark, check it's dark, turn the lamp on, check you can now see, drop the lamp and move away, then return to confirm the lamp still lights the room.

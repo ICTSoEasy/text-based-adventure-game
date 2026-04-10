@@ -14,6 +14,7 @@ class Game:
         self.puzzles = None #Puzzle engine, set up in CREATE
         self.turn_counter = 0
         self.score = 0
+        self.counters = {}
 
     #This will tell us whether we are in play or not
     def getPlayStatus(self):

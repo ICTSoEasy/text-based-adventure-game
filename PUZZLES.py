@@ -1,5 +1,6 @@
 import csv
 import time
+import random
 
 class PuzzleEngine:
     def __init__(self, game):
@@ -26,7 +27,8 @@ class PuzzleEngine:
             key = (
                 puzzle['trigger_verb'].strip().upper(),
                 puzzle['trigger_item'].strip().upper(),
-                puzzle['trigger_room'].strip()
+                puzzle['trigger_room'].strip(),
+                puzzle.get('condition_item_turns_eq', '').strip()
             )
 
             # Skip once-only puzzles that have already fired
@@ -92,6 +94,33 @@ class PuzzleEngine:
             if not items or items[0].state != int(cis_state):
                 return False
 
+        # condition_item_turns_eq: item_name:value — named item's turns_remaining must equal value
+        cite = puzzle.get('condition_item_turns_eq', '').strip()
+        if cite:
+            cite_name, cite_value = cite.split(':')
+            items = self.game.findAllItems(cite_name.upper())
+            if not items or items[0].getTurnsRemaining() != int(cite_value):
+                return False
+
+        # condition_location_dark: true/false — whether the player's location is dark
+        cld = puzzle.get('condition_location_dark', '').strip().lower()
+        if cld == 'true' and player.isLocationLit():
+            return False
+        if cld == 'false' and not player.isLocationLit():
+            return False
+
+        # condition_counter_gte: counter_name:value — named counter must be >= value
+        ccg = puzzle.get('condition_counter_gte', '').strip()
+        if ccg:
+            ccg_name, ccg_value = ccg.split(':')
+            if self.game.counters.get(ccg_name, 0) < int(ccg_value):
+                return False
+
+        # chance_pct: integer 1-100 — percentage chance this row fires at all
+        pct = puzzle.get('chance_pct', '').strip()
+        if pct and not random.randint(1, 100) <= int(pct):
+            return False
+
         return True
 
     def _apply(self, player, puzzle):
@@ -148,6 +177,16 @@ class PuzzleEngine:
                 print(msg)
             else:
                 print(f'[Message not found: {target}]')
+
+        elif effect == 'INCREMENT_COUNTER':
+            self.game.counters[target] = self.game.counters.get(target, 0) + 1
+            if self.game.settings.get('debug', False):
+                print(f'  [counter] {target} = {self.game.counters[target]}')
+
+        elif effect == 'RESET_COUNTER':
+            self.game.counters[target] = 0
+            if self.game.settings.get('debug', False):
+                print(f'  [counter] {target} = 0 (reset)')
 
         elif effect == 'WIN':
             player.game.flipPlayStatus()

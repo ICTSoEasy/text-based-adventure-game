@@ -77,9 +77,10 @@ NAMED_ROUTE_CODES = {
 
 FIELDNAMES = [
     'trigger_verb','trigger_item','trigger_room',
-    'condition_item','condition_not_item','condition_room_item','condition_item_state',
+    'condition_item','condition_not_item','condition_room_item','condition_item_state','condition_item_turns_eq',
     'effect_type','effect_target','effect_value',
-    'message','delay','once'
+    'message','delay','once',
+    'condition_location_dark','condition_counter_gte','chance_pct'
 ]
 
 def parse_travel(path):
