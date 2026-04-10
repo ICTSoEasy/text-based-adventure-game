@@ -1,10 +1,39 @@
 #An initial definition of a thing
 class Thing:
-    def __init__(self, id, shortDesc, longDesc, gettable = True):
+    def __init__(self, id, shortDesc, longDesc, gettable=True, idWords=None, roomDescs=None, state=0):
         self.id = id
         self.shortDesc = shortDesc
         self.longDesc = longDesc
         self.gettable = gettable
+        self.idWords = idWords or [shortDesc.upper()]
+        self.roomDescs = roomDescs or []
+        self.state = state
+        self.making_light = 0
+        self.light_turns = 0
+        self.turns_remaining = 0
+
+    def getMakingLight(self):
+        return self.making_light
+
+    def setMakingLight(self, value):
+        self.making_light = value
+
+    def getLightTurns(self):
+        return self.light_turns
+
+    def setLightTurns(self, value):
+        self.light_turns = value
+        self.turns_remaining = value
+
+    def getTurnsRemaining(self):
+        return self.turns_remaining
+
+    def decrementLight(self):
+        if self.turns_remaining > 0:
+            self.turns_remaining -= 1
+        if self.turns_remaining <= 0:
+            self.making_light = 0
+            self.state = 0
 
     #This will look at itself and give us back the ID
     def getId(self):
@@ -27,6 +56,17 @@ class Thing:
     #object's long description
     def setLongDesc(self,desc):
         self.longDesc = desc
+
+    def matchesName(self, word):
+        return word.upper() in self.idWords
+
+    def getRoomDesc(self):
+        if self.roomDescs and self.state < len(self.roomDescs):
+            return self.roomDescs[self.state]
+        return ''
+
+    def setState(self, state):
+        self.state = state
 
     #This will toggle the gettability of the thing
     def toggleGettable(self):

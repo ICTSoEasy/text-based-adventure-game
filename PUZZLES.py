@@ -17,6 +17,7 @@ class PuzzleEngine:
         """Check all puzzles for a matching trigger and apply effects. Returns True if anything fired."""
         fired_any = False
         keys_fired_this_call = set()
+        debug = self.game.settings.get('debug', False)
 
         for puzzle in self.puzzles:
             if not self._matches(puzzle, player, verb, item_name, room_id):
@@ -31,6 +32,13 @@ class PuzzleEngine:
             # Skip once-only puzzles that have already fired
             if puzzle['once'].strip().lower() == 'true' and key in self.fired:
                 continue
+
+            if debug:
+                tv = puzzle['trigger_verb'].strip()
+                ti = puzzle['trigger_item'].strip()
+                tr = puzzle['trigger_room'].strip()
+                ef = puzzle['effect_type'].strip()
+                print(f'  [puzzle] {tv} {ti} room={tr} → {ef}')
 
             self._apply(player, puzzle)
             fired_any = True
@@ -76,6 +84,14 @@ class PuzzleEngine:
             if not room.ifContains(cri):
                 return False
 
+        # condition_item_state: item_name:state — named item must be in that state
+        cis = puzzle.get('condition_item_state', '').strip()
+        if cis:
+            cis_name, cis_state = cis.split(':')
+            items = self.game.findAllItems(cis_name.upper())
+            if not items or items[0].state != int(cis_state):
+                return False
+
         return True
 
     def _apply(self, player, puzzle):
@@ -101,8 +117,12 @@ class PuzzleEngine:
         elif effect == 'REMOVE_EXIT':
             self.game.getRoom(int(target)).removeExit(value)
 
-        elif effect == 'SET_ROOM_DESC':
+        elif effect == 'SET_ROOM_LONG_DESC':
             self.game.getRoom(int(target)).setLongDesc(value)
+
+        elif effect == 'SHOW_ROOM_LONG_DESC':
+            room_id = int(target) if target else player.getRoom()
+            print(self.game.getRoom(room_id).getLongDesc())
 
         elif effect == 'SET_ITEM_SHORT_DESC':
             item = self.game.findItem(target.upper())
@@ -112,6 +132,10 @@ class PuzzleEngine:
         elif effect == 'TELEPORT':
             player.setRoom(int(value))
             player.look()
+
+        elif effect == 'SET_ITEM_STATE':
+            for item in self.game.findAllItems(target.upper()):
+                item.setState(int(value))
 
         elif effect == 'SET_ITEM_LONG_DESC':
             item = self.game.findItem(target.upper())

@@ -23,6 +23,8 @@ def run(stdscr):
     player.setGame(game)
     game.addPlayer(player)
 
+    game._update_status()
+
     if 'welcome' in game.messages:
         print(game.messages['welcome'])
 

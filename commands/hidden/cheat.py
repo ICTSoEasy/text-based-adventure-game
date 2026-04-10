@@ -5,7 +5,12 @@ def execute(player, noun):
         print('Cheat to where? (e.g. CHEAT 15)')
         return
     try:
-        player.setRoom(int(noun))
-        player.look()
+        room_id = int(noun)
     except ValueError:
         print('Please give a room number.')
+        return
+    if room_id not in player.game.rooms:
+        print(f'Room {room_id} does not exist.')
+        return
+    player.setRoom(room_id)
+    player.look()

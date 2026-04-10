@@ -9,6 +9,18 @@ class Player:
         self.items = []
         self.game = None
 
+    def isLocationLit(self):
+        room = self.game.getRoom(self.getRoom())
+        if room.isLit():
+            return True
+        for item in self.items:
+            if item.getMakingLight():
+                return True
+        for item in room.getContains():
+            if item.getMakingLight():
+                return True
+        return False
+
     def setGame(self, game):
         self.game = game
 
@@ -37,31 +49,40 @@ class Player:
 
     def look(self):
         room = self.game.getRoom(self.getRoom())
-        print(room.getLongDesc())
-        for thing in room.getContains():
-            print('A', thing.getShortDesc(), 'is here.')
-        if self.game.settings.get('show_exits', True) or self.game.settings.get('debug', False):
-            exits = room.getExits()
-            keys = ', '.join(exits.keys()) if exits else 'None!'
-            print('Exits:', keys)
+        if self.isLocationLit() or self.game.settings.get('debug', False):
+            print(room.getLongDesc())
+            for thing in room.getContains():
+                room_desc = thing.getRoomDesc()
+                if room_desc:
+                    print(room_desc)
+                else:
+                    print('A', thing.getShortDesc(), 'is here.')
+            if self.game.settings.get('show_exits', True) or self.game.settings.get('debug', False):
+                exits = room.getExits()
+                keys = ', '.join(exits.keys()) if exits else 'None!'
+                print('Exits:', keys)
+        else:
+            print(self.game.settings.get('dark_message'))
 
     def lookItem(self, noun):
         found = False
         room = self.game.getRoom(self.getRoom())
         thing = room.ifContains(noun)
         if thing is not None:
-            print(thing.getLongDesc())
+            desc = thing.getLongDesc()
+            print(desc if desc else self.game.messages.get('no_item_detail', 'Sorry but I am not allowed to give more detail.'))
             found = True
         thing = self.hasItem(noun)
         if thing is not None:
-            print(thing.getLongDesc())
+            desc = thing.getLongDesc()
+            print(desc if desc else self.game.messages.get('no_item_detail', 'Sorry but I am not allowed to give more detail.'))
             found = True
         if not found:
             print('I cannot find one of them!')
 
     def hasItem(self, lookingFor):
         for item in self.items:
-            if item.getShortDesc().upper() == lookingFor.upper():
+            if item.matchesName(lookingFor):
                 return item
         return None
 
@@ -71,7 +92,8 @@ class Player:
         if thing is not None:
             self.items.append(thing)
             room.remove(thing)
-            print('You manage to get a', noun.lower())
+            #print('You manage to get a', noun.lower())
+            print('You manage to get a',thing.getShortDesc())
             if not thing.isGettable():
                 print('Uh-oh... you struggle to hold a', noun.lower())
                 self.dropItem(noun)

@@ -69,11 +69,15 @@ NAMED_ROUTE_CODES = {
     74: ['SHELL'],
     75: ['RESERVOIR'],
     77: ['FORK'],
+    # Magic words
+    62: ['XYZZY'],
+    65: ['PLUGH'],
+    71: ['PLOVER'],
 }
 
 FIELDNAMES = [
     'trigger_verb','trigger_item','trigger_room',
-    'condition_item','condition_not_item','condition_room_item',
+    'condition_item','condition_not_item','condition_room_item','condition_item_state',
     'effect_type','effect_target','effect_value',
     'message','delay','once'
 ]
@@ -113,6 +117,7 @@ def generate_named_routes(connections):
                     'condition_item':       '',
                     'condition_not_item':   '',
                     'condition_room_item':  '',
+                    'condition_item_state': '',
                     'effect_type':          'TELEPORT',
                     'effect_target':        '',
                     'effect_value':         str(to_r),
@@ -126,13 +131,80 @@ def generate_named_routes(connections):
 KEEP_ROWS = [
     # YES/NO instructions in room 1
     dict(trigger_verb='YES', trigger_item='', trigger_room='1',
-         condition_item='', condition_not_item='', condition_room_item='',
+         condition_item='', condition_not_item='', condition_room_item='', condition_item_state='',
          effect_type='SHOW_MESSAGE', effect_target='instructions', effect_value='',
          message='', delay='0', once='false'),
+    dict(trigger_verb='YES', trigger_item='', trigger_room='1',
+         condition_item='', condition_not_item='', condition_room_item='', condition_item_state='',
+         effect_type='SHOW_ROOM_LONG_DESC', effect_target='', effect_value='',
+         message='', delay='1', once='false'),
     dict(trigger_verb='NO', trigger_item='', trigger_room='1',
-         condition_item='', condition_not_item='', condition_room_item='',
-         effect_type='SHOW_MESSAGE', effect_target='no_instructions', effect_value='',
+         condition_item='', condition_not_item='', condition_room_item='', condition_item_state='',
+         effect_type='SHOW_ROOM_LONG_DESC', effect_target='', effect_value='',
+         message='', delay='1', once='false'),
+    # Unlock grate (from room 8, above) — keys required, only when locked (state 0)
+    dict(trigger_verb='UNLOCK', trigger_item='GRATE', trigger_room='8',
+         condition_item='KEYS', condition_not_item='', condition_room_item='', condition_item_state='grate:0',
+         effect_type='PRINT_MSG', effect_target='', effect_value='',
+         message='The grate is now open.', delay='0', once='false'),
+    dict(trigger_verb='UNLOCK', trigger_item='GRATE', trigger_room='8',
+         condition_item='KEYS', condition_not_item='', condition_room_item='', condition_item_state='grate:0',
+         effect_type='SET_ITEM_STATE', effect_target='grate', effect_value='1',
          message='', delay='0', once='false'),
+    dict(trigger_verb='UNLOCK', trigger_item='GRATE', trigger_room='8',
+         condition_item='KEYS', condition_not_item='', condition_room_item='', condition_item_state='grate:0',
+         effect_type='ADD_EXIT', effect_target='8', effect_value='DOWN:9',
+         message='', delay='0', once='false'),
+    dict(trigger_verb='UNLOCK', trigger_item='GRATE', trigger_room='8',
+         condition_item='KEYS', condition_not_item='', condition_room_item='', condition_item_state='grate:0',
+         effect_type='ADD_EXIT', effect_target='9', effect_value='UP:8',
+         message='', delay='0', once='false'),
+    # Unlock grate (from room 9, below) — same effect, same state check
+    dict(trigger_verb='UNLOCK', trigger_item='GRATE', trigger_room='9',
+         condition_item='KEYS', condition_not_item='', condition_room_item='', condition_item_state='grate:0',
+         effect_type='PRINT_MSG', effect_target='', effect_value='',
+         message='The grate is now open.', delay='0', once='false'),
+    dict(trigger_verb='UNLOCK', trigger_item='GRATE', trigger_room='9',
+         condition_item='KEYS', condition_not_item='', condition_room_item='', condition_item_state='grate:0',
+         effect_type='SET_ITEM_STATE', effect_target='grate', effect_value='1',
+         message='', delay='0', once='false'),
+    dict(trigger_verb='UNLOCK', trigger_item='GRATE', trigger_room='9',
+         condition_item='KEYS', condition_not_item='', condition_room_item='', condition_item_state='grate:0',
+         effect_type='ADD_EXIT', effect_target='8', effect_value='DOWN:9',
+         message='', delay='0', once='false'),
+    dict(trigger_verb='UNLOCK', trigger_item='GRATE', trigger_room='9',
+         condition_item='KEYS', condition_not_item='', condition_room_item='', condition_item_state='grate:0',
+         effect_type='ADD_EXIT', effect_target='9', effect_value='UP:8',
+         message='', delay='0', once='false'),
+    # Forced moves — fire automatically on room entry, before player can type
+    dict(trigger_verb='FORCE', trigger_item='', trigger_room='16',   # crack too small -> back to gully
+         condition_item='', condition_not_item='', condition_room_item='', condition_item_state='',
+         effect_type='TELEPORT', effect_target='', effect_value='14',
+         message='', delay='1', once='false'),
+    dict(trigger_verb='FORCE', trigger_item='', trigger_room='20',   # broken neck -> death
+         condition_item='', condition_not_item='', condition_room_item='', condition_item_state='',
+         effect_type='LOSE', effect_target='', effect_value='',
+         message='', delay='1', once='false'),
+    dict(trigger_verb='FORCE', trigger_item='', trigger_room='26',   # up plant -> above pit
+         condition_item='', condition_not_item='', condition_room_item='', condition_item_state='',
+         effect_type='TELEPORT', effect_target='', effect_value='88',
+         message='', delay='1', once='false'),
+    dict(trigger_verb='FORCE', trigger_item='', trigger_room='32',   # blocked by snake -> back to hall
+         condition_item='', condition_not_item='', condition_room_item='', condition_item_state='',
+         effect_type='TELEPORT', effect_target='', effect_value='19',
+         message='', delay='1', once='false'),
+    dict(trigger_verb='FORCE', trigger_item='', trigger_room='40',   # low passage -> east side
+         condition_item='', condition_not_item='', condition_room_item='', condition_item_state='',
+         effect_type='TELEPORT', effect_target='', effect_value='41',
+         message='', delay='1', once='false'),
+    dict(trigger_verb='FORCE', trigger_item='', trigger_room='59',   # low passage -> west side
+         condition_item='', condition_not_item='', condition_room_item='', condition_item_state='',
+         effect_type='TELEPORT', effect_target='', effect_value='27',
+         message='', delay='1', once='false'),
+    dict(trigger_verb='FORCE', trigger_item='', trigger_room='79',   # stream exit -> back to building
+         condition_item='', condition_not_item='', condition_room_item='', condition_item_state='',
+         effect_type='TELEPORT', effect_target='', effect_value='3',
+         message='', delay='1', once='false'),
 ]
 
 def main():

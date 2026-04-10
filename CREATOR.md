@@ -70,20 +70,23 @@ id,short_desc,long_desc,exits
 
 ## items.csv
 
-One row per object. Format: `id,short_desc,long_desc,gettable,room_id`
+One row per object. Format: `id,id_words,short_desc,long_desc,room_desc,gettable,room_id,state`
 
 - **id** — unique number for this item
-- **short_desc** — name used in commands (e.g. `GET HAMMER` matches `hammer`)
-- **long_desc** — description shown when player LOOKs at the item
+- **id_words** — comma-separated list of words the player can use to refer to this item (e.g. `hammer,hamme` means both `GET HAMMER` and `GET HAMME` work). If blank, defaults to `short_desc`
+- **short_desc** — fallback name shown in room if `room_desc` is empty (e.g. `A hammer is here.`)
+- **long_desc** — description shown when player does `LOOK HAMMER`. Leave blank to show the default "not allowed to give more detail" message
+- **room_desc** — description(s) shown when item is present in a room. Use `|` to separate multiple state descriptions (e.g. `The lamp is unlit.|The lamp is glowing brightly.`). If blank, falls back to `A {short_desc} is here.`
 - **gettable** — `true` if the player can pick it up; `false` for fixed objects
 - **room_id** — which room the item starts in
+- **state** — which `room_desc` to display (0-indexed). Defaults to `0` if blank. Change via puzzles to show a different description
 
 **Example:**
 ```
-id,short_desc,long_desc,gettable,room_id
-1,hammer,A heavy iron hammer with a worn wooden handle.,true,1
-2,anvil,A massive iron anvil. You couldn't possibly lift it.,false,2
-3,key,A small brass key.,true,3
+id,id_words,short_desc,long_desc,room_desc,gettable,room_id,state
+1,"hammer,hamme",hammer,A heavy iron hammer with a worn wooden handle.,A hammer lies on the floor.,true,1,0
+2,"anvil",anvil,A massive iron anvil. You couldn't possibly lift it.,,false,2,0
+3,"key,small key",key,A small brass key.,There is a small brass key here.|The key has been used.,true,3,0
 ```
 
 ---
@@ -126,6 +129,7 @@ The puzzle engine connects player actions to game events. Each row is one effect
 | `condition_item` | Player must be carrying this item |
 | `condition_not_item` | Player must NOT be carrying this item |
 | `condition_room_item` | This item must be present in the current room |
+| `condition_item_state` | `item_name:state` — named item must be in this state (e.g. `grate:0`). Blank = any state |
 | `effect_type` | What happens (see below) |
 | `effect_target` | What the effect acts on |
 | `effect_value` | Value for the effect |
@@ -142,42 +146,15 @@ The puzzle engine connects player actions to game events. Each row is one effect
 | `TELEPORT` | *(blank)* | room id | Move the player to a room and show its description |
 | `ADD_EXIT` | room id | `DIRECTION:room_id` | Add an exit to a room |
 | `REMOVE_EXIT` | room id | `DIRECTION` | Remove an exit from a room |
-| `SET_ROOM_DESC` | room id | new description | Change a room's long description |
+| `SET_ROOM_LONG_DESC` | room id | new description | Change a room's long description |
+| `SHOW_ROOM_LONG_DESC` | room id (or blank for current room) | *(blank)* | Print a room's long description |
+| `SET_ITEM_STATE` | item name | state number | Set the state of all items with that name (controls which `room_desc` is shown) |
 | `SET_ITEM_SHORT_DESC` | item name | new short desc | Change an item's short (command) name |
 | `SET_ITEM_LONG_DESC` | item name | new long desc | Change an item's description |
 | `WIN` | *(blank)* | *(blank)* | End the game with a win |
 | `LOSE` | *(blank)* | *(blank)* | Kill the player |
 
-### Example: Unlock a door with a key
-
-```
-trigger_verb,trigger_item,trigger_room,condition_item,condition_not_item,condition_room_item,effect_type,effect_target,effect_value,message,delay,once
-USE,KEY,1,,,DOOR,PRINT_MSG,,,You unlock the door with the key.,0,true
-USE,KEY,1,,,DOOR,ADD_EXIT,1,NORTH:2,,0,true
-USE,KEY,1,,,DOOR,SET_ROOM_DESC,1,The hallway. The door to the north is now open.,,0,true
-```
-
-### Example: Win condition
-
-```
-MOVE,,2,COIN,,,PRINT_MSG,,,You place the coin in the fountain. A golden light surrounds you...,2,false
-MOVE,,2,COIN,,,WIN,,,YOU WIN!,0,false
-```
-
-### Example: Death trap
-
-```
-MOVE,,5,,,,PRINT_MSG,,,The floor gives way!,2,false
-MOVE,,5,,,,LOSE,,,,0,false
-```
-
-### Example: Transform an item
-
-```
-USE,KNIFE,,,,ROPE,SET_ITEM_SHORT_DESC,ROPE,scraps,,0,true
-USE,KNIFE,,,,ROPE,SET_ITEM_LONG_DESC,ROPE,Tattered scraps of rope. Useless now.,,0,true
-USE,KNIFE,,,,ROPE,PRINT_MSG,,,You cut the rope into useless scraps.,0,true
-```
+See the **Example Puzzles** section at the end of this guide for full worked examples.
 
 ---
 
@@ -194,9 +171,113 @@ def execute(player, noun):
 
 The `HELP` command automatically discovers all files in this folder and lists their `DESCRIPTION`.
 
-Built-in commands: `LOOK`, `GET`, `DROP`, `USE`, `MOVE`, `ITEMS`, `HELP`, `CHEAT`, `FAST`
+Built-in commands: `LOOK`, `GET`, `DROP`, `UNLOCK`, `OPEN`, `MOVE`, `ITEMS`, `HELP`, `CHEAT`, `DEBUG`, `FAST`
+
+Hidden commands (not shown in HELP): `CHEAT`, `DEBUG`
 
 ---
+
+---
+
+## Example Puzzles
+
+### Opening a passageway with a found item
+A common problem is to have a locked or blocked passageway that needs to be opened or unlocked with a found item. 
+
+__Adventure example:__ There is a grate in rooms 8/9 that is locked and needs to be _unlocked_ with keys from room 3.
+
+1. Add the needed item. In this case, it's a key (actually a set of keys). Add an _item_ with id_words set to "keys" (I actually set to key _and_ keys using `key,keys` to allow either). The short description is what will be used when you "get" them. Note this is a variation from the original game which just says "OK". If you want to be able to "look" a the item, give it a long_desc. Adventure doesn't generally do this so it can be left blank for a default message. The _room_desc_ is what is seen when the player enters or looks in the room. _There are some keys on the ground here._ is good enough. The item needs to be able to be picked up, so set _gettable_ to TRUE. Set the id the item will be in, and by default set the state to 0.
+
+2. Create the passageway items. In our example, it's a grating. You need an item for *each end* of the passageway (because who says it can only have two ends?) Each one should have a different ID - this could be as simple as "3" and "4" - I actually used "3" and "1003" so as not to interfere with the original game IDs. ID words I set to "grate" along with the short description. No long description needed if you don't want. Now the bit that makes it fun, the _room_desc_. The grate is a bit different to the keys in that the description will change based on whether it's open or shut. We separate the two descriptions with a | pipe: _THE GRATE IS LOCKED.|THE GRATE IS OPEN._ - the first one aligns to state 0 which is our normal starting state. _gettable_ is FALSE (we don't want people nicking our gratings), the room ID(s) need to be set, and state starts off as 0. Note in the Adventure example, the _only_ things that vary on the two rows are the ID and the room_id. 
+
+3. Create the command. This is fairly commonplace code - you can copy almost any existing verb-noun pair. The terminology we're looking for will be _UNLOCK GATE_ - so we create a file `unlock.py` for the verb in our `commands/game` directory. The only things we need to change are:
+- Description - this pushes through to help (and is ueeful to remember what it's for!)
+- The print statement when the noun is missing ("Unlock what?")
+- pass the verb through to the puzzle trigger "UNLOCK"
+- The failure message ("You can't unlock that.")
+
+```python
+DESCRIPTION = 'UNLOCK - unlock something (e.g. UNLOCK GRATE)'
+
+def execute(player, noun):
+    if noun is None:
+        print('Unlock what?')
+        return
+    fired = player.game.puzzles.trigger(player, 'UNLOCK', noun, player.getRoom())
+    if not fired:
+        print("You can't unlock that.")
+
+```
+
+4. Set up the puzzle. There are actually quite a few lines for this one. When we unlock the grate, with the keys, we need to output a message telling the player the grate has been opened, then we want to add the exit from this room to the next, _and_ the exit from the other room to this one (assuming it runs both ways), then we want to change the state from 0 to 1 so that the system knows the grate is open. That's four lines!
+
+On all four:
+- trigger_verb = UNLOCK
+- trigger_item = GRATE
+- trigger_room = 8 (in my example)
+- condition_item = KEYS - You need this item in inventory for the puzzle to fire
+- condition_not_item = leave blank (having something won't stop this working)
+- condition_room_item = leave blank (you don't need something in the room for this to work)
+- condition_item_state = grate:0 - You can only _open_ the grate if it's in state 0. If it's not in state 0, it's already open!
+- delay = 0 - do all at onces
+- once = FALSE - we do only want it to fire once but we're dealing with that with the state change
+
+Npw the things that separate them:
+- First one is a PRINT_MSG effect type, message being "The grate is now open."
+- Then ADD_EXIT effect type, effect_target = 8 (the current room), effect value _DOWN:9_ (it goes DOWN from 8 to 9)
+- Then ADD_EXIT effect type, effect_target = 9 (other room), effect value _UP:8_ (it goes UP from the other room to here)
+- Finally SET_ITEM_STATE effect type, effect_target = grate and effect value = 1 (change the grate to state 1 - it works by name so catches them all)
+
+_Then_... you have to repeat that for another four rows, but change the trigger room to 9. Just in case they somehow get into room 9 before room 8. And remember - order is important. If you change the state on line 1, none of the rest will fire!
+
+__TEST__
+This test code should turn on debug, get the keys, jump to the grate, try to get down (fail), unlock, go down, and try to unlock from the other side (fail due to already being unlocked).
+```
+DEBUG
+CHEAT 3
+GET KEYS
+CHEAT 8
+DOWN
+UNLOCK GRATE
+DOWN
+UNLOCK GRATE
+```
+
+### Light and Dark
+It is common to have some areas that are lit, and some that are not. A light source is needed to deal with the dark!
+
+__Adventure example:__ There is a lamp in room 3 which you need to TAKE then ON to be able to see in the caves. It has 330 units of oil which decrement every turn when the lamp is on.
+
+1. **Mark rooms as lit or dark.** In `rooms.csv`, each room has a `lit` column. Set it to `TRUE` for rooms with natural light (outdoors, rooms with windows, etc.) and `FALSE` for anywhere that needs a light source. Rooms default to `FALSE` if the column is blank. In Adventure, rooms 1–10 are naturally lit (above ground) and everything underground is dark.
+
+2. **Set the dark message.** In `settings.csv`, the `dark_message` setting controls what the player sees when they enter a dark room without light. The Adventure default is _IT IS NOW PITCH DARK. IF YOU PROCEED YOU WILL LIKELY FALL INTO A PIT._ Change this to suit your game.
+
+3. **Create the light item.** In `items.csv`, a light source needs two extra columns beyond a normal item:
+   - `room_desc` — use two pipe-separated descriptions for unlit and lit states, e.g. `There is a brass lamp here.|There is a glowing brass lamp here.`
+   - `light_turns` — how many turns of light it provides. Set to `0` for items that are not light sources. The Adventure lamp has `330`.
+
+   The item otherwise works like any other — give it `id_words`, a `gettable` of `TRUE`, and place it in a room.
+
+4. **Create the ON and OFF commands.** Copy `commands/game/on.py` and `commands/game/off.py`. The `ON` command checks the player is carrying the item by name, sets its `state` to 1 (switching to the lit `room_desc`) and calls `setMakingLight(1)`. `OFF` reverses this. You can also add aliases — Adventure uses `LIGHT` for on and `EXTINGUISH`/`EXTIN` for off.
+
+   The engine handles the rest automatically:
+   - Each turn the lamp is lit, `turns_remaining` decrements by 1
+   - When it hits 0, `making_light` is set to 0 and `state` drops back to 0 — the lamp goes out
+   - `isLocationLit()` checks both the player's inventory and the current room, so a dropped lamp still lights the room it's left in
+
+__TEST__
+This test code should turn on debug, pick up the lamp, go somewhere dark, check it's dark, turn the lamp on, check you can now see, drop the lamp and move away, then return to confirm the lamp still lights the room.
+```
+DEBUG
+CHEAT 3
+GET LAMP
+CHEAT 25
+ON
+LOOK
+DROP LAMP
+UP
+DOWN
+```
 
 ## Tips for designing your game
 

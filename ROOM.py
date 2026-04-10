@@ -11,12 +11,16 @@ class Room:
     # - longDesc will be the longer description which we will only see if we actually look around.
     #   as this is not strictly necessary, we start it as nothing and then set it later if we
     #   so wish.
-    def __init__(self, id, shortDesc, exits, contains):
+    def __init__(self, id, shortDesc, exits, contains, lit=False):
         self.id = id
         self.shortDesc = shortDesc
         self.exits = exits
         self.contains = contains
         self.longDesc = ''
+        self.lit = lit
+
+    def isLit(self):
+        return self.lit
 
     #This will look at itself and give us back the ID
     def getId(self):
@@ -58,10 +62,9 @@ class Room:
         return self.contains
 
     #This will let us test if a particular item is in the room
-    def ifContains(self,lookingFor):
-        items = self.getContains()
-        for item in items:
-            if item.getShortDesc().upper() == lookingFor:
+    def ifContains(self, lookingFor):
+        for item in self.getContains():
+            if item.matchesName(lookingFor):
                 return item
         return None
 

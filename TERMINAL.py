@@ -35,16 +35,33 @@ class Terminal:
         stdscr.clear()
         stdscr.refresh()
 
-        text_height = self._height - 2
-        self.text_win = curses.newwin(text_height, self._width, 0, 0)
+        self.status_win = curses.newwin(2, self._width, 0, 0)
+
+        text_height = self._height - 4
+        self.text_win = curses.newwin(text_height, self._width, 2, 0)
         self.text_win.scrollok(True)
         self.text_win.idlok(True)
 
-        self.input_win = curses.newwin(2, self._width, text_height, 0)
+        self.input_win = curses.newwin(2, self._width, text_height + 2, 0)
 
         self._draw_separator()
         self.text_win.refresh()
         self.input_win.refresh()
+
+    def update_status(self, game_name='', score=None, turns=None):
+        try:
+            parts = [game_name] if game_name else []
+            if score is not None:
+                parts.append(f'Score: {score}')
+            if turns is not None:
+                parts.append(f'Turns: {turns}')
+            text = '  >  '.join(parts)
+            self.status_win.erase()
+            self.status_win.addstr(0, 0, text[:self._width - 1], curses.color_pair(1))
+            self.status_win.addstr(1, 0, '─' * (self._width - 1), curses.color_pair(1))
+            self.status_win.refresh()
+        except curses.error:
+            pass
 
     def _draw_separator(self):
         try:
@@ -73,7 +90,7 @@ class Terminal:
         self.text_win.refresh()
 
     def _write_wrapped(self, text):
-        max_w = self._width - 1
+        max_w = min(80, self._width - 1)
         while len(text) > max_w:
             split_at = text.rfind(' ', 0, max_w)
             if split_at <= 0:
@@ -124,7 +141,7 @@ class Terminal:
         result = raw.decode('utf-8', errors='replace')
 
         try:
-            self.text_win.addstr(f'\n\n> {result}\n\n', curses.color_pair(1))
+            self.text_win.addstr(f'\n> {result}\n\n', curses.color_pair(1))
         except curses.error:
             pass
         self.text_win.refresh()

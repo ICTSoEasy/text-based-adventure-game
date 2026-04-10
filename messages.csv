@@ -1,5 +1,6 @@
 id,text
 welcome,{sp:16}WELCOME TO ADVENTURE!!\n\n{sp:6}Original development by Willie Crowther\n{sp:9}Major features added by Don Woods.\n{sp:13}This port by Oli Howson.\n\nWould you like instructions?
 unknown_command,I don't know that word.
-instructions,"Somewhere nearby is Colossal Cave, where others have found fortunes in treasure and gold, though it is rumoured that some who enter are never seen again. Magic is said to work in the cave. I will be your eyes and hands. Direct me with commands of 1 or 2 words.\n\nShould you get stuck, type HELP for some hints.\n\nGood luck!"
+no_item_detail,Sorry but I am not allowed to give more detail.
+instructions,"Somewhere nearby is Colossal Cave, where others have found fortunes in treasure and gold, though it is rumoured that some who enter are never seen again. Magic is said to work in the cave. I will be your eyes and hands. Direct me with commands of 1 or 2 words.\n\nShould you get stuck, type HELP for some hints.\n\nGood luck!\n"
 no_instructions,{sp:1}

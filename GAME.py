@@ -12,6 +12,8 @@ class Game:
         self.status = False #not in play
         self.player = None #No player until we add them
         self.puzzles = None #Puzzle engine, set up in CREATE
+        self.turn_counter = 0
+        self.score = 0
 
     #This will tell us whether we are in play or not
     def getPlayStatus(self):
@@ -63,10 +65,57 @@ class Game:
                 return item
         return None
 
+    #Find ALL items matching a name across all rooms and player inventory
+    def findAllItems(self, name):
+        name = name.upper()
+        found = []
+        for room in self.rooms.values():
+            for item in room.getContains():
+                if item.matchesName(name):
+                    found.append(item)
+        if self.player:
+            for item in self.player.items:
+                if item.matchesName(name):
+                    found.append(item)
+        return found
+
     #A 'tick' is a round of the game. The game does any
     #house keeping it may need and then gives the player
     #an opportunity to do it's thing.
     def tick(self):
         if getattr(self, 'settings', {}).get('debug', False):
             print(f'[tick]')
-        self.player.getCommand()
+        if self.puzzles:
+            self.puzzles.trigger(self.player, 'FORCE', None, self.player.getRoom())
+        if self.status:
+            self.player.getCommand()
+            self.turn_counter += 1
+            self.decrement_lights()
+            if self.settings.get('debug', False):
+                print(f'  [turn {self.turn_counter}]')
+            self._update_status()
+
+    def decrement_lights(self):
+        debug = self.settings.get('debug', False)
+        all_items = []
+        for room in self.rooms.values():
+            all_items.extend(room.getContains())
+        if self.player:
+            all_items.extend(self.player.items)
+
+        for item in all_items:
+            if item.getLightTurns() > 0:
+                if item.getMakingLight():
+                    item.decrementLight()
+                if debug:
+                    print(f'  [light] {item.getShortDesc()}: making_light={item.getMakingLight()} turns_remaining={item.getTurnsRemaining()}')
+
+    def _update_status(self):
+        import TERMINAL
+        t = TERMINAL.get()
+        if not t:
+            return
+        name = self.settings.get('game_name', '')
+        score = self.score if self.settings.get('show_score', True) else None
+        turns = self.turn_counter if self.settings.get('show_turns', True) else None
+        t.update_status(name, score, turns)

@@ -2,6 +2,8 @@
 
 ## Preferences
 - Use CLAUDE.md (this file) for all memory instead of the file-based memory system under ~/.claude/projects/
+- Do not add content (examples, documentation body, code) unless explicitly asked. If asked to add a section or heading, add only the heading and let the user fill it in.
+- Do not do things without being asked — complete the stated task only.
 
 ## Project Overview
 A Python text-based adventure game built as a **workshop activity** — the goal is for students/participants to create their own adventures without writing Python code, by editing CSV files.

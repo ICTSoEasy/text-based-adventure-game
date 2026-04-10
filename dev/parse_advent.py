@@ -93,11 +93,13 @@ def parse_short_descs(lines):
 
 def parse_travel(lines):
     """
-    Section 3: travel table. Returns {from_room: {direction: to_room}}.
-    Only simple (unconditional) compass-direction connections are kept.
+    Section 3: travel table.
+    Returns ({from_room: {direction: to_room}}, [(from_room, to_room, codes)]).
+    Only compass-direction connections are kept in exits dict.
     Conditional entries (to_room > 500 or == 0) are skipped.
     """
     exits = {}
+    all_connections = []
     for line in lines:
         if not line.strip():
             continue
@@ -115,6 +117,8 @@ def parse_travel(lines):
         if to_room == 0 or to_room > 500:
             continue
 
+        all_connections.append((from_room, to_room, codes))
+
         # Find compass directions in the motion codes
         dirs = [DIRECTION_CODES[c] for c in codes if c in DIRECTION_CODES]
         if not dirs:
@@ -127,13 +131,17 @@ def parse_travel(lines):
         if primary not in exits[from_room]:  # first wins
             exits[from_room][primary] = to_room
 
-    return exits
+    return exits, all_connections
 
 
-def build_rooms_csv(long_descs, short_descs, exits, path='rooms.csv'):
-    # Only include rooms that can actually be entered (appear as travel sources)
-    # and have a description
-    room_ids = sorted(r for r in exits if r in long_descs)
+def build_rooms_csv(long_descs, short_descs, exits, all_connections, path='rooms.csv'):
+    # Include all rooms that have a long description and are reachable
+    # (appear as a source or destination in the travel table)
+    all_rooms = set(exits.keys())
+    for from_r, to_r, _ in all_connections:
+        if to_r < 500:
+            all_rooms.add(to_r)
+    room_ids = sorted(r for r in all_rooms if r in long_descs)
 
     with open(path, 'w', newline='') as f:
         w = csv.writer(f)
@@ -156,13 +164,13 @@ def main():
 
     long_descs  = parse_long_descs(sections.get(1, []))
     short_descs = parse_short_descs(sections.get(2, []))
-    exits       = parse_travel(sections.get(3, []))
+    exits, all_connections = parse_travel(sections.get(3, []))
 
     print(f'Long descriptions: {len(long_descs)}')
     print(f'Short descriptions: {len(short_descs)}')
     print(f'Rooms with exits: {len(exits)}')
 
-    build_rooms_csv(long_descs, short_descs, exits)
+    build_rooms_csv(long_descs, short_descs, exits, all_connections)
 
     # Verify a few key rooms
     print('\nSpot check:')
