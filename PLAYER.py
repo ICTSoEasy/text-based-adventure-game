@@ -192,6 +192,12 @@ class Player:
                 if not self.game.puzzles.trigger(self, verb.upper(), None, self.room):
                     self.move(verb.upper())
                 return
+        # Try the puzzle engine — verb may be a known action even without a command file
+        if self.game.puzzles.trigger(self, verb.upper(), noun, self.room):
+            return
+        if self.game.puzzles.has_verb(verb.upper()):
+            print('Nothing happens.')
+            return
         print(self.game.messages.get('unknown_command', 'Unknown command. Type HELP for help.'))
 
     def getCommand(self):

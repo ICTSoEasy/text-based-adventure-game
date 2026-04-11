@@ -8,4 +8,4 @@ input_prompt,,Prompt shown before each command input (blank for none)
 dark_message,IT IS NOW PITCH DARK. IF YOU PROCEED YOU WILL LIKELY FALL INTO A PIT.,Message shown when player is in a dark room without light
 show_score,TRUE,Show score in the status bar
 show_turns,TRUE,Show turn counter in the status bar
-use_uppercase,TRUE,Convert all game output to uppercase (original 1977 style)
+use_uppercase,FALSE,Convert all game output to uppercase (original 1977 style)

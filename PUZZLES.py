@@ -20,6 +20,10 @@ class PuzzleEngine:
                 else:
                     self.puzzles.append(row)
 
+    def has_verb(self, verb):
+        """Return True if any puzzle row uses this verb."""
+        return any(p['trigger_verb'].strip().upper() == verb.upper() for p in self.puzzles)
+
     def trigger(self, player, verb, item_name, room_id):
         """Check all puzzles for a matching trigger and apply effects. Returns True if anything fired."""
         fired_any = False

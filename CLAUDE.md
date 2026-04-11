@@ -5,6 +5,7 @@
 - Do not add content (examples, documentation body, code) unless explicitly asked. If asked to add a section or heading, add only the heading and let the user fill it in.
 - Do not do things without being asked — complete the stated task only.
 - All in-game messages must be identical to the original Colossal Cave Adventure. If there is any reason a message must vary from the original, ask before changing it.
+- When asked to commit, always push immediately after.
 
 ## Project Overview
 A Python text-based adventure game built as a **workshop activity** — the goal is for students/participants to create their own adventures without writing Python code, by editing CSV files.
