@@ -219,6 +219,10 @@ class PuzzleEngine:
             if self.game.settings.get('debug', False):
                 print(f'  [counter] {target} = 0 (reset)')
 
+        elif effect == 'SET_GETTABLE':
+            for item in self.game.findAllItems(target.upper()):
+                item.gettable = (value.strip().upper() == 'TRUE')
+
         elif effect == 'DROP_ITEM':
             item = player.hasItem(target.upper())
             if item:
