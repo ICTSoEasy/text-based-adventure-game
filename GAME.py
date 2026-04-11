@@ -89,9 +89,9 @@ class Game:
         if self.puzzles:
             self.puzzles.trigger(self.player, 'FORCE', None, self.player.getRoom())
         if self.status:
-            self.decrement_lights()
             self.player.getCommand()
             self.turn_counter += 1
+            self.decrement_lights()
             if self.settings.get('debug', False):
                 print(f'  [turn {self.turn_counter}]')
             self._update_status()
@@ -108,8 +108,6 @@ class Game:
             if item.getLightTurns() > 0:
                 if item.getMakingLight():
                     item.decrementLight()
-                    if not item.getMakingLight():
-                        print(self.messages.get('lamp_out', 'YOUR LAMP HAS RUN OUT OF POWER.'))
                 if debug:
                     print(f'  [light] {item.getShortDesc()}: making_light={item.getMakingLight()} turns_remaining={item.getTurnsRemaining()}')
 
