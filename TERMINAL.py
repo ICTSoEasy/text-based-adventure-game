@@ -71,12 +71,21 @@ class Terminal:
             pass
         self.input_win.refresh()
 
+    def _sentence_case(self, text):
+        import re
+        text = text.lower()
+        text = re.sub(r'(?<=[.!?])\s+([a-z])', lambda m: m.group(0)[:-1] + m.group(1).upper(), text)
+        text = re.sub(r'(^|\n)([a-z])', lambda m: m.group(1) + m.group(2).upper(), text)
+        return text
+
     def game_print(self, *args, **kwargs):
         sep = kwargs.get('sep', ' ')
         end = kwargs.get('end', '\n')
         text = sep.join(str(a) for a in args) + end
         if self.use_uppercase:
             text = text.upper()
+        else:
+            text = self._sentence_case(text)
 
         lines = text.split('\n')
         for i, line in enumerate(lines):
