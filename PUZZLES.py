@@ -219,6 +219,12 @@ class PuzzleEngine:
             if self.game.settings.get('debug', False):
                 print(f'  [counter] {target} = 0 (reset)')
 
+        elif effect == 'ADD_POINTS':
+            self.game.score += int(value)
+
+        elif effect == 'REMOVE_POINTS':
+            self.game.score -= int(value)
+
         elif effect == 'WIN':
             player.game.flipPlayStatus()
 
