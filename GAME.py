@@ -106,7 +106,7 @@ class Game:
 
         for item in all_items:
             if item.getLightTurns() > 0:
-                if item.getMakingLight():
+                if item.getMakingLight() or item.getTurnsRemaining() == 0:
                     item.decrementLight()
                 if debug:
                     print(f'  [light] {item.getShortDesc()}: making_light={item.getMakingLight()} turns_remaining={item.getTurnsRemaining()}')

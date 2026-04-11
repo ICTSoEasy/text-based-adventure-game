@@ -29,8 +29,7 @@ class Thing:
         return self.turns_remaining
 
     def decrementLight(self):
-        if self.turns_remaining > 0:
-            self.turns_remaining -= 1
+        self.turns_remaining -= 1
         if self.turns_remaining <= 0:
             self.making_light = 0
             self.state = 0
