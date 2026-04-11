@@ -3,7 +3,7 @@ trigger_verb,trigger_item,trigger_room,condition_item,condition_not_item,conditi
 ;===Lamp is needed to see in the dark - messages shown when it gets low on oil,,,,,,,,,,,,,,,,
 FORCE,,,LAMP,,,lamp:1,lamp:50,PRINT_MSG,,,Your lamp is getting dim.,0,FALSE,,,
 FORCE,,,LAMP,,,lamp:1,lamp:30,PRINT_MSG,,,Your lamp is running very low.,0,FALSE,,,
-FORCE,,,LAMP,,,lamp:1,lamp:1,PRINT_MSG,,,Your lamp has run out of power.,0,FALSE,,,
+;FORCE,,,LAMP,,,lamp:1,lamp:1,PRINT_MSG,,,Your lamp has run out of power.,0,FALSE,,,
 ";===If you move in the dark, every move adds up. After move 1 there's a 35% chance you die",,,,,,,,,,,,,,,,
 FORCE,,,,,,,,INCREMENT_COUNTER,dark_moves,,,0,FALSE,TRUE,,
 FORCE,,,,,,,,RESET_COUNTER,dark_moves,,,0,FALSE,FALSE,,

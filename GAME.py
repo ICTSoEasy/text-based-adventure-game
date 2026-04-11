@@ -89,9 +89,9 @@ class Game:
         if self.puzzles:
             self.puzzles.trigger(self.player, 'FORCE', None, self.player.getRoom())
         if self.status:
+            self.decrement_lights()
             self.player.getCommand()
             self.turn_counter += 1
-            self.decrement_lights()
             if self.settings.get('debug', False):
                 print(f'  [turn {self.turn_counter}]')
             self._update_status()
