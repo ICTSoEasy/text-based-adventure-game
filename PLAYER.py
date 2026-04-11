@@ -132,7 +132,37 @@ class Player:
         if count == 0:
             print('- Nothing!')
 
-    def doCommand(self, verb, noun):
+    def _expand_noun(self, noun):
+        """If noun has no exact match but numbered variants exist locally (e.g. ROD1, ROD2), return them.
+        Prefers items in the current room over inventory, so GET finds room items and DROP finds inventory items."""
+        import re
+        if noun is None:
+            return [noun]
+        if self.game.findItem(noun):
+            return [noun]
+        current_room = self.game.getRoom(self.getRoom())
+        room_variants = []
+        inv_variants = []
+        for item in current_room.getContains():
+            for word in item.idWords:
+                if re.match(f'^{re.escape(noun)}\\d+$', word) and word not in room_variants:
+                    room_variants.append(word)
+        for item in self.items:
+            for word in item.idWords:
+                if re.match(f'^{re.escape(noun)}\\d+$', word) and word not in inv_variants:
+                    inv_variants.append(word)
+        variants = sorted(room_variants) or sorted(inv_variants)
+        return [variants[0]] if variants else [noun]
+
+    def doCommand(self, verb, noun, _expanded=False):
+        # Expand bare noun to numbered variants if needed (e.g. ROD -> ROD1, ROD2)
+        if not _expanded:
+            nouns = self._expand_noun(noun)
+            if len(nouns) > 1 or (nouns and nouns[0] != noun):
+                for n in nouns:
+                    self.doCommand(verb, n, _expanded=True)
+                return
+
         # Remap Python keywords that can't be module names
         v = {'in': 'enter', 'return': 'back'}.get(verb.lower(), verb.lower())
         candidates = [
@@ -154,12 +184,12 @@ class Player:
     def getCommand(self):
         prompt = self.game.settings.get('input_prompt', 'What do you want to do? ')
         command = input(prompt).upper()
-        commands = command.split(' ')
+        commands = command.split()
         while True:
             if len(commands) == 1:
                 self.doCommand(commands[0], None)
                 break
-            elif len(commands) == 2:
+            elif len(commands) >= 2:
                 self.doCommand(commands[0], commands[1])
                 break
             else:
