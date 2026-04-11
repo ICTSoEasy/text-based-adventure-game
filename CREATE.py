@@ -20,22 +20,40 @@ def _coerce(value):
     except ValueError: pass
     return value
 
-def Create(game):
-    with open('settings.csv', newline='', encoding='utf-8') as f:
+def _read_csv(filename, debug=False):
+    """Read a CSV file, filtering comment rows (first field starts with ;).
+    If debug is True, prints comments as they are encountered."""
+    rows = []
+    with open(filename, newline='', encoding='utf-8') as f:
         reader = csv.DictReader(f)
-        game.settings = {row['setting']: _coerce(row['value']) for row in reader}
+        for row in reader:
+            first = list(row.values())[0].strip()
+            if first.startswith(';'):
+                if debug:
+                    print(f'  [comment] {first[1:].strip()}')
+            else:
+                rows.append(row)
+    return rows
+
+def Create(game):
+    # Settings loaded first so debug flag is available for subsequent loads.
+    # Comments in settings.csv are stored and printed after debug is known.
+    settings_rows = _read_csv('settings.csv', debug=False)
+    game.settings = {row['setting']: _coerce(row['value']) for row in settings_rows}
 
     debug = game.settings.get('debug', False)
 
-    with open('messages.csv', newline='', encoding='utf-8') as f:
-        reader = csv.DictReader(f)
-        game.messages = {row['id']: _process_message(row['text']) for row in reader}
+    # Now re-read settings.csv comments if debug is on
+    if debug:
+        _read_csv('settings.csv', debug=True)
+
+    messages_rows = _read_csv('messages.csv', debug=debug)
+    game.messages = {row['id']: _process_message(row['text']) for row in messages_rows}
     if debug: print('Loaded messages')
 
     if debug: print('Loading rooms...')
-    with open('rooms.csv', newline='', encoding='utf-8') as f:
-        reader = csv.DictReader(f)
-        for row in reader:
+    rooms_rows = _read_csv('rooms.csv', debug=debug)
+    for row in rooms_rows:
             exits_raw = row['exits'].strip()
             if exits_raw:
                 exits = {}
@@ -50,10 +68,8 @@ def Create(game):
     if debug: print(f'  {len(game.rooms)} rooms loaded')
 
     if debug: print('Loading items...')
-    with open('items.csv', newline='', encoding='utf-8') as f:
-        reader = csv.DictReader(f)
-        item_count = 0
-        for row in reader:
+    item_count = 0
+    for row in _read_csv('items.csv', debug=debug):
             gettable = row['gettable'].strip().lower() == 'true'
             id_words_raw = row.get('id_words', '').strip()
             id_words = [w.strip().upper() for w in id_words_raw.split(',')] if id_words_raw else [row['short_desc'].upper()]

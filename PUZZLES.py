@@ -9,10 +9,16 @@ class PuzzleEngine:
         self.fired = set()  # tracks group keys for once=True puzzles
 
     def load(self, filename='puzzles.csv'):
+        debug = self.game.settings.get('debug', False)
         with open(filename, newline='', encoding='utf-8') as f:
             reader = csv.DictReader(f)
             for row in reader:
-                self.puzzles.append(row)
+                first = list(row.values())[0].strip()
+                if first.startswith(';'):
+                    if debug:
+                        print(f'  [comment] {first[1:].strip()}')
+                else:
+                    self.puzzles.append(row)
 
     def trigger(self, player, verb, item_name, room_id):
         """Check all puzzles for a matching trigger and apply effects. Returns True if anything fired."""
