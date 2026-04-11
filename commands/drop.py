@@ -4,7 +4,9 @@ def execute(player, noun):
     if noun is None:
         print('Drop what?')
         return
-    had_item = player.hasItem(noun) is not None
+    if not player.hasItem(noun):
+        print('You do not have a', noun.lower(), 'to drop!')
+        return
+    if player.game.puzzles.trigger(player, 'DROP', noun, player.getRoom()):
+        return
     player.dropItem(noun)
-    if had_item and not player.hasItem(noun):
-        player.game.puzzles.trigger(player, 'DROP', noun, player.getRoom())

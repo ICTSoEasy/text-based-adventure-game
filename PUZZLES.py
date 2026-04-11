@@ -219,6 +219,12 @@ class PuzzleEngine:
             if self.game.settings.get('debug', False):
                 print(f'  [counter] {target} = 0 (reset)')
 
+        elif effect == 'DROP_ITEM':
+            item = player.hasItem(target.upper())
+            if item:
+                player.items.remove(item)
+                self.game.getRoom(player.getRoom()).putIn(item)
+
         elif effect == 'ADD_POINTS':
             self.game.score += int(value)
 
