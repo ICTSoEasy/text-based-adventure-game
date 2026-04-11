@@ -1,4 +1,4 @@
-import csv
+import json
 import time
 import random
 
@@ -8,21 +8,25 @@ class PuzzleEngine:
         self.puzzles = []
         self.fired = set()  # tracks group keys for once=True puzzles
 
-    def load(self, filename='puzzles.csv'):
+    def load(self, filename='puzzles.json'):
         debug = self.game.settings.get('debug', False)
-        with open(filename, newline='', encoding='utf-8') as f:
-            reader = csv.DictReader(f)
-            for row in reader:
-                first = list(row.values())[0].strip()
-                if first.startswith(';'):
-                    if debug:
-                        print(f'  [comment] {first[1:].strip()}')
-                else:
-                    self.puzzles.append(row)
+        with open(filename, encoding='utf-8') as f:
+            rows = json.load(f)
+        for row in rows:
+            if '_comment' in row and len(row) == 1:
+                if debug:
+                    print(f'  [comment] {row["_comment"]}')
+            else:
+                self.puzzles.append(row)
+
+    def _f(self, puzzle, key):
+        """Get field value as a stripped string, defaulting to ''."""
+        val = puzzle.get(key)
+        return '' if val is None else str(val).strip()
 
     def has_verb(self, verb):
         """Return True if any puzzle row uses this verb."""
-        return any(p['trigger_verb'].strip().upper() == verb.upper() for p in self.puzzles)
+        return any(self._f(p, 'trigger_verb').upper() == verb.upper() for p in self.puzzles)
 
     def trigger(self, player, verb, item_name, room_id):
         """Check all puzzles for a matching trigger and apply effects. Returns True if anything fired."""
@@ -35,30 +39,32 @@ class PuzzleEngine:
                 continue
 
             key = (
-                puzzle['trigger_verb'].strip().upper(),
-                puzzle['trigger_item'].strip().upper(),
-                puzzle['trigger_room'].strip(),
-                puzzle.get('condition_item_turns_eq', '').strip()
+                self._f(puzzle, 'trigger_verb').upper(),
+                self._f(puzzle, 'trigger_item').upper(),
+                self._f(puzzle, 'trigger_room'),
+                self._f(puzzle, 'condition_item_turns_eq')
             )
 
             # Skip once-only puzzles that have already fired
-            if puzzle['once'].strip().lower() == 'true' and key in self.fired:
+            once = puzzle.get('once', False)
+            if (once is True or str(once).lower() == 'true') and key in self.fired:
                 continue
 
             if debug:
-                tv = puzzle['trigger_verb'].strip()
-                ti = puzzle['trigger_item'].strip()
-                tr = puzzle['trigger_room'].strip()
-                ef = puzzle['effect_type'].strip()
+                tv = self._f(puzzle, 'trigger_verb')
+                ti = self._f(puzzle, 'trigger_item')
+                tr = self._f(puzzle, 'trigger_room')
+                ef = self._f(puzzle, 'effect_type')
                 print(f'  [puzzle] {tv} {ti} room={tr} → {ef}')
 
             self._apply(player, puzzle)
             fired_any = True
 
-            if puzzle['once'].strip().lower() == 'true':
+            if once is True or str(once).lower() == 'true':
                 keys_fired_this_call.add(key)
 
-            if (puzzle.get('stop') or '').strip().lower() == 'true':
+            stop = puzzle.get('stop', False)
+            if stop is True or str(stop).lower() == 'true':
                 break
 
         # Mark once-only groups as fired after processing all rows
@@ -69,40 +75,40 @@ class PuzzleEngine:
         item_name = (item_name or '').upper()
 
         # Verb must match
-        if puzzle['trigger_verb'].strip().upper() != verb.upper():
+        if self._f(puzzle, 'trigger_verb').upper() != verb.upper():
             return False
 
         # trigger_item: if specified, must match
-        ti = puzzle['trigger_item'].strip().upper()
+        ti = self._f(puzzle, 'trigger_item').upper()
         if ti and ti != item_name:
             return False
 
         # trigger_room: if specified, must match
-        tr = puzzle['trigger_room'].strip()
+        tr = self._f(puzzle, 'trigger_room')
         if tr and int(tr) != room_id:
             return False
 
         # condition_item: player must be carrying this
-        ci = puzzle['condition_item'].strip().upper()
+        ci = self._f(puzzle, 'condition_item').upper()
         if ci and not player.hasItem(ci):
             return False
 
         # condition_not_item: player must NOT be carrying any of these (comma-separated)
-        cni = puzzle['condition_not_item'].strip().upper()
+        cni = self._f(puzzle, 'condition_not_item').upper()
         if cni:
-            for item_name in [x.strip() for x in cni.split(',')]:
-                if item_name and player.hasItem(item_name):
+            for ni in [x.strip() for x in cni.split(',')]:
+                if ni and player.hasItem(ni):
                     return False
 
         # condition_room_item: this item must be in the current room
-        cri = puzzle['condition_room_item'].strip().upper()
+        cri = self._f(puzzle, 'condition_room_item').upper()
         if cri:
             room = self.game.getRoom(room_id)
             if not room.ifContains(cri):
                 return False
 
         # condition_item_state: item_name:state — named item must be in that state
-        cis = puzzle.get('condition_item_state', '').strip()
+        cis = self._f(puzzle, 'condition_item_state')
         if cis:
             cis_name, cis_state = cis.split(':')
             items = self.game.findAllItems(cis_name.upper())
@@ -110,7 +116,7 @@ class PuzzleEngine:
                 return False
 
         # condition_item_turns_eq: item_name:value — named item's turns_remaining must equal value
-        cite = puzzle.get('condition_item_turns_eq', '').strip()
+        cite = self._f(puzzle, 'condition_item_turns_eq')
         if cite:
             cite_name, cite_value = cite.split(':')
             items = self.game.findAllItems(cite_name.upper())
@@ -118,33 +124,33 @@ class PuzzleEngine:
                 return False
 
         # condition_location_dark: true/false — whether the player's location is dark
-        cld = puzzle.get('condition_location_dark', '').strip().lower()
+        cld = self._f(puzzle, 'condition_location_dark').lower()
         if cld == 'true' and player.isLocationLit():
             return False
         if cld == 'false' and not player.isLocationLit():
             return False
 
         # condition_counter_gte: counter_name:value — named counter must be >= value
-        ccg = puzzle.get('condition_counter_gte', '').strip()
+        ccg = self._f(puzzle, 'condition_counter_gte')
         if ccg:
             ccg_name, ccg_value = ccg.split(':')
             if self.game.counters.get(ccg_name, 0) < int(ccg_value):
                 return False
 
         # chance_pct: integer 1-100 — percentage chance this row fires at all
-        pct = puzzle.get('chance_pct', '').strip()
+        pct = self._f(puzzle, 'chance_pct')
         if pct and not random.randint(1, 100) <= int(pct):
             return False
 
         return True
 
     def _apply(self, player, puzzle):
-        effect = puzzle['effect_type'].strip().upper()
-        target = puzzle['effect_target'].strip()
-        value = puzzle['effect_value'].strip()
-        message = puzzle['message'].strip()
-        delay_str = puzzle['delay'].strip()
-        delay = float(delay_str) if delay_str else 0
+        effect = self._f(puzzle, 'effect_type').upper()
+        target = self._f(puzzle, 'effect_target')
+        value = self._f(puzzle, 'effect_value')
+        message = self._f(puzzle, 'message')
+        delay_raw = puzzle.get('delay') or 0
+        delay = float(delay_raw)
 
         if message:
             print(message)
@@ -221,7 +227,7 @@ class PuzzleEngine:
 
         elif effect == 'SET_GETTABLE':
             for item in self.game.findAllItems(target.upper()):
-                item.gettable = (value.strip().upper() == 'TRUE')
+                item.gettable = (value.upper() == 'TRUE')
 
         elif effect == 'DROP_ITEM':
             item = player.hasItem(target.upper())

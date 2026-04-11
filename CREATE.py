@@ -86,6 +86,6 @@ def Create(game):
 
     if debug: print('Loading puzzles...')
     puzzles = PuzzleEngine(game)
-    puzzles.load('puzzles.csv')
+    puzzles.load('puzzles.json')
     game.puzzles = puzzles
     if debug: print(f'  {len(puzzles.puzzles)} puzzle rows loaded')
