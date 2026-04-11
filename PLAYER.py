@@ -106,7 +106,7 @@ class Player:
         if thing is not None:
             room.putIn(thing)
             self.items.remove(thing)
-            print('You drop a', noun.lower())
+            print('OK')
         else:
             print('You do not have a', noun.lower(), 'to drop!')
 
