@@ -184,6 +184,14 @@ class Player:
                 except Exception as e:
                     print(f'Something went wrong: {e}')
                 return
+        # If no command matched, check if the verb is a named exit from the current room
+        if noun is None and self.room is not None:
+            room = self.game.getRoom(self.room)
+            exits = room.getExits()
+            if exits and verb.upper() in exits:
+                if not self.game.puzzles.trigger(self, verb.upper(), None, self.room):
+                    self.move(verb.upper())
+                return
         print(self.game.messages.get('unknown_command', 'Unknown command. Type HELP for help.'))
 
     def getCommand(self):
