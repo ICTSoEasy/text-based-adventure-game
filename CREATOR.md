@@ -338,6 +338,53 @@ GET BIRD
 I
 ```
 
+### Using one item to clear a creature blocking your path
+
+Sometimes a creature blocks movement in a room. Another item (or a sacrifice) is needed to clear it and open up new exits.
+
+__Adventure example:__ A snake blocks the south and west exits of the Hall of the Mountain King (room 19). Dropping the bird (which must be in the cage) in that room causes it to attack and drive the snake away, opening those exits. Both the bird and the snake are destroyed in the process.
+
+1. **Add the creature as an item.** In `items.csv`, set `gettable=FALSE` and give it a single `room_desc` — the message seen when the creature is present. There's no need for a second state since the creature will be completely removed from the game. Place it in the blocking room.
+
+2. **Add the DROP puzzle.** When the player drops the sacrificial item in the right room (and the creature is still there), several things need to happen in sequence. Add rows in `puzzles.csv` with `trigger_verb=DROP`, `trigger_item=BIRD`, `trigger_room=19`, and `condition_room_item=SNAKE` on every row (so it only fires while the snake is still there):
+
+   - **Row 1 — dramatic message:** `PRINT_MSG` — the flavour text describing what happens.
+   - **Row 2 — destroy the sacrificial item:** `DESTROY_ITEM` with target `bird` — removes it from wherever it now is (it was just dropped into the room by the DROP command before puzzles fire).
+   - **Row 3 — destroy the creature:** `DESTROY_ITEM` with target `snake`.
+   - **Rows 4-5 — open the exits:** `ADD_EXIT` for each direction that was blocked. Here `ADD_EXIT` on room 19 for `SOUTH:36` and `WEST:37`.
+
+   Note: in Adventure these exits are one-way — you can go south/west from room 19 but there is no route back. That's intentional and valid.
+
+3. **No command file needed.** The DROP command already triggers puzzles after a successful drop — nothing extra required.
+
+__TEST__
+```
+DEBUG
+CHEAT 3
+GET LAMP
+GET KEYS
+OUT
+S
+S
+S
+UNLOCK GRATE
+D
+W
+GET CAGE
+ON
+W
+GET ROD
+W
+W
+GET BIRD
+DROP ROD
+GET BIRD
+W
+D
+N
+DROP BIRD
+```
+
 ---
 
 ## Tips for designing your game
