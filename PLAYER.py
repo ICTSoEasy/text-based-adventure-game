@@ -49,7 +49,8 @@ class Player:
 
     def look(self):
         room = self.game.getRoom(self.getRoom())
-        if self.isLocationLit() or self.game.settings.get('debug', False):
+        debug = self.game.settings.get('debug', False)
+        if self.isLocationLit():
             print(room.getLongDesc())
             for thing in room.getContains():
                 room_desc = thing.getRoomDesc()
@@ -57,12 +58,16 @@ class Player:
                     print(room_desc)
                 else:
                     print('A', thing.getShortDesc(), 'is here.')
-            if self.game.settings.get('show_exits', True) or self.game.settings.get('debug', False):
+            if self.game.settings.get('show_exits', True) or debug:
                 exits = room.getExits()
                 keys = ', '.join(exits.keys()) if exits else 'None!'
                 print('Exits:', keys)
         else:
             print(self.game.settings.get('dark_message'))
+            if debug:
+                exits = room.getExits()
+                keys = ', '.join(exits.keys()) if exits else 'None!'
+                print('Exits:', keys)
 
     def lookItem(self, noun):
         found = False
