@@ -193,6 +193,15 @@ class PuzzleEngine:
                 room.remove(item)
                 player.items.append(item)
 
+        elif effect == 'DESTROY_ITEM':
+            for item in self.game.findAllItems(target.upper()):
+                for room in self.game.rooms.values():
+                    if item in room.getContains():
+                        room.remove(item)
+                for inv_item in list(player.items):
+                    if inv_item is item:
+                        player.items.remove(inv_item)
+
         elif effect == 'INCREMENT_COUNTER':
             self.game.counters[target] = self.game.counters.get(target, 0) + 1
             if self.game.settings.get('debug', False):

@@ -158,6 +158,7 @@ The puzzle engine connects player actions to game events. Each row is one effect
 | `SET_ITEM_LONG_DESC` | item name | new long desc | Change an item's description |
 | `INCREMENT_COUNTER` | counter name | *(blank)* | Add 1 to a named counter (created at 0 if it doesn't exist) |
 | `RESET_COUNTER` | counter name | *(blank)* | Reset a named counter to 0 |
+| `DESTROY_ITEM` | item name | *(blank)* | Remove an item from the game entirely, wherever it is (room or player inventory) |
 | `WIN` | *(blank)* | *(blank)* | End the game with a win |
 | `LOSE` | *(blank)* | *(blank)* | Kill the player |
 
