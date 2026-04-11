@@ -79,13 +79,26 @@ class Terminal:
         return text
 
     def game_print(self, *args, **kwargs):
+        import re
         sep = kwargs.get('sep', ' ')
         end = kwargs.get('end', '\n')
         text = sep.join(str(a) for a in args) + end
+
+        # Extract {^}...{/^} forced-uppercase sections before case conversion
+        forced = []
+        def _extract(m):
+            forced.append(m.group(1).upper())
+            return f'\x00{len(forced)-1}\x00'
+        text = re.sub(r'\{\^\}(.*?)\{/\^\}', _extract, text, flags=re.DOTALL)
+
         if self.use_uppercase:
             text = text.upper()
         else:
             text = self._sentence_case(text)
+
+        # Restore forced-uppercase sections (placeholders survive case conversion)
+        for i, section in enumerate(forced):
+            text = text.replace(f'\x00{i}\x00', section)
 
         lines = text.split('\n')
         for i, line in enumerate(lines):
