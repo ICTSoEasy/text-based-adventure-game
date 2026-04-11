@@ -1,13 +1,10 @@
 DESCRIPTION = 'OFF - extinguish the lamp'
 
 def execute(player, noun):
-    lamp = player.hasItem('lamp')
+    lamp = player.hasItem('lamp') or player.game.getRoom(player.getRoom()).ifContains('lamp')
     if not lamp:
-        print('You are not carrying the lamp.')
-        return
-    if lamp.state == 0:
-        print('The lamp is already off.')
+        print('YOU HAVE NO SOURCE OF LIGHT.')
         return
     lamp.setState(0)
     lamp.setMakingLight(0)
-    print('The lamp is now off.')
+    print('YOUR LAMP IS NOW OFF.')
