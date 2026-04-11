@@ -1,4 +1,4 @@
-trigger_verb,trigger_item,trigger_room,condition_item,condition_not_item,condition_room_item,condition_item_state,condition_item_turns_eq,effect_type,effect_target,effect_value,message,delay,once,condition_location_dark,condition_counter_gte,chance_pct
+trigger_verb,trigger_item,trigger_room,condition_item,condition_not_item,condition_room_item,condition_item_state,condition_item_turns_eq,effect_type,effect_target,effect_value,message,delay,once,condition_location_dark,condition_counter_gte,chance_pct,stop
 ;=== ACTUAL PUZZLE TYPE PUZZLES ===,,,,,,,,,,,,,,,,
 ;===Lamp is needed to see in the dark - messages shown when it gets low on oil,,,,,,,,,,,,,,,,
 FORCE,,,LAMP,,,lamp:1,lamp:50,PRINT_MSG,,,Your lamp is getting dim.,0,FALSE,,,
@@ -130,19 +130,19 @@ HALL,,17,,,,,,TELEPORT,,15,,0,FALSE,,,
 WAVE,ROD1,17,,,,fissure:0,,PRINT_MSG,,,A CRYSTAL BRIDGE NOW SPANS THE FISSURE.,0,FALSE,,,
 WAVE,ROD1,17,,,,fissure:0,,ADD_EXIT,17,OVER:27,,0,FALSE,,,
 WAVE,ROD1,17,,,,fissure:0,,ADD_EXIT,27,OVER:17,,0,FALSE,,,
-WAVE,ROD1,17,,,,fissure:0,,SET_ITEM_STATE,fissure,1,,0,FALSE,,,
+WAVE,ROD1,17,,,,fissure:0,,SET_ITEM_STATE,fissure,1,,0,FALSE,,,TRUE
 WAVE,ROD1,17,,,,fissure:1,,PRINT_MSG,,,THE CRYSTAL BRIDGE HAS VANISHED!,0,FALSE,,,
 WAVE,ROD1,17,,,,fissure:1,,REMOVE_EXIT,17,OVER,,0,FALSE,,,
 WAVE,ROD1,17,,,,fissure:1,,REMOVE_EXIT,27,OVER,,0,FALSE,,,
-WAVE,ROD1,17,,,,fissure:1,,SET_ITEM_STATE,fissure,0,,0,FALSE,,,
+WAVE,ROD1,17,,,,fissure:1,,SET_ITEM_STATE,fissure,0,,0,FALSE,,,TRUE
 WAVE,ROD1,27,,,,fissure:0,,PRINT_MSG,,,A CRYSTAL BRIDGE NOW SPANS THE FISSURE.,0,FALSE,,,
 WAVE,ROD1,27,,,,fissure:0,,ADD_EXIT,17,OVER:27,,0,FALSE,,,
 WAVE,ROD1,27,,,,fissure:0,,ADD_EXIT,27,OVER:17,,0,FALSE,,,
-WAVE,ROD1,27,,,,fissure:0,,SET_ITEM_STATE,fissure,1,,0,FALSE,,,
+WAVE,ROD1,27,,,,fissure:0,,SET_ITEM_STATE,fissure,1,,0,FALSE,,,TRUE
 WAVE,ROD1,27,,,,fissure:1,,PRINT_MSG,,,THE CRYSTAL BRIDGE HAS VANISHED!,0,FALSE,,,
 WAVE,ROD1,27,,,,fissure:1,,REMOVE_EXIT,17,OVER,,0,FALSE,,,
 WAVE,ROD1,27,,,,fissure:1,,REMOVE_EXIT,27,OVER,,0,FALSE,,,
-WAVE,ROD1,27,,,,fissure:1,,SET_ITEM_STATE,fissure,0,,0,FALSE,,,
+WAVE,ROD1,27,,,,fissure:1,,SET_ITEM_STATE,fissure,0,,0,FALSE,,,TRUE
 HALL,,18,,,,,,TELEPORT,,15,,0,FALSE,,,
 OUT,,18,,,,,,TELEPORT,,15,,0,FALSE,,,
 STAIRS,,19,,,,,,TELEPORT,,15,,0,FALSE,,,

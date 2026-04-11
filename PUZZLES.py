@@ -58,6 +58,9 @@ class PuzzleEngine:
             if puzzle['once'].strip().lower() == 'true':
                 keys_fired_this_call.add(key)
 
+            if (puzzle.get('stop') or '').strip().lower() == 'true':
+                break
+
         # Mark once-only groups as fired after processing all rows
         self.fired.update(keys_fired_this_call)
         return fired_any
