@@ -17,6 +17,7 @@ def run(stdscr):
     Create(game)
 
     terminal.typewriter_speed = game.settings.get('typewriter_speed', 0.02)
+    terminal.use_uppercase = game.settings.get('use_uppercase', False)
 
     player = Player()
     player.setRoom(game.settings.get('starting_room', 1))

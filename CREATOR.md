@@ -29,6 +29,7 @@ Controls global game behaviour. Format: `setting,value,description`
 | `typewriter_speed` | `0.02` | Seconds per character (0 = instant) |
 | `input_prompt` | `What do you want to do? ` | Text shown before each command input (blank for none) |
 | `debug` | `true` / `false` | Shows loading detail, tick counter, always shows exits |
+| `use_uppercase` | `true` / `false` | Convert all game output to uppercase (original 1977 style) |
 
 **Example:**
 ```

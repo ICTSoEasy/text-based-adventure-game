@@ -13,6 +13,7 @@ class Terminal:
         self.text_win = None
         self.input_win = None
         self.typewriter_speed = typewriter_speed
+        self.use_uppercase = False
         self._height = 0
         self._width = 0
 
@@ -74,6 +75,8 @@ class Terminal:
         sep = kwargs.get('sep', ' ')
         end = kwargs.get('end', '\n')
         text = sep.join(str(a) for a in args) + end
+        if self.use_uppercase:
+            text = text.upper()
 
         lines = text.split('\n')
         for i, line in enumerate(lines):
