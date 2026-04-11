@@ -185,13 +185,9 @@ class Player:
         prompt = self.game.settings.get('input_prompt', 'What do you want to do? ')
         command = input(prompt).upper()
         commands = command.split()
-        while True:
-            if len(commands) == 1:
-                self.doCommand(commands[0], None)
-                break
-            elif len(commands) >= 2:
-                self.doCommand(commands[0], commands[1])
-                break
-            else:
-                print('Please enter a verb followed by an optional noun.')
-                print('Type HELP for help.')
+        if len(commands) == 0:
+            return
+        elif len(commands) == 1:
+            self.doCommand(commands[0], None)
+        else:
+            self.doCommand(commands[0], commands[1])

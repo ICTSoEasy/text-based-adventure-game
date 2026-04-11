@@ -108,6 +108,8 @@ class Game:
             if item.getLightTurns() > 0:
                 if item.getMakingLight():
                     item.decrementLight()
+                    if not item.getMakingLight():
+                        print(self.messages.get('lamp_out', 'YOUR LAMP HAS RUN OUT OF POWER.'))
                 if debug:
                     print(f'  [light] {item.getShortDesc()}: making_light={item.getMakingLight()} turns_remaining={item.getTurnsRemaining()}')
 
