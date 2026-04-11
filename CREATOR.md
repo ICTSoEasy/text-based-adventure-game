@@ -124,7 +124,7 @@ The puzzle engine connects player actions to game events. Each row is one effect
 
 | Column | Description |
 |--------|-------------|
-| `trigger_verb` | Verb that activates this row (`USE`, `MOVE`, `GET`, `DROP`, or blank for any) |
+| `trigger_verb` | Verb that activates this row (`USE`, `MOVE`, `GET`, `DROP`, compass directions `NORTH`/`SOUTH`/`EAST`/`WEST`/`NE`/`NW`/`SE`/`SW`/`UP`/`DOWN`, or blank for any). Compass direction triggers fire **before** movement — if any row fires, the movement is cancelled. |
 | `trigger_item` | Item name that must be used (or blank for any) |
 | `trigger_room` | Room ID where this triggers (or blank for any room) |
 | `condition_item` | Player must be carrying this item |
@@ -383,6 +383,27 @@ W
 D
 N
 DROP BIRD
+```
+
+### Blocking a direction with a custom message
+
+Compass directions (`NORTH`, `SOUTH`, `EAST`, `WEST`, `NE`, `NW`, `SE`, `SW`, `UP`, `DOWN`) check puzzles before attempting movement. If any puzzle fires, the movement is cancelled. This lets you display a specific message when a passage is blocked — rather than the generic "I cannot move that way."
+
+__Adventure example:__ The snake blocks the south and west exits of room 19. Trying to go south or west before clearing the snake prints "You can't get by the snake." instead of a generic failure.
+
+1. **Leave the exits out of `rooms.csv`.** Don't add the blocked directions to the room's exit list — they'll be added later by the puzzle that clears the blocker (e.g. `ADD_EXIT`).
+
+2. **Add the blocking puzzle rows.** In `puzzles.csv`, add one row per blocked direction with `trigger_verb=SOUTH` (or whichever direction), `trigger_room=19`, `condition_room_item=SNAKE`, effect `PRINT_MSG`, and the message to display. Set `once=FALSE`.
+
+   Because the puzzle fires and returns true, the movement command is cancelled — the player stays put.
+
+3. **No command file changes needed.** All compass direction aliases already check puzzles first.
+
+__TEST__
+```
+CHEAT 19
+SOUTH
+WEST
 ```
 
 ---
