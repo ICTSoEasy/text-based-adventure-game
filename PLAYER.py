@@ -93,7 +93,7 @@ class Player:
             self.items.append(thing)
             room.remove(thing)
             #print('You manage to get a', noun.lower())
-            print('OK')
+            print('OK.')
             if not thing.isGettable():
                 print('Uh-oh... you struggle to hold a', noun.lower())
                 self.dropItem(noun)
@@ -106,7 +106,7 @@ class Player:
         if thing is not None:
             room.putIn(thing)
             self.items.remove(thing)
-            print('OK')
+            print('OK.')
         else:
             print('You do not have a', noun.lower(), 'to drop!')
 
