@@ -3,6 +3,6 @@ id,id_words,short_desc,long_desc,room_desc,gettable,room_id,state,light_turns
 2,"lamp,headlamp,headl,lantern,lante",brass lantern,,THERE IS A SHINY BRASS LAMP NEARBY.|THERE IS A LAMP SHINING NEARBY.,TRUE,3,0,330
 3,grate,grate,,THE GRATE IS LOCKED.|THE GRATE IS OPEN.,FALSE,8,0,0
 1003,grate,grate,,THE GRATE IS LOCKED.|THE GRATE IS OPEN.,FALSE,9,0,0
-4,cage,wicker cage,,,TRUE,5,,0
-5,rod1,black rod with a rusty star,,A THREE FOOT BLACK ROD WITH A RUSTY STAR ON AN END LIES NEARBY.,TRUE,12,,0
+4,cage,wicker cage,,THERE IS A SMALL WICKER CAGE DISCARDED NEARBY.,TRUE,10,,0
+5,rod1,black rod with a rusty star,,A THREE FOOT BLACK ROD WITH A RUSTY STAR ON AN END LIES NEARBY.,TRUE,11,,0
 6,rod2,black rod with a rusty mark,,A THREE FOOT BLACK ROD WITH A RUSTY MARK ON AN END LIES NEARBY.,TRUE,9,,0
