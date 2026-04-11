@@ -8,6 +8,7 @@ id,id_words,short_desc,long_desc,room_desc,gettable,room_id,state,light_turns
 8,bird,little bird in cage,,A CHEERFUL LITTLE BIRD IS SITTING HERE SINGING.|THERE IS A LITTLE BIRD IN THE CAGE.,FALSE,13,,0
 9,snake,snake,,A HUGE GREEN FIERCE SNAKE BARS THE WAY!,FALSE,19,,0
 6,rod2,black rod with a rusty mark,,A THREE FOOT BLACK ROD WITH A RUSTY MARK ON AN END LIES NEARBY.,TRUE,9,,0
+24,oil,small pool of oil,,A SMALL POOL OF OIL IN ONE CORNER OF THE PIT.,FALSE,25,0,0
 7,steps,stone steps,,ROUGH STONE STEPS LEAD DOWN THE PIT.,FALSE,14,0,0
 1007,steps,stone steps,,ROUGH STONE STEPS LEAD UP THE DOME.,FALSE,15,0,0
 12,fissure,fissure,,|A CRYSTAL BRIDGE NOW SPANS THE FISSURE.,FALSE,17,0,0
