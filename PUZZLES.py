@@ -80,10 +80,12 @@ class PuzzleEngine:
         if ci and not player.hasItem(ci):
             return False
 
-        # condition_not_item: player must NOT be carrying this
+        # condition_not_item: player must NOT be carrying any of these (comma-separated)
         cni = puzzle['condition_not_item'].strip().upper()
-        if cni and player.hasItem(cni):
-            return False
+        if cni:
+            for item_name in [x.strip() for x in cni.split(',')]:
+                if item_name and player.hasItem(item_name):
+                    return False
 
         # condition_room_item: this item must be in the current room
         cri = puzzle['condition_room_item'].strip().upper()
@@ -183,6 +185,13 @@ class PuzzleEngine:
                 print(msg)
             else:
                 print(f'[Message not found: {target}]')
+
+        elif effect == 'GIVE_ITEM':
+            room = self.game.getRoom(player.getRoom())
+            item = room.ifContains(target.upper())
+            if item:
+                room.remove(item)
+                player.items.append(item)
 
         elif effect == 'INCREMENT_COUNTER':
             self.game.counters[target] = self.game.counters.get(target, 0) + 1

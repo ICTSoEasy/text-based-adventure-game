@@ -296,6 +296,49 @@ UP
 DOWN
 ```
 
+### Getting an item only when you have another item
+
+Sometimes an item can only be picked up if the player already has a specific item. You can also block the action if the player is carrying something that gets in the way.
+
+__Adventure example:__ The bird in room 13 can only be caught if the player is carrying the wicker cage. If they are carrying the black rod (rod1), the bird is frightened and cannot be caught.
+
+1. **Make the item non-gettable.** In `items.csv`, set `gettable=FALSE` for the bird. This prevents the normal GET command from picking it up. Give it two pipe-separated `room_desc` entries — one for when it's free, one for when it's in the cage: `A CHEERFUL LITTLE BIRD IS SITTING HERE SINGING.|THERE IS A LITTLE BIRD IN THE CAGE.`
+
+2. **Add the GET puzzles.** The GET command fires puzzles before attempting a normal pick-up. If any puzzle fires, the normal pick-up is skipped entirely. Add three rows in `puzzles.csv`, all with `trigger_verb=GET`, `trigger_item=BIRD`, `trigger_room=13`:
+
+   - **Row 1 — rod frightens the bird:** `condition_item=ROD1`. Effect: `PRINT_MSG` — "THE BIRD WAS UNAFRAID WHEN YOU ENTERED, BUT AS YOU APPROACH IT BECOMES DISTURBED AND YOU CANNOT CATCH IT." Set `once=FALSE` so it fires every time.
+   - **Row 2 — no cage:** `condition_not_item=ROD1,CAGE` (player has neither). Effect: `PRINT_MSG` — "YOU CAN CATCH THE BIRD, BUT YOU CANNOT CARRY IT." Set `once=FALSE`.
+   - **Row 3 — success (has cage, no rod):** `condition_item=CAGE`, `condition_not_item=ROD1`. Two effects on separate rows: `GIVE_ITEM` with target `bird` (moves bird from room to inventory), then `SET_ITEM_STATE` with target `bird` and value `1` (switches to the "in cage" description). Set `once=FALSE` — the puzzle engine handles repeat attempts naturally since the bird won't be in the room a second time.
+
+   Order matters: put the rod-blocking row first so it takes priority over the success row when the player has both.
+
+__TEST__
+```
+DEBUG
+CHEAT 3
+GET LAMP
+GET KEYS
+OUT
+S
+S
+S
+UNLOCK GRATE
+D
+W
+GET CAGE
+ON
+W
+GET ROD
+W
+W
+GET BIRD
+DROP ROD
+GET BIRD
+I
+```
+
+---
+
 ## Tips for designing your game
 
 1. **Draw your map first** — number your rooms on paper before touching the CSV
