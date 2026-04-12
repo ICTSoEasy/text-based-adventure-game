@@ -250,4 +250,6 @@ class PuzzleEngine:
             player.kill()
 
         else:
-            print(f'[Unknown effect type: {effect}]')
+            debug = self.game.settings.get('debug', False)
+            if debug:
+                print(f'[Unknown effect type: {effect}]')

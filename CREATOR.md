@@ -134,7 +134,7 @@ The puzzle engine connects player actions to game events. Each row is one effect
 | `condition_item_turns_eq` | `item_name:value` — named item's turns remaining must equal value (e.g. `lamp:50`). Fires on exactly that turn. Blank = no check |
 | `condition_location_dark` | `true` = only fire when the player's location is dark; `false` = only fire when lit. Blank = either |
 | `condition_counter_gte` | `counter_name:value` — named counter must be ≥ value (e.g. `dark_moves:2`). Blank = no check |
-| `effect_type` | What happens (see below) |
+| `effect_type` | What happens (see below). Can be omitted if you only want to print a message |
 | `effect_target` | What the effect acts on |
 | `effect_value` | Value for the effect |
 | `message` | Text to print when this row fires — printed before the effect runs. Can be added to any effect type, not just `PRINT_MSG`. Takes priority over `message_file` |
@@ -147,8 +147,8 @@ The puzzle engine connects player actions to game events. Each row is one effect
 
 | Effect | Target | Value | Description |
 |--------|--------|-------|-------------|
-| `PRINT_MSG` | *(blank)* | *(blank)* | Print a message with no other effect. Use when you only need text output — if an effect row already does the work, just add `message` or `message_file` to that row instead |
-| `PRINT_MSG_FILE` | message id | *(blank)* | Same as `PRINT_MSG` but the text comes from `messages.csv`. Equivalent to adding `message_file` to a `PRINT_MSG` row |
+| `PRINT_MSG` | *(blank)* | *(blank)* | Print a message with no other effect. Equivalent to omitting `effect_type` and using `message` |
+| `PRINT_MSG_FILE` | message id | *(blank)* | Print a named message with no other effect. Equivalent to omitting `effect_type` and using `message_file` |
 | `TELEPORT` | *(blank)* | room id | Move the player to a room and show its description |
 | `ADD_EXIT` | room id | `DIRECTION:room_id` | Add an exit to a room |
 | `REMOVE_EXIT` | room id | `DIRECTION` | Remove an exit from a room |
