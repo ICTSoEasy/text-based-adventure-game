@@ -16,19 +16,21 @@ def execute(player, noun):
     # Only items with a scoring value
     scoreable = [i for i in all_items if i.finding_bonus or i.deposit_bonus]
 
-    if details and scoreable:
-        for item in scoreable:
-            if not item.found:
-                continue
-            in_building = any(
-                item in game.getRoom(deposit_room).getContains()
-                for _ in [None]
-                if deposit_room in game.rooms
-            )
+    deposit_items = game.getRoom(deposit_room).getContains() if deposit_room in game.rooms else []
+
+    score = 0
+    for item in scoreable:
+        if not item.found:
+            continue
+        score += item.finding_bonus
+        in_building = item in deposit_items
+        if in_building:
+            score += item.deposit_bonus
+        if details:
             line = f'{item.getShortDesc().capitalize()} found ({item.finding_bonus})'
             if in_building and item.deposit_bonus:
                 line += f' and deposited in building ({item.deposit_bonus})'
             print(line)
 
     max_score = sum(i.finding_bonus + i.deposit_bonus for i in scoreable)
-    print(f'If you were to quit now, you would score {game.score} out of a possible {max_score}.')
+    print(f'If you were to quit now, you would score {score} out of a possible {max_score}.')
