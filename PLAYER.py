@@ -211,6 +211,8 @@ class Player:
     def getCommand(self):
         prompt = self.game.settings.get('input_prompt', 'What do you want to do? ')
         command = input(prompt).upper()
+        if command.strip().startswith(';'):
+            return
         commands = command.split()
         if len(commands) == 0:
             return
