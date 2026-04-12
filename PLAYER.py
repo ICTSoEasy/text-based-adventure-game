@@ -58,6 +58,8 @@ class Player:
                     print(room_desc)
                 else:
                     print('A', thing.getShortDesc(), 'is here.')
+                if debug:
+                    print('  '+str(thing.isGettable()))
             if self.game.settings.get('show_exits', True) or debug:
                 exits = room.getExits()
                 keys = ', '.join(exits.keys()) if exits else 'None!'
@@ -95,13 +97,19 @@ class Player:
         room = self.game.getRoom(self.getRoom())
         thing = room.ifContains(noun)
         if thing is not None:
-            self.items.append(thing)
-            room.remove(thing)
-            #print('You manage to get a', noun.lower())
-            print('OK.')
-            if not thing.isGettable():
-                print('Uh-oh... you struggle to hold a', noun.lower())
-                self.dropItem(noun)
+            #self.items.append(thing)
+            #room.remove(thing)
+            ##print('You manage to get a', noun.lower())
+            #print('OK.')
+            #if not thing.isGettable():
+            #    print('Uh-oh... you struggle to hold a', noun.lower())
+            #    self.dropItem(noun)
+            if thing.isGettable():
+                self.items.append(thing)
+                room.remove(thing)
+                print(self.game.settings.get('get_ok', 'ITEM GOT'))
+            else:
+                print(self.game.settings.get('get_no', 'ITEM NOT GOT'))
         else:
             print('You cannot find a', noun.lower())
 

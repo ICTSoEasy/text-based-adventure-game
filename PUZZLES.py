@@ -192,7 +192,7 @@ class PuzzleEngine:
             if item:
                 item.setLongDesc(value)
 
-        elif effect == 'SHOW_MESSAGE':
+        elif effect == 'PRINT_MSG_FILE':
             msg = self.game.messages.get(target)
             if msg:
                 print(msg)
