@@ -84,9 +84,7 @@ class Game:
         return found
 
     def _recalculate_score(self):
-        deposit_room_id = self.settings.get('deposit_room', 3)
-        deposit_room = self.rooms.get(deposit_room_id)
-        deposit_items = deposit_room.getContains() if deposit_room else []
+        default_deposit_room_id = self.settings.get('deposit_room', 3)
         all_items = []
         for room in self.rooms.values():
             all_items.extend(room.getContains())
@@ -97,8 +95,11 @@ class Game:
         for item in all_items:
             if item.found and item.finding_bonus:
                 score += item.finding_bonus
-            if item in deposit_items and item.deposit_bonus:
-                score += item.deposit_bonus
+            if item.deposit_bonus:
+                dr_id = item.deposit_room if item.deposit_room else default_deposit_room_id
+                dr = self.rooms.get(dr_id)
+                if dr and item in dr.getContains():
+                    score += item.deposit_bonus
         self.score = score
 
     def _mark_items_found(self):

@@ -3,8 +3,7 @@ DESCRIPTION = "Show your current score (SCORE DETAILS for breakdown)"
 def execute(player, noun):
     game = player.game
     details = noun and noun.upper() == 'DETAILS'
-
-    deposit_room = game.settings.get('deposit_room', 3)
+    default_deposit_room_id = game.settings.get('deposit_room', 3)
 
     # Collect all items including destroyed ones
     all_items = []
@@ -13,23 +12,23 @@ def execute(player, noun):
     all_items.extend(player.items)
     all_items.extend(game.destroyed_items)
 
-    # Only items with a scoring value
     scoreable = [i for i in all_items if i.finding_bonus or i.deposit_bonus]
-
-    deposit_items = game.getRoom(deposit_room).getContains() if deposit_room in game.rooms else []
 
     score = 0
     for item in scoreable:
         if not item.found:
             continue
         score += item.finding_bonus
-        in_building = item in deposit_items
-        if in_building:
+        dr_id = item.deposit_room if item.deposit_room else default_deposit_room_id
+        dr = game.rooms.get(dr_id)
+        in_deposit_room = dr and item in dr.getContains()
+        if in_deposit_room:
             score += item.deposit_bonus
         if details:
             line = f'{item.getShortDesc().capitalize()} found ({item.finding_bonus})'
-            if in_building and item.deposit_bonus:
-                line += f' and deposited in building ({item.deposit_bonus})'
+            if in_deposit_room and item.deposit_bonus:
+                room_name = dr.getShortDesc().lower() if dr else f'room {dr_id}'
+                line += f' and deposited in {room_name} ({item.deposit_bonus})'
             print(line)
 
     max_score = sum(i.finding_bonus + i.deposit_bonus for i in scoreable)

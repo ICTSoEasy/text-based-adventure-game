@@ -1,4 +1,4 @@
-id,id_words,short_desc,long_desc,room_desc,gettable,room_id,state,light_turns,finding_bonus,deposit_bonus,unborn
+id,id_words,short_desc,long_desc,room_desc,gettable,room_id,state,light_turns,finding_bonus,deposit_bonus,deposit_room,unborn
 1,"keys,key",set of keys,,There are some keys on the ground here.,TRUE,3,0,0
 2,"lamp,headlamp,headl,lantern,lante",brass lantern,,THERE IS A SHINY BRASS LAMP NEARBY.|THERE IS A LAMP SHINING NEARBY.,TRUE,3,0,330
 3,grate,grate,,THE GRATE IS LOCKED.|THE GRATE IS OPEN.,FALSE,8,0,0
@@ -18,7 +18,8 @@ id,id_words,short_desc,long_desc,room_desc,gettable,room_id,state,light_turns,fi
 12,fissure,fissure,,|A CRYSTAL BRIDGE NOW SPANS THE FISSURE.,FALSE,17,0,0
 1012,fissure,fissure,,|A CRYSTAL BRIDGE NOW SPANS THE FISSURE.,FALSE,27,0,0
 13,tablet,stone tablet,,"A MASSIVE STONE TABLET IMBEDDED IN THE WALL READS: \n""{^}CONGRATULATIONS ON BRINGING LIGHT INTO THE DARK-ROOM!{/^}""",FALSE,101,0,0
-17,"trident,tride",jeweled trident,,THERE IS A JEWEL-ENCRUSTED TRIDENT HERE!,TRUE,106,0,0,2,14
+17,"trident,tride",jeweled trident,,THERE IS A JEWEL-ENCRUSTED TRIDENT HERE!,TRUE,106,0,0,2,14,,
+16,"magazine,magaz,issue,spelu",spelunker today,,THERE ARE A FEW RECENT ISSUES OF "SPELUNKER TODAY" MAGAZINE HERE.,TRUE,106,0,0,,,1,108
 14,"clam",giant clam,,THERE IS AN ENORMOUS CLAM HERE WITH ITS SHELL TIGHTLY CLOSED.,TRUE,103,0,0,,,,
 15,"oyster",giant oyster,,THERE IS AN ENORMOUS OYSTER HERE WITH ITS SHELL TIGHTLY CLOSED.,TRUE,0,0,0,,,TRUE
 61,"pearl",glistening pearl,,OFF TO ONE SIDE LIES A GLISTENING PEARL!,TRUE,0,0,0,2,10,TRUE
