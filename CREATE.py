@@ -83,7 +83,7 @@ def Create(game):
             thing.setLightTurns(light_turns)
             thing.finding_bonus = int(row.get('finding_bonus', '0') or '0')
             thing.deposit_bonus = int(row.get('deposit_bonus', '0') or '0')
-            if row.get('unborn', '').strip().lower() == 'true':
+            if (row.get('unborn') or '').strip().lower() == 'true':
                 game.unborn_items.append(thing)
             else:
                 game.addItem(int(row['room_id']), thing)
