@@ -70,29 +70,21 @@
 
 
   {"_comment": "Vase - safe drop onto pillow (pillow must be in room); otherwise shatters"},
-  {"_comment": "GET vase: award 2 points once, block if broken, otherwise give item"},
-  {"trigger_verb": "GET", "trigger_item": "VASE", "effect_type": "ADD_POINTS", "effect_value": "2", "once": true},
-  {"trigger_verb": "GET", "trigger_item": "VASE", "effect_type": "GIVE_ITEM", "effect_target": "vase", "message": "OK.", "condition_item_state": "vase:0"},
+  {"_comment": "Breaks."},
+  {"trigger_verb": "DROP", "trigger_item": "VASE", "condition_not_room_item": "PILLOW", "effect_type": "PRINT_MSG", "message_file": "drop_vase"},
+  {"trigger_verb": "DROP", "trigger_item": "VASE", "condition_not_room_item": "PILLOW", "effect_type": "DROP_ITEM", "effect_target": "vase"},
+  {"trigger_verb": "DROP", "trigger_item": "VASE", "condition_not_room_item": "PILLOW", "effect_type": "SET_ITEM_STATE", "effect_target": "vase", "effect_value": "2"},
+  {"trigger_verb": "DROP", "trigger_item": "VASE", "condition_not_room_item": "PILLOW", "effect_type": "SET_GETTABLE", "effect_target": "vase", "effect_value": "FALSE"},
+  {"trigger_verb": "BREAK", "trigger_item": "VASE", "effect_type": "DROP_ITEM", "effect_target": "vase", "message_file": "break_vase"},
+  {"trigger_verb": "BREAK", "trigger_item": "VASE", "effect_type": "SET_ITEM_STATE", "effect_target": "vase", "effect_value": "2"},
+  {"trigger_verb": "BREAK", "trigger_item": "VASE", "effect_type": "SET_GETTABLE", "effect_target": "vase", "effect_value": "FALSE"},
   {"_comment": "Successful placement."},
   {"trigger_verb": "DROP", "trigger_item": "VASE", "condition_room_item": "PILLOW", "effect_type": "PRINT_MSG", "message_file": "vase_resting"},
   {"trigger_verb": "DROP", "trigger_item": "VASE", "condition_room_item": "PILLOW", "effect_type": "DROP_ITEM", "effect_target": "vase"},
   {"trigger_verb": "DROP", "trigger_item": "VASE", "condition_room_item": "PILLOW", "effect_type": "SET_GETTABLE", "effect_target": "PILLOW", "effect_value": "FALSE"},
-  {"_comment": "If in building, stop it being picked up and give points.."},
-  {"trigger_verb": "DROP", "trigger_item": "VASE", "condition_room_item": "PILLOW", "effect_type": "SET_GETTABLE", "effect_target": "vase", "effect_value": "FALSE", "trigger_room": "3"},
-  {"trigger_verb": "DROP", "trigger_item": "VASE", "condition_room_item": "PILLOW", "effect_type": "ADD_POINTS", "effect_value": "14", "trigger_room": "3"},
-  {"trigger_verb": "GET", "trigger_item": "VASE", "effect_type": "PRINT_MSG", "message": "You can't be serious.",  "trigger_room": "3", "stop": true},
-  {"trigger_verb": "DROP", "trigger_item": "VASE", "condition_room_item": "PILLOW", "effect_type": "SET_ITEM_STATE", "effect_target": "vase", "effect_value": "1", "stop": true},
-  {"_comment": "Breaks."},
-  {"trigger_verb": "DROP", "trigger_item": "VASE", "effect_type": "PRINT_MSG", "message_file": "drop_vase"},
-  {"trigger_verb": "DROP", "trigger_item": "VASE", "effect_type": "DROP_ITEM", "effect_target": "vase"},
-  {"trigger_verb": "DROP", "trigger_item": "VASE", "effect_type": "SET_ITEM_STATE", "effect_target": "vase", "effect_value": "2"},
-  {"trigger_verb": "DROP", "trigger_item": "VASE", "effect_type": "SET_GETTABLE", "effect_target": "vase", "effect_value": "FALSE"},
-  {"trigger_verb": "BREAK", "trigger_item": "VASE", "effect_type": "DROP_ITEM", "effect_target": "vase", "message_file": "break_vase"},
-  {"trigger_verb": "BREAK", "trigger_item": "VASE", "effect_type": "SET_ITEM_STATE", "effect_target": "vase", "effect_value": "2"},
-  {"trigger_verb": "BREAK", "trigger_item": "VASE", "effect_type": "SET_GETTABLE", "effect_target": "vase", "effect_value": "FALSE"},
-  {"_comment": "Gettable if down safe."},
-  {"trigger_verb": "GET", "trigger_item": "VASE", "condition_room_item": "PILLOW", "effect_type": "SET_GETTABLE", "effect_target": "PILLOW", "effect_value": "TRUE"},
- 
+  {"_comment": "Enable pillow gettage if vase picked up."},
+  {"trigger_verb": "GET", "trigger_item": "VASE", "condition_room_item": "PILLOW", "effect_type": "SET_GETTABLE", "effect_target": "PILLOW", "effect_value": "TRUE", "message": "Ok."},
+
 
   {"_comment": "Bottle - FILL BOTTLE at oil pool (room 25) to collect oil"},
   {"trigger_verb": "FILL", "trigger_item": "BOTTLE", "trigger_room": "25", "condition_item": "BOTTLE", "condition_room_item": "OIL", "effect_type": "PRINT_MSG", "message_file": "bottle_full_oil"},
@@ -136,6 +128,9 @@
   {"trigger_verb": "JUMP", "trigger_room": "17", "condition_item_state": "fissure:1", "message_file": "jump_bridge"},
   {"trigger_verb": "JUMP", "trigger_room": "27", "condition_item_state": "fissure:1", "message_file": "jump_bridge"},
 
+
+  {"_comment": "Stone tablet can be read."},
+  {"trigger_verb": "READ", "trigger_room": "101", "message_file": "stone_read"},
 
   {"_comment": "=== ACTION COMMANDS - BUT NOT USED IN THE RIGHT PLACE/WITH THE RIGHT ITEM ==="},
   {"_comment": "Attacking with no valid target in the room."},
