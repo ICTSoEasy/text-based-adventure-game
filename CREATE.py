@@ -75,12 +75,13 @@ def Create(game):
             id_words_raw = row.get('id_words', '').strip()
             id_words = [w.strip().upper() for w in id_words_raw.split(',')] if id_words_raw else [row['short_desc'].upper()]
             room_desc_raw = row.get('room_desc', '').strip()
-            room_descs = [d.strip() for d in room_desc_raw.split('|')] if room_desc_raw else []
+            room_descs = [_process_message(d.strip()) for d in room_desc_raw.split('|')] if room_desc_raw else []
             state_raw = row.get('state', '').strip()
             state = int(state_raw) if state_raw else 0
             thing = Thing(int(row['id']), row['short_desc'], row['long_desc'], gettable, id_words, room_descs, state)
             light_turns = int(row.get('light_turns', '0') or '0')
             thing.setLightTurns(light_turns)
+            thing.finding_bonus = int(row.get('finding_bonus', '0') or '0')
             game.addItem(int(row['room_id']), thing)
             item_count += 1
     if debug: print(f'  {item_count} items loaded')

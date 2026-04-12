@@ -11,4 +11,5 @@ show_turns,TRUE,Show turn counter in the status bar
 use_uppercase,FALSE,Convert all game output to uppercase (original 1977 style)
 get_ok,Ok.,OK message when something can be got
 get_no,You can't be serious!,Failure message when something can't be got.
-lives,3,Number of likves to start with.
+lives,3,Number of lives to start with.
+allow_look_item,FALSE,Allow LOOK ITEM to show an item's long description (not in original CCA)

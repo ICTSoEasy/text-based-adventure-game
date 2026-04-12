@@ -16,6 +16,7 @@ class Game:
         self.score = 0
         self.lives = 3
         self.counters = {}
+        self.destroyed_items = []
 
     #This will tell us whether we are in play or not
     def getPlayStatus(self):
@@ -54,7 +55,7 @@ class Game:
     def getRoom(self,id):
         return self.rooms[id]
 
-    #Find an item by name (uppercase) across all rooms and player inventory
+    #Find an item by name (uppercase) across all rooms and player inventory (not destroyed)
     def findItem(self, name):
         name = name.upper()
         for room in self.rooms.values():
@@ -67,7 +68,7 @@ class Game:
                 return item
         return None
 
-    #Find ALL items matching a name across all rooms and player inventory
+    #Find ALL items matching a name across all rooms and player inventory (not destroyed)
     def findAllItems(self, name):
         name = name.upper()
         found = []
@@ -81,6 +82,18 @@ class Game:
                     found.append(item)
         return found
 
+    def _mark_items_found(self):
+        if not self.player:
+            return
+        room = self.rooms.get(self.player.getRoom())
+        if not room:
+            return
+        for item in room.getContains():
+            if not item.found:
+                item.found = True
+                if item.finding_bonus:
+                    self.score += item.finding_bonus
+
     #A 'tick' is a round of the game. The game does any
     #house keeping it may need and then gives the player
     #an opportunity to do it's thing.
@@ -93,6 +106,7 @@ class Game:
             self.player.getCommand()
             self.turn_counter += 1
             self.decrement_lights()
+            self._mark_items_found()
             if self.settings.get('debug', False):
                 print(f'  [turn {self.turn_counter}]')
             self._update_status()

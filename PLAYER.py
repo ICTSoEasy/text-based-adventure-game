@@ -72,6 +72,9 @@ class Player:
                 print('Exits:', keys)
 
     def lookItem(self, noun):
+        if not self.game.settings.get('allow_look_item', False):
+            print(self.game.messages.get('no_item_detail', 'Sorry but I am not allowed to give more detail.'))
+            return
         found = False
         room = self.game.getRoom(self.getRoom())
         thing = room.ifContains(noun)

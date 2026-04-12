@@ -251,6 +251,7 @@ class PuzzleEngine:
                 for inv_item in list(player.items):
                     if inv_item is item:
                         player.items.remove(inv_item)
+                self.game.destroyed_items.append(item)
 
         elif effect == 'INCREMENT_COUNTER':
             self.game.counters[target] = self.game.counters.get(target, 0) + 1
