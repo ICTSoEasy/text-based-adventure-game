@@ -112,7 +112,7 @@ welcome,{sp:8}WELCOME TO HAUNTED HOUSE\n\nCan you find the treasure and escape?
 hint,Have you tried looking at everything in the room?
 ```
 
-To display a message from a puzzle, use the `PRINT_MSG` effect (see puzzles below).
+To display a message from a puzzle, add `message_file` to any puzzle row (see puzzles below).
 
 ---
 
@@ -137,8 +137,8 @@ The puzzle engine connects player actions to game events. Each row is one effect
 | `effect_type` | What happens (see below) |
 | `effect_target` | What the effect acts on |
 | `effect_value` | Value for the effect |
-| `message` | Text to display when this fires. Takes priority over `message_file` |
-| `message_file` | ID of a message in `messages.csv` to display. Used instead of `message` if `message` is blank |
+| `message` | Text to print when this row fires — printed before the effect runs. Can be added to any effect type, not just `PRINT_MSG`. Takes priority over `message_file` |
+| `message_file` | ID of a message in `messages.csv` to print when this row fires. Used if `message` is blank. Can be added to any effect type |
 | `delay` | Seconds to pause before this effect (for dramatic timing) |
 | `once` | `true` = fire only once ever; `false` = fire every time |
 | `chance_pct` | Integer 1–100. If set, the row only fires that percentage of the time (e.g. `35` = 35% chance). Blank = always fires |
@@ -147,8 +147,8 @@ The puzzle engine connects player actions to game events. Each row is one effect
 
 | Effect | Target | Value | Description |
 |--------|--------|-------|-------------|
-| `PRINT_MSG` | *(blank)* | *(blank)* | Display the `message` column text |
-| `PRINT_MSG_FILE` | message id | *(blank)* | Display a named message from `messages.csv` |
+| `PRINT_MSG` | *(blank)* | *(blank)* | Print a message with no other effect. Use when you only need text output — if an effect row already does the work, just add `message` or `message_file` to that row instead |
+| `PRINT_MSG_FILE` | message id | *(blank)* | Same as `PRINT_MSG` but the text comes from `messages.csv`. Equivalent to adding `message_file` to a `PRINT_MSG` row |
 | `TELEPORT` | *(blank)* | room id | Move the player to a room and show its description |
 | `ADD_EXIT` | room id | `DIRECTION:room_id` | Add an exit to a room |
 | `REMOVE_EXIT` | room id | `DIRECTION` | Remove an exit from a room |
@@ -218,26 +218,22 @@ def execute(player, noun):
 
 ```
 
-4. Set up the puzzle. There are actually quite a few lines for this one. When we unlock the grate, with the keys, we need to output a message telling the player the grate has been opened, then we want to add the exit from this room to the next, _and_ the exit from the other room to this one (assuming it runs both ways), then we want to change the state from 0 to 1 so that the system knows the grate is open. That's four lines!
+4. Set up the puzzle. When we unlock the grate with the keys, we need to add the exit from this room to the next, the exit back the other way, and change the state from 0 to 1. That's three rows — and we attach the "grate is now open" message directly to the final `SET_ITEM_STATE` row rather than needing a separate `PRINT_MSG` row first.
 
-On all four:
+On all three:
 - trigger_verb = UNLOCK
 - trigger_item = GRATE
 - trigger_room = 8 (in my example)
-- condition_item = KEYS - You need this item in inventory for the puzzle to fire
-- condition_not_item = leave blank (having something won't stop this working)
-- condition_room_item = leave blank (you don't need something in the room for this to work)
-- condition_item_state = grate:0 - You can only _open_ the grate if it's in state 0. If it's not in state 0, it's already open!
-- delay = 0 - do all at onces
-- once = FALSE - we do only want it to fire once but we're dealing with that with the state change
+- condition_item = KEYS — you need this item in inventory for the puzzle to fire
+- condition_item_state = grate:0 — you can only _open_ the grate if it's in state 0. If it's not in state 0, it's already open!
+- once = FALSE — we only want it to fire once but we're dealing with that with the state change
 
-Npw the things that separate them:
-- First one is a PRINT_MSG effect type, message being "The grate is now open."
-- Then ADD_EXIT effect type, effect_target = 8 (the current room), effect value _DOWN:9_ (it goes DOWN from 8 to 9)
-- Then ADD_EXIT effect type, effect_target = 9 (other room), effect value _UP:8_ (it goes UP from the other room to here)
-- Finally SET_ITEM_STATE effect type, effect_target = grate and effect value = 1 (change the grate to state 1 - it works by name so catches them all)
+Now the things that separate them:
+- **Row 1** — ADD_EXIT effect type, effect_target = 8 (the current room), effect_value = _DOWN:9_ (it goes DOWN from 8 to 9)
+- **Row 2** — ADD_EXIT effect type, effect_target = 9 (other room), effect_value = _UP:8_ (it goes UP from the other room to here)
+- **Row 3** — SET_ITEM_STATE effect type, effect_target = grate, effect_value = 1 (change the grate to state 1 — it works by name so catches them all). Add `message_file = grate_unlocked` (or `message = "The grate is now open."`) to this row so the player sees the result.
 
-_Then_... you have to repeat that for another four rows, but change the trigger room to 9. Just in case they somehow get into room 9 before room 8. And remember - order is important. If you change the state on line 1, none of the rest will fire!
+_Then_... you have to repeat those three rows with trigger_room = 9, just in case they somehow reach room 9 first. And remember — order matters. If you change the state on the first row, none of the rest will fire!
 
 __TEST__
 This test code should turn on debug, get the keys, jump to the grate, try to get down (fail), unlock, go down, and try to unlock from the other side (fail due to already being unlocked).
@@ -347,12 +343,11 @@ __Adventure example:__ A snake blocks the south and west exits of the Hall of th
 
 1. **Add the creature as an item.** In `items.csv`, set `gettable=FALSE` and give it a single `room_desc` — the message seen when the creature is present. There's no need for a second state since the creature will be completely removed from the game. Place it in the blocking room.
 
-2. **Add the DROP puzzle.** When the player drops the sacrificial item in the right room (and the creature is still there), several things need to happen in sequence. Add rows in `puzzles.csv` with `trigger_verb=DROP`, `trigger_item=BIRD`, `trigger_room=19`, and `condition_room_item=SNAKE` on every row (so it only fires while the snake is still there):
+2. **Add the DROP puzzle.** When the player drops the sacrificial item in the right room (and the creature is still there), several things need to happen in sequence. Add rows in `puzzles.json` with `trigger_verb=DROP`, `trigger_item=BIRD`, `trigger_room=19`, and `condition_room_item=SNAKE` on every row (so it only fires while the snake is still there):
 
-   - **Row 1 — dramatic message:** `PRINT_MSG` — the flavour text describing what happens.
-   - **Row 2 — destroy the sacrificial item:** `DESTROY_ITEM` with target `bird` — removes it from wherever it now is (it was just dropped into the room by the DROP command before puzzles fire).
-   - **Row 3 — destroy the creature:** `DESTROY_ITEM` with target `snake`.
-   - **Rows 4-5 — open the exits:** `ADD_EXIT` for each direction that was blocked. Here `ADD_EXIT` on room 19 for `SOUTH:36` and `WEST:37`.
+   - **Row 1 — destroy the sacrificial item:** `DESTROY_ITEM` with target `bird`. Add the flavour text as `message` on this row — it prints before the effect runs.
+   - **Row 2 — destroy the creature:** `DESTROY_ITEM` with target `snake`.
+   - **Rows 3-4 — open the exits:** `ADD_EXIT` for each direction that was blocked. Here `ADD_EXIT` on room 19 for `SOUTH:36` and `WEST:37`.
 
    Note: in Adventure these exits are one-way — you can go south/west from room 19 but there is no route back. That's intentional and valid.
 
@@ -394,7 +389,7 @@ __Adventure example:__ The snake blocks the south and west exits of room 19. Try
 
 1. **Leave the exits out of `rooms.csv`.** Don't add the blocked directions to the room's exit list — they'll be added later by the puzzle that clears the blocker (e.g. `ADD_EXIT`).
 
-2. **Add the blocking puzzle rows.** In `puzzles.csv`, add one row per blocked direction with `trigger_verb=SOUTH` (or whichever direction), `trigger_room=19`, `condition_room_item=SNAKE`, effect `PRINT_MSG`, and the message to display. Set `once=FALSE`.
+2. **Add the blocking puzzle rows.** In `puzzles.json`, add one row per blocked direction with `trigger_verb=SOUTH` (or whichever direction), `trigger_room=19`, `condition_room_item=SNAKE`, effect `PRINT_MSG`, and the message to display. Set `once=FALSE`.
 
    Because the puzzle fires and returns true, the movement command is cancelled — the player stays put.
 

@@ -6,3 +6,5 @@ instructions,"Somewhere nearby is {^}C{/^}olossal Cave, where others have found 
 no_instructions,{sp:1}
 lamp_out,YOUR LAMP HAS RUN OUT OF POWER.
 pit_death,YOU FELL INTO A PIT AND BROKE EVERY BONE IN YOUR BODY!
+grate_unlocked,THE GRATE IS NOW UNLOCKED.
+grate_already_unlocked,IT WAS ALREADY UNLOCKED.
