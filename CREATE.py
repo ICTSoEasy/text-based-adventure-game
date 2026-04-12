@@ -69,27 +69,29 @@ def Create(game):
     if debug: print(f'  {len(game.rooms)} rooms loaded')
 
     if debug: print('Loading items...')
+    import json as _json
     item_count = 0
-    for row in _read_csv('items.csv', debug=debug):
-            gettable = row['gettable'].strip().lower() == 'true'
-            id_words_raw = row.get('id_words', '').strip()
-            id_words = [w.strip().upper() for w in id_words_raw.split(',')] if id_words_raw else [row['short_desc'].upper()]
-            room_desc_raw = row.get('room_desc', '').strip()
-            room_descs = [_process_message(d.strip()) for d in room_desc_raw.split('|')] if room_desc_raw else []
-            state_raw = row.get('state', '').strip()
-            state = int(state_raw) if state_raw else 0
-            thing = Thing(int(row['id']), row['short_desc'], row['long_desc'], gettable, id_words, room_descs, state)
-            light_turns = int(row.get('light_turns', '0') or '0')
-            thing.setLightTurns(light_turns)
-            thing.finding_bonus = int(row.get('finding_bonus', '0') or '0')
-            thing.deposit_bonus = int(row.get('deposit_bonus', '0') or '0')
-            deposit_room_raw = (row.get('deposit_room') or '').strip()
-            thing.deposit_room = int(deposit_room_raw) if deposit_room_raw else None
-            if (row.get('unborn') or '').strip().lower() == 'true':
-                game.unborn_items.append(thing)
-            else:
-                game.addItem(int(row['room_id']), thing)
-            item_count += 1
+    with open('items.json', encoding='utf-8') as f:
+        item_rows = _json.load(f)
+    for row in item_rows:
+        if '_comment' in row and len(row) == 1:
+            if debug: print(f'  [comment] {row["_comment"]}')
+            continue
+        gettable = row.get('gettable', True)
+        id_words = [w.upper() for w in row.get('id_words', [row['short_desc'].upper()])]
+        room_descs = [_process_message(d) for d in row.get('room_desc', [])]
+        state = row.get('state', 0)
+        long_desc = row.get('long_desc', '')
+        thing = Thing(int(row['id']), row['short_desc'], long_desc, gettable, id_words, room_descs, state)
+        thing.setLightTurns(row.get('light_turns', 0))
+        thing.finding_bonus = row.get('finding_bonus', 0)
+        thing.deposit_bonus = row.get('deposit_bonus', 0)
+        thing.deposit_room = row.get('deposit_room', None)
+        if row.get('unborn', False):
+            game.unborn_items.append(thing)
+        else:
+            game.addItem(int(row['room_id']), thing)
+        item_count += 1
     if debug: print(f'  {item_count} items loaded')
 
     if debug: print('Loading puzzles...')
