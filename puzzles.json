@@ -132,11 +132,33 @@
   {"_comment": "Stone tablet can be read."},
   {"trigger_verb": "READ", "trigger_room": "101", "message_file": "stone_read"},
 
+
+  {"_comment": "Trident, Clam, Oyster, Pearl."},
+  {"trigger_verb": "DOWN", "trigger_room": "103", "condition_item": "CLAM", "message_file": "carrying_clam_down"},
+  {"trigger_verb": "OPEN", "trigger_item": "clam,>clam", "condition_item": "CLAM", "message_file": "carrying_clam_open"},
+  {"trigger_verb": "OPEN", "trigger_item": "clam,>clam", "condition_room_item": "CLAM", "condition_not_item": "trident", "message_file": "open_clam_no_trident"},
+  {"trigger_verb": "OPEN", "trigger_item": "clam,>clam", "condition_room_item": "CLAM", "condition_item": "trident", "effect_type": "CREATE_ITEM", "effect_target": "oyster"},
+  {"trigger_verb": "OPEN", "trigger_item": "clam,>clam", "condition_room_item": "CLAM", "condition_item": "trident", "effect_type": "CREATE_ITEM", "effect_target": "pearl", "effect_value": "105"},
+  {"trigger_verb": "OPEN", "trigger_item": "clam,>clam", "condition_room_item": "CLAM", "condition_item": "trident", "message_file": "pearl_rolls_out", "effect_type": "DESTROY_ITEM", "effect_target": "clam"},
+  {"trigger_verb": "DOWN", "trigger_room": "103", "condition_item": "OYSTER", "message_file": "carrying_oyster_down"},
+  {"trigger_verb": "OPEN", "trigger_item": "oyster,>oyster", "condition_item": "OYSTER", "message_file": "carrying_oyster_open"},
+  {"trigger_verb": "OPEN", "trigger_item": "oyster,>oyster", "condition_room_item": "OYSTER", "condition_not_item": "trident", "message_file": "open_oyster_no_trident"},
+  {"trigger_verb": "OPEN", "trigger_item": "oyster,>oyster", "condition_room_item": "OYSTER", "condition_item": "trident", "message_file": "oyster_insides"},
+  {"_comment": "Attacking the shells just gives a warning."},
+  {"trigger_verb": "ATTACK", "trigger_item": "oyster,>oyster,>clam,clam", "message_file": "attack_shell", "stop": true},
+  {"trigger_verb": "KILL", "trigger_item": "oyster,>oyster,>clam,clam", "message_file": "attack_shell", "stop": true},
+  {"trigger_verb": "HIT", "trigger_item": "oyster,>oyster,>clam,clam", "message_file": "attack_shell", "stop": true},
+
+
+  {"_comment": "Magazine."},
+  {"trigger_verb": "READ", "trigger_item": "magazine,>magazine", "condition_item": "MAGAZINE", "message_file": "dwarvish_mag"},
+
+
   {"_comment": "=== ACTION COMMANDS - BUT NOT USED IN THE RIGHT PLACE/WITH THE RIGHT ITEM ==="},
   {"_comment": "Attacking with no valid target in the room."},
-  {"trigger_verb": "ATTACK", "condition_not_room_item": "BIRD,SNAKE", "message_file": "nothing_to_attack", "stop": true},
-  {"trigger_verb": "KILL", "condition_not_room_item": "BIRD,SNAKE", "message_file": "nothing_to_attack", "stop": true},
-  {"trigger_verb": "HIT", "condition_not_room_item": "BIRD,SNAKE", "message_file": "nothing_to_attack", "stop": true},
+  {"trigger_verb": "ATTACK", "condition_not_room_item": "BIRD,SNAKE,OYSTER,CLAM", "message_file": "nothing_to_attack", "stop": true},
+  {"trigger_verb": "KILL", "condition_not_room_item": "BIRD,SNAKE,OYSTER,CLAM", "message_file": "nothing_to_attack", "stop": true},
+  {"trigger_verb": "HIT", "condition_not_room_item": "BIRD,SNAKE,OYSTER,CLAM", "message_file": "nothing_to_attack", "stop": true},
 
 
   {"_comment": "=== FORCE MOVES - THESE AREN'T PUZZLES BUT FORCE YOU TO MOVE TO ANOTHER ROOM (OR DIE) WHEN YOU ENTER ==="},
