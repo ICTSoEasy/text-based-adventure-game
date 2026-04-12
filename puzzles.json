@@ -68,13 +68,13 @@
   {"trigger_verb": "YES", "trigger_room": "1", "effect_type": "SHOW_ROOM_LONG_DESC", "delay": 1},
   {"trigger_verb": "NO", "trigger_room": "1", "effect_type": "SHOW_ROOM_LONG_DESC", "delay": 1},
 
-  
+
   {"_comment": "Vase - safe drop onto pillow (pillow must be in room); otherwise shatters"},
   {"_comment": "GET vase: award 2 points once, block if broken, otherwise give item"},
   {"trigger_verb": "GET", "trigger_item": "VASE", "effect_type": "ADD_POINTS", "effect_value": "2", "once": true},
-  {"trigger_verb": "GET", "trigger_item": "VASE", "effect_type": "GIVE_ITEM", "effect_target": "vase", "message": "OK."},
+  {"trigger_verb": "GET", "trigger_item": "VASE", "effect_type": "GIVE_ITEM", "effect_target": "vase", "message": "OK.", "condition_item_state": "vase:0"},
   {"_comment": "Successful placement."},
-  {"trigger_verb": "DROP", "trigger_item": "VASE", "condition_room_item": "PILLOW", "effect_type": "PRINT_MSG", "message": "THE VASE IS NOW RESTING, DELICATELY, ON A VELVET PILLOW."},
+  {"trigger_verb": "DROP", "trigger_item": "VASE", "condition_room_item": "PILLOW", "effect_type": "PRINT_MSG", "message_file": "vase_resting"},
   {"trigger_verb": "DROP", "trigger_item": "VASE", "condition_room_item": "PILLOW", "effect_type": "DROP_ITEM", "effect_target": "vase"},
   {"trigger_verb": "DROP", "trigger_item": "VASE", "condition_room_item": "PILLOW", "effect_type": "SET_GETTABLE", "effect_target": "PILLOW", "effect_value": "FALSE"},
   {"_comment": "If in building, stop it being picked up and give points.."},
@@ -83,13 +83,17 @@
   {"trigger_verb": "GET", "trigger_item": "VASE", "effect_type": "PRINT_MSG", "message": "You can't be serious.",  "trigger_room": "3", "stop": true},
   {"trigger_verb": "DROP", "trigger_item": "VASE", "condition_room_item": "PILLOW", "effect_type": "SET_ITEM_STATE", "effect_target": "vase", "effect_value": "1", "stop": true},
   {"_comment": "Breaks."},
-  {"trigger_verb": "DROP", "trigger_item": "VASE", "effect_type": "PRINT_MSG", "message": "THE MING VASE DROPS WITH A DELICATE CRASH."},
+  {"trigger_verb": "DROP", "trigger_item": "VASE", "effect_type": "PRINT_MSG", "message_file": "drop_vase"},
   {"trigger_verb": "DROP", "trigger_item": "VASE", "effect_type": "DROP_ITEM", "effect_target": "vase"},
   {"trigger_verb": "DROP", "trigger_item": "VASE", "effect_type": "SET_ITEM_STATE", "effect_target": "vase", "effect_value": "2"},
   {"trigger_verb": "DROP", "trigger_item": "VASE", "effect_type": "SET_GETTABLE", "effect_target": "vase", "effect_value": "FALSE"},
+  {"trigger_verb": "BREAK", "trigger_item": "VASE", "effect_type": "DROP_ITEM", "effect_target": "vase", "message_file": "break_vase"},
+  {"trigger_verb": "BREAK", "trigger_item": "VASE", "effect_type": "SET_ITEM_STATE", "effect_target": "vase", "effect_value": "2"},
+  {"trigger_verb": "BREAK", "trigger_item": "VASE", "effect_type": "SET_GETTABLE", "effect_target": "vase", "effect_value": "FALSE"},
   {"_comment": "Gettable if down safe."},
   {"trigger_verb": "GET", "trigger_item": "VASE", "condition_room_item": "PILLOW", "effect_type": "SET_GETTABLE", "effect_target": "PILLOW", "effect_value": "TRUE"},
  
+  
   {"_comment": "Bottle - FILL BOTTLE at oil pool (room 25) to collect oil"},
   {"trigger_verb": "FILL", "trigger_item": "BOTTLE", "trigger_room": "25", "condition_item": "BOTTLE", "condition_room_item": "OIL", "effect_type": "PRINT_MSG", "message": "YOUR BOTTLE IS NOW FULL OF OIL."},
   {"trigger_verb": "FILL", "trigger_item": "BOTTLE", "trigger_room": "25", "condition_item": "BOTTLE", "condition_room_item": "OIL", "effect_type": "SET_ITEM_STATE", "effect_target": "bottle", "effect_value": "2", "stop": true},
