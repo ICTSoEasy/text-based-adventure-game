@@ -1,0 +1,34 @@
+DESCRIPTION = "Show your current score (SCORE DETAILS for breakdown)"
+
+def execute(player, noun):
+    game = player.game
+    details = noun and noun.upper() == 'DETAILS'
+
+    deposit_room = game.settings.get('deposit_room', 3)
+
+    # Collect all items including destroyed ones
+    all_items = []
+    for room in game.rooms.values():
+        all_items.extend(room.getContains())
+    all_items.extend(player.items)
+    all_items.extend(game.destroyed_items)
+
+    # Only items with a scoring value
+    scoreable = [i for i in all_items if i.finding_bonus or i.deposit_bonus]
+
+    if details and scoreable:
+        for item in scoreable:
+            if not item.found:
+                continue
+            in_building = any(
+                item in game.getRoom(deposit_room).getContains()
+                for _ in [None]
+                if deposit_room in game.rooms
+            )
+            line = f'{item.getShortDesc().capitalize()} found ({item.finding_bonus})'
+            if in_building and item.deposit_bonus:
+                line += f' and deposited in building ({item.deposit_bonus})'
+            print(line)
+
+    max_score = sum(i.finding_bonus + i.deposit_bonus for i in scoreable)
+    print(f'If you were to quit now, you would score {game.score} out of a possible {max_score}.')

@@ -13,6 +13,7 @@ class Thing:
         self.turns_remaining = 0
         self.found = False
         self.finding_bonus = 0
+        self.deposit_bonus = 0
 
     def getMakingLight(self):
         return self.making_light
