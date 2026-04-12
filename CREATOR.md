@@ -125,7 +125,7 @@ The puzzle engine connects player actions to game events. Each row is one effect
 | Column | Description |
 |--------|-------------|
 | `trigger_verb` | Verb that activates this row (`USE`, `MOVE`, `GET`, `DROP`, compass directions `NORTH`/`SOUTH`/`EAST`/`WEST`/`NE`/`NW`/`SE`/`SW`/`UP`/`DOWN`, or blank for any). Compass direction triggers fire **before** movement — if any row fires, the movement is cancelled. |
-| `trigger_item` | Item name that must be used (or blank for any) |
+| `trigger_item` | Item noun that must be used (or blank for any). Comma-separated to accept multiple. Use `OIL>BOTTLE` to match typed word OIL but check BOTTLE exists; use `>BOTTLE` to match a bare verb (no noun) but check BOTTLE exists |
 | `trigger_room` | Room ID where this triggers (or blank for any room) |
 | `condition_item` | Player must be carrying this item |
 | `condition_not_item` | Player must NOT be carrying this item |

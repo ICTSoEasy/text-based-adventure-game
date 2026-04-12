@@ -78,15 +78,34 @@ class PuzzleEngine:
         if self._f(puzzle, 'trigger_verb').upper() != verb.upper():
             return False
 
-        # trigger_item: if specified, must match the typed word and be in the current room or inventory
-        ti = self._f(puzzle, 'trigger_item').upper()
-        if ti and ti != item_name:
-            return False
-        if ti:
+        # trigger_item: comma-separated list of accepted noun patterns.
+        # Each entry can be:
+        #   BOTTLE        → typed word must be BOTTLE, existence checked for BOTTLE
+        #   OIL>BOTTLE    → typed word must be OIL, existence checked for BOTTLE
+        #   >BOTTLE       → typed word must be absent (bare verb), existence checked for BOTTLE
+        ti_raw = self._f(puzzle, 'trigger_item').upper()
+        if ti_raw:
+            item_name_up = (item_name or '').upper()
             room = self.game.getRoom(room_id)
-            in_room = room.ifContains(ti) if room else None
-            in_inv = player.hasItem(ti)
-            if not in_room and not in_inv:
+            matched = False
+            for entry in [e.strip() for e in ti_raw.split(',')]:
+                if '>' in entry:
+                    ti_match, ti_check = entry.split('>', 1)
+                else:
+                    ti_match = ti_check = entry
+                # Check typed word matches
+                if ti_match == '' and item_name_up != '':
+                    continue  # empty left = bare verb only
+                if ti_match != '' and ti_match != item_name_up:
+                    continue
+                # Check item exists in room or inventory
+                in_room = room.ifContains(ti_check) if room and ti_check else None
+                in_inv = player.hasItem(ti_check) if ti_check else None
+                if ti_check and not in_room and not in_inv:
+                    continue
+                matched = True
+                break
+            if not matched:
                 return False
 
         # trigger_room: if specified, must match
