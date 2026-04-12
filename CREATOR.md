@@ -137,7 +137,8 @@ The puzzle engine connects player actions to game events. Each row is one effect
 | `effect_type` | What happens (see below) |
 | `effect_target` | What the effect acts on |
 | `effect_value` | Value for the effect |
-| `message` | Text to display when this fires |
+| `message` | Text to display when this fires. Takes priority over `message_file` |
+| `message_file` | ID of a message in `messages.csv` to display. Used instead of `message` if `message` is blank |
 | `delay` | Seconds to pause before this effect (for dramatic timing) |
 | `once` | `true` = fire only once ever; `false` = fire every time |
 | `chance_pct` | Integer 1–100. If set, the row only fires that percentage of the time (e.g. `35` = 35% chance). Blank = always fires |

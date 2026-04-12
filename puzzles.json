@@ -9,7 +9,7 @@
   {"_comment": "If you move in the dark, every move adds up. After move 1 there is a 35% chance you die"},
   {"trigger_verb": "FORCE", "condition_location_dark": "true", "effect_type": "INCREMENT_COUNTER", "effect_target": "dark_moves"},
   {"trigger_verb": "FORCE", "condition_location_dark": "false", "effect_type": "RESET_COUNTER", "effect_target": "dark_moves"},
-  {"trigger_verb": "FORCE", "condition_counter_gte": "dark_moves:2", "chance_pct": "35", "effect_type": "LOSE", "message": "You stumble around in the dark and fall into a pit."},
+  {"trigger_verb": "FORCE", "condition_counter_gte": "dark_moves:2", "chance_pct": "35", "effect_type": "LOSE", "message_file": "pit_death"},
 
   {"_comment": "Grate across a tunnel between rooms 8 and 9 - needs to be opened with keys to add the exits"},
   {"trigger_verb": "UNLOCK", "trigger_item": "GRATE", "trigger_room": "8", "condition_item": "KEYS", "condition_item_state": "grate:0", "effect_type": "PRINT_MSG", "message": "The grate is now open."},

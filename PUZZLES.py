@@ -152,6 +152,8 @@ class PuzzleEngine:
         delay_raw = puzzle.get('delay') or 0
         delay = float(delay_raw)
 
+        if not message:
+            message = self.game.messages.get(self._f(puzzle,'message_file'))
         if message:
             print(message)
         if delay:
