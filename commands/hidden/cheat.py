@@ -22,13 +22,14 @@ def execute(player, noun):
 
 
 def _cheat_items(player):
+    import TERMINAL
+    t = TERMINAL.get()
     game = player.game
 
-    # Build rows
     rows = []
     for room in game.rooms.values():
         for item in room.getContains():
-            rows.append(_row(item, f'Room {room.getId()} ({room.getShortDesc()})'))
+            rows.append(_row(item, f'Room {room.getId()}'))
     for item in player.items:
         rows.append(_row(item, 'INVENTORY'))
     for item in game.destroyed_items:
@@ -38,17 +39,27 @@ def _cheat_items(player):
         print('No items found.')
         return
 
-    headers = ['ID', 'Name', 'ID Words', 'Location', 'Found', 'Gettable', 'State', 'Find Bonus', 'Light Turns', 'Turns Left']
+    headers = ['ID', 'Name', 'ID Words', 'Location', 'Found', 'Gettable', 'State', 'Bonus', 'LightT', 'TLeft']
     col_widths = [len(h) for h in headers]
     for row in rows:
         for i, cell in enumerate(row):
             col_widths[i] = max(col_widths[i], len(str(cell)))
 
     fmt = '  '.join(f'{{:<{w}}}' for w in col_widths)
-    print(fmt.format(*headers))
-    print('  '.join('-' * w for w in col_widths))
+    sep = '  '.join('-' * w for w in col_widths)
+
+    def _print_raw(line):
+        if t:
+            t._write_chunk(line)
+            t._newline()
+        else:
+            import builtins
+            builtins.print(line)
+
+    _print_raw(fmt.format(*headers))
+    _print_raw(sep)
     for row in rows:
-        print(fmt.format(*[str(c) for c in row]))
+        _print_raw(fmt.format(*[str(c) for c in row]))
 
 
 def _row(item, location):
