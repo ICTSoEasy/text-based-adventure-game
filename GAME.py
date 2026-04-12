@@ -82,6 +82,24 @@ class Game:
                     found.append(item)
         return found
 
+    def _recalculate_score(self):
+        deposit_room_id = self.settings.get('deposit_room', 3)
+        deposit_room = self.rooms.get(deposit_room_id)
+        deposit_items = deposit_room.getContains() if deposit_room else []
+        all_items = []
+        for room in self.rooms.values():
+            all_items.extend(room.getContains())
+        if self.player:
+            all_items.extend(self.player.items)
+        all_items.extend(self.destroyed_items)
+        score = 0
+        for item in all_items:
+            if item.found and item.finding_bonus:
+                score += item.finding_bonus
+            if item in deposit_items and item.deposit_bonus:
+                score += item.deposit_bonus
+        self.score = score
+
     def _mark_items_found(self):
         if not self.player:
             return
@@ -91,8 +109,6 @@ class Game:
         for item in room.getContains():
             if not item.found:
                 item.found = True
-                if item.finding_bonus:
-                    self.score += item.finding_bonus
 
     #A 'tick' is a round of the game. The game does any
     #house keeping it may need and then gives the player
@@ -107,6 +123,7 @@ class Game:
             self.turn_counter += 1
             self.decrement_lights()
             self._mark_items_found()
+            self._recalculate_score()
             if self.settings.get('debug', False):
                 print(f'  [turn {self.turn_counter}]')
             self._update_status()
