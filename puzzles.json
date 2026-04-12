@@ -60,7 +60,6 @@
   {"_comment": "Vase - safe drop onto pillow (pillow must be in room); otherwise shatters"},
   {"_comment": "GET vase: award 2 points once, block if broken, otherwise give item"},
   {"trigger_verb": "GET", "trigger_item": "VASE", "effect_type": "ADD_POINTS", "effect_value": "2", "once": true},
-  {"trigger_verb": "GET", "trigger_item": "VASE", "condition_item_state": "vase:2", "message": "THE VASE IS NOW JUST A PILE OF SHERDS.", "stop": true},
   {"trigger_verb": "GET", "trigger_item": "VASE", "effect_type": "GIVE_ITEM", "effect_target": "vase", "message": "OK."},
   {"_comment": "Successful placement."},
   {"trigger_verb": "DROP", "trigger_item": "VASE", "condition_room_item": "PILLOW", "effect_type": "PRINT_MSG", "message": "THE VASE IS NOW RESTING, DELICATELY, ON A VELVET PILLOW."},
@@ -78,9 +77,7 @@
   {"trigger_verb": "DROP", "trigger_item": "VASE", "effect_type": "SET_GETTABLE", "effect_target": "vase", "effect_value": "FALSE"},
   {"_comment": "Gettable if down safe."},
   {"trigger_verb": "GET", "trigger_item": "VASE", "condition_room_item": "PILLOW", "effect_type": "SET_GETTABLE", "effect_target": "PILLOW", "effect_value": "TRUE"},
-  {"trigger_verb": "GET", "trigger_item": "VASE", "condition_room_item": "PILLOW", "effect_type": "PRINT_MSG", "message": "Ok."},
-  {"trigger_verb": "GET", "trigger_item": "VASE", "condition_room_item": "PILLOW",  "effect_type": "GIVE_ITEM", "effect_target": "vase"},
-
+ 
   {"_comment": "Bottle - FILL BOTTLE at oil pool (room 25) to collect oil"},
   {"trigger_verb": "FILL", "trigger_item": "BOTTLE", "trigger_room": "25", "condition_item": "BOTTLE", "condition_room_item": "OIL", "effect_type": "PRINT_MSG", "message": "YOUR BOTTLE IS NOW FULL OF OIL."},
   {"trigger_verb": "FILL", "trigger_item": "BOTTLE", "trigger_room": "25", "condition_item": "BOTTLE", "condition_room_item": "OIL", "effect_type": "SET_ITEM_STATE", "effect_target": "bottle", "effect_value": "2", "stop": true},
