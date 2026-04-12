@@ -253,6 +253,15 @@ class PuzzleEngine:
                         player.items.remove(inv_item)
                 self.game.destroyed_items.append(item)
 
+        elif effect == 'CREATE_ITEM':
+            name = target.upper()
+            dest_id = int(value) if value else player.getRoom()
+            for item in list(self.game.unborn_items):
+                if item.matchesName(name):
+                    self.game.unborn_items.remove(item)
+                    self.game.getRoom(dest_id).putIn(item)
+                    break
+
         elif effect == 'INCREMENT_COUNTER':
             self.game.counters[target] = self.game.counters.get(target, 0) + 1
             if self.game.settings.get('debug', False):

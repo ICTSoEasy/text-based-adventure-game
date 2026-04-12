@@ -34,12 +34,14 @@ def _cheat_items(player):
         rows.append(_row(item, 'INVENTORY'))
     for item in game.destroyed_items:
         rows.append(_row(item, 'DESTROYED'))
+    for item in game.unborn_items:
+        rows.append(_row(item, 'UNBORN'))
 
     if not rows:
         print('No items found.')
         return
 
-    headers = ['ID', 'Name', 'ID Words', 'Location', 'Found', 'Gettable', 'State', 'Bonus', 'LightT', 'TLeft']
+    headers = ['ID', 'Name', 'ID Words', 'Location', 'Found', 'Gettable', 'State', 'FindBonus', 'DepBonus', 'LightT', 'TLeft']
     col_widths = [len(h) for h in headers]
     for row in rows:
         for i, cell in enumerate(row):
@@ -72,6 +74,7 @@ def _row(item, location):
         item.gettable,
         item.state,
         item.finding_bonus,
+        item.deposit_bonus,
         item.getLightTurns(),
         item.getTurnsRemaining(),
     ]
