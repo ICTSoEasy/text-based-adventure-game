@@ -4,7 +4,13 @@ unknown_command,I don't know that word.
 no_item_detail,Sorry but I am not allowed to give more detail.
 instructions,"Somewhere nearby is {^}C{/^}olossal Cave, where others have found fortunes in treasure and gold, though it is rumoured that some who enter are never seen again. Magic is said to work in the cave. I will be your eyes and hands. Direct me with commands of 1 or 2 words.\nShould you get stuck, type ""HELP"" for some hints. FOR INFORMATION ON HOW TO END YOUR ADVENTURE, ETC., TYPE ""INFO"".)\n{sp:16}- - -\nTHIS PROGRAM WAS ORIGINALLY DEVELOPED BY {^}W{/^}illie {^}C{/^}rowther}.  MOST OF THE FEATURES OF THE CURRENT PROGRAM WERE ADDED BY {^}D{/^}on {^}W{/^}oods. This port was developed by {^}O{/^}li {^}H{/^}owson (Oli.Howson@open.ac.uk) CONTACT {^}Oli{/^} IF YOU HAVE ANY QUESTIONS, COMMENTS, ETC.\n"
 no_instructions,{sp:1}
-lamp_out,YOUR LAMP HAS RUN OUT OF POWER.
 pit_death,YOU FELL INTO A PIT AND BROKE EVERY BONE IN YOUR BODY!
+==COMMENT==,THESE ARE ALL FOR QUESTS
+++COMMENT++,++LAMP++,
+lamp_out,YOUR LAMP HAS RUN OUT OF POWER.
+++COMMENT++,++GRATE/KEYS++
 grate_unlocked,THE GRATE IS NOW UNLOCKED.
 grate_already_unlocked,IT WAS ALREADY UNLOCKED.
+grate_locked,THE GRATE IS NOW LOCKED.
+grate_already_locked,IT WAS ALREADY LOCKED.
+no_keys,YOU HAVE NO KEYS!

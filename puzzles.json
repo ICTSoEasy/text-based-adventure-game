@@ -20,6 +20,21 @@
   {"trigger_verb": "UNLOCK", "trigger_item": "GRATE", "trigger_room": "9", "condition_item": "KEYS", "condition_item_state": "grate:0", "effect_type": "ADD_EXIT", "effect_target": "8", "effect_value": "DOWN:9"},
   {"trigger_verb": "UNLOCK", "trigger_item": "GRATE", "trigger_room": "9", "condition_item": "KEYS", "condition_item_state": "grate:0", "effect_type": "ADD_EXIT", "effect_target": "9", "effect_value": "UP:8"},
   {"trigger_verb": "UNLOCK", "trigger_item": "GRATE", "trigger_room": "9", "condition_item": "KEYS", "condition_item_state": "grate:0", "effect_type": "SET_ITEM_STATE", "effect_target": "grate", "effect_value": "1", "message_file": "grate_unlocked"},
+  {"trigger_verb": "UNLOCK", "trigger_item": "GRATE", "trigger_room": "8", "condition_item_state": "grate:0", "message_file": "no_keys"},
+  {"trigger_verb": "UNLOCK", "trigger_item": "GRATE", "trigger_room": "9", "condition_item_state": "grate:0", "message_file": "no_keys"},
+
+  {"_comment": "Grate can also be locked"},
+  {"trigger_verb": "LOCK", "trigger_item": "GRATE", "trigger_room": "8", "condition_item": "KEYS", "condition_item_state": "grate:0", "message_file": "grate_already_locked"},
+  {"trigger_verb": "LOCK", "trigger_item": "GRATE", "trigger_room": "8", "condition_item": "KEYS", "condition_item_state": "grate:1", "effect_type": "REMOVE_EXIT", "effect_target": "8", "effect_value": "DOWN"},
+  {"trigger_verb": "LOCK", "trigger_item": "GRATE", "trigger_room": "8", "condition_item": "KEYS", "condition_item_state": "grate:1", "effect_type": "REMOVE_EXIT", "effect_target": "9", "effect_value": "UP"},
+  {"trigger_verb": "LOCK", "trigger_item": "GRATE", "trigger_room": "8", "condition_item": "KEYS", "condition_item_state": "grate:1", "effect_type": "SET_ITEM_STATE", "effect_target": "grate", "effect_value": "0", "message_file": "grate_locked"},
+  {"trigger_verb": "LOCK", "trigger_item": "GRATE", "trigger_room": "9", "condition_item": "KEYS", "condition_item_state": "grate:0", "message_file": "grate_already_locked"},
+  {"trigger_verb": "LOCK", "trigger_item": "GRATE", "trigger_room": "9", "condition_item": "KEYS", "condition_item_state": "grate:1", "effect_type": "REMOVE_EXIT", "effect_target": "8", "effect_value": "DOWN"},
+  {"trigger_verb": "LOCK", "trigger_item": "GRATE", "trigger_room": "9", "condition_item": "KEYS", "condition_item_state": "grate:1", "effect_type": "REMOVE_EXIT", "effect_target": "9", "effect_value": "UP"},
+  {"trigger_verb": "LOCK", "trigger_item": "GRATE", "trigger_room": "9", "condition_item": "KEYS", "condition_item_state": "grate:1", "effect_type": "SET_ITEM_STATE", "effect_target": "grate", "effect_value": "0", "message_file": "grate_locked"},
+  {"trigger_verb": "LOCK", "trigger_item": "GRATE", "trigger_room": "8", "condition_item_state": "grate:1", "message_file": "no_keys"},
+  {"trigger_verb": "LOCK", "trigger_item": "GRATE", "trigger_room": "9", "condition_item_state": "grate:1", "message_file": "no_keys"},
+
 
   {"_comment": "Bird in room 13 - needs cage to carry, rod1 frightens it. Dropping in snake room clears the snake."},
   {"trigger_verb": "GET", "trigger_item": "BIRD", "trigger_room": "13", "condition_item": "ROD1", "effect_type": "PRINT_MSG", "message": "THE BIRD WAS UNAFRAID WHEN YOU ENTERED, BUT AS YOU APPROACH IT BECOMES DISTURBED AND YOU CANNOT CATCH IT."},
@@ -43,7 +58,7 @@
   {"trigger_verb": "NO", "trigger_room": "1", "effect_type": "SHOW_ROOM_LONG_DESC", "delay": 1},
 
   {"_comment": "Vase - safe drop onto pillow (pillow must be in room); otherwise shatters"},
-  {"_comment": "Successful placemnt."},
+  {"_comment": "Successful placement."},
   {"trigger_verb": "DROP", "trigger_item": "VASE", "condition_room_item": "PILLOW", "effect_type": "PRINT_MSG", "message": "THE VASE IS NOW RESTING, DELICATELY, ON A VELVET PILLOW."},
   {"trigger_verb": "DROP", "trigger_item": "VASE", "condition_room_item": "PILLOW", "effect_type": "DROP_ITEM", "effect_target": "vase"},
   {"trigger_verb": "DROP", "trigger_item": "VASE", "condition_room_item": "PILLOW", "effect_type": "SET_GETTABLE", "effect_target": "PILLOW", "effect_value": "FALSE"},

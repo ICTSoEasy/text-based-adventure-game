@@ -40,6 +40,7 @@ def Create(game):
     # Comments in settings.csv are stored and printed after debug is known.
     settings_rows = _read_csv('settings.csv', debug=False)
     game.settings = {row['setting']: _coerce(row['value']) for row in settings_rows}
+    game.lives = game.settings.get('lives', 3)
 
     debug = game.settings.get('debug', False)
 

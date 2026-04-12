@@ -49,13 +49,15 @@ class Terminal:
         self.text_win.refresh()
         self.input_win.refresh()
 
-    def update_status(self, game_name='', score=None, turns=None):
+    def update_status(self, game_name='', score=None, turns=None, lives=None):
         try:
             parts = [game_name] if game_name else []
             if score is not None:
                 parts.append(f'Score: {score}')
             if turns is not None:
                 parts.append(f'Turns: {turns}')
+            if lives is not None:
+                parts.append(f'Lives: {lives}')
             text = '  >  '.join(parts)
             self.status_win.erase()
             self.status_win.addstr(0, 0, text[:self._width - 1], curses.color_pair(1))

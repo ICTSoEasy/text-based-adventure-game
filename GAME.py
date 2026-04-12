@@ -14,6 +14,7 @@ class Game:
         self.puzzles = None #Puzzle engine, set up in CREATE
         self.turn_counter = 0
         self.score = 0
+        self.lives = 3
         self.counters = {}
 
     #This will tell us whether we are in play or not
@@ -119,4 +120,4 @@ class Game:
         name = self.settings.get('game_name', '')
         score = self.score if self.settings.get('show_score', True) else None
         turns = self.turn_counter if self.settings.get('show_turns', True) else None
-        t.update_status(name, score, turns)
+        t.update_status(name, score, turns, self.lives)
