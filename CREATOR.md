@@ -10,7 +10,7 @@ Everything you need to build your own adventure game. You never need to touch an
 |------|---------|
 | `settings.csv` | Global game configuration |
 | `rooms.csv` | Every location in your game |
-| `items.csv` | Every object in your game |
+| `items.json` | Every object in your game |
 | `puzzles.csv` | Triggers, conditions, and effects |
 | `messages.csv` | Named text messages (welcome screen etc.) |
 | `commands/` | One Python file per verb |
@@ -69,25 +69,29 @@ id,short_desc,long_desc,exits
 
 ---
 
-## items.csv
+## items.json
 
-One row per object. Format: `id,id_words,short_desc,long_desc,room_desc,gettable,room_id,state`
+One object per JSON entry. Fields:
 
 - **id** — unique number for this item
-- **id_words** — comma-separated list of words the player can use to refer to this item (e.g. `hammer,hamme` means both `GET HAMMER` and `GET HAMME` work). If blank, defaults to `short_desc`
+- **id_words** — list of words the player can use to refer to this item (e.g. `["hammer", "hamme"]` means both `GET HAMMER` and `GET HAMME` work). If omitted, defaults to `short_desc`
 - **short_desc** — fallback name shown in room if `room_desc` is empty (e.g. `A hammer is here.`)
-- **long_desc** — description shown when player does `LOOK HAMMER`. Leave blank to show the default "not allowed to give more detail" message
-- **room_desc** — description(s) shown when item is present in a room. Use `|` to separate multiple state descriptions (e.g. `The lamp is unlit.|The lamp is glowing brightly.`). If blank, falls back to `A {short_desc} is here.`
-- **gettable** — `true` if the player can pick it up; `false` for fixed objects
+- **long_desc** — description shown when player does `LOOK HAMMER`. Omit to show the default "not allowed to give more detail" message
+- **room_desc** — list of descriptions shown when item is present in a room. Multiple entries correspond to item states (e.g. `["The lamp is unlit.", "The lamp is glowing brightly."]`). If omitted, falls back to `A {short_desc} is here.`
+- **gettable** — `true` if the player can pick it up; `false` for fixed objects. Defaults to `true`
 - **room_id** — which room the item starts in
-- **state** — which `room_desc` to display (0-indexed). Defaults to `0` if blank. Change via puzzles to show a different description
+- **state** — which `room_desc` to display (0-indexed). Defaults to `0`. Change via puzzles to show a different description
+
+You can add `{"_comment": "=== Section heading ==="}` entries to organise the file — the engine ignores them.
 
 **Example:**
-```
-id,id_words,short_desc,long_desc,room_desc,gettable,room_id,state
-1,"hammer,hamme",hammer,A heavy iron hammer with a worn wooden handle.,A hammer lies on the floor.,true,1,0
-2,"anvil",anvil,A massive iron anvil. You couldn't possibly lift it.,,false,2,0
-3,"key,small key",key,A small brass key.,There is a small brass key here.|The key has been used.,true,3,0
+```json
+[
+  {"_comment": "=== TOOLS (room 1) ==="},
+  {"id": 1, "id_words": ["hammer", "hamme"], "short_desc": "hammer", "long_desc": "A heavy iron hammer.", "room_desc": ["A hammer lies on the floor."], "gettable": true, "room_id": 1},
+  {"id": 2, "id_words": ["anvil"], "short_desc": "anvil", "long_desc": "A massive iron anvil. You couldn't possibly lift it.", "gettable": false, "room_id": 2},
+  {"id": 3, "id_words": ["key"], "short_desc": "key", "room_desc": ["There is a small brass key here.", "The key has been used."], "gettable": true, "room_id": 3}
+]
 ```
 
 ---
@@ -259,11 +263,11 @@ __Adventure example:__ There is a lamp in room 3 which you need to TAKE then ON 
 
 2. **Set the dark message.** In `settings.csv`, the `dark_message` setting controls what the player sees when they enter a dark room without light. The Adventure default is _IT IS NOW PITCH DARK. IF YOU PROCEED YOU WILL LIKELY FALL INTO A PIT._ Change this to suit your game.
 
-3. **Create the light item.** In `items.csv`, a light source needs two extra columns beyond a normal item:
-   - `room_desc` — use two pipe-separated descriptions for unlit and lit states, e.g. `There is a brass lamp here.|There is a glowing brass lamp here.`
-   - `light_turns` — how many turns of light it provides. Set to `0` for items that are not light sources. The Adventure lamp has `330`.
+3. **Create the light item.** In `items.json`, a light source needs two extra fields beyond a normal item:
+   - `room_desc` — use two entries for unlit and lit states, e.g. `["There is a brass lamp here.", "There is a glowing brass lamp here."]`
+   - `light_turns` — how many turns of light it provides. Omit or set to `0` for non-light-sources. The Adventure lamp has `330`.
 
-   The item otherwise works like any other — give it `id_words`, a `gettable` of `TRUE`, and place it in a room.
+   The item otherwise works like any other — give it `id_words`, a `gettable` of `true`, and place it in a room.
 
 4. **Create the ON and OFF commands.** Copy `commands/game/on.py` and `commands/game/off.py`. The `ON` command checks the player is carrying the item by name, sets its `state` to 1 (switching to the lit `room_desc`) and calls `setMakingLight(1)`. `OFF` reverses this. You can also add aliases — Adventure uses `LIGHT` for on and `EXTINGUISH`/`EXTIN` for off.
 
@@ -302,7 +306,7 @@ Sometimes an item can only be picked up if the player already has a specific ite
 
 __Adventure example:__ The bird in room 13 can only be caught if the player is carrying the wicker cage. If they are carrying the black rod (rod1), the bird is frightened and cannot be caught.
 
-1. **Make the item non-gettable.** In `items.csv`, set `gettable=FALSE` for the bird. This prevents the normal GET command from picking it up. Give it two pipe-separated `room_desc` entries — one for when it's free, one for when it's in the cage: `A CHEERFUL LITTLE BIRD IS SITTING HERE SINGING.|THERE IS A LITTLE BIRD IN THE CAGE.`
+1. **Make the item non-gettable.** In `items.json`, set `"gettable": false` for the bird. This prevents the normal GET command from picking it up. Give it two `room_desc` entries — one for when it's free, one for when it's in the cage: `["A CHEERFUL LITTLE BIRD IS SITTING HERE SINGING.", "THERE IS A LITTLE BIRD IN THE CAGE."]`
 
 2. **Add the GET puzzles.** The GET command fires puzzles before attempting a normal pick-up. If any puzzle fires, the normal pick-up is skipped entirely. Add three rows in `puzzles.csv`, all with `trigger_verb=GET`, `trigger_item=BIRD`, `trigger_room=13`:
 
@@ -343,7 +347,7 @@ Sometimes a creature blocks movement in a room. Another item (or a sacrifice) is
 
 __Adventure example:__ A snake blocks the south and west exits of the Hall of the Mountain King (room 19). Dropping the bird (which must be in the cage) in that room causes it to attack and drive the snake away, opening those exits. Both the bird and the snake are destroyed in the process.
 
-1. **Add the creature as an item.** In `items.csv`, set `gettable=FALSE` and give it a single `room_desc` — the message seen when the creature is present. There's no need for a second state since the creature will be completely removed from the game. Place it in the blocking room.
+1. **Add the creature as an item.** In `items.json`, set `"gettable": false` and give it a single `room_desc` entry — the message seen when the creature is present. There's no need for a second state since the creature will be completely removed from the game. Place it in the blocking room.
 
 2. **Add the DROP puzzle.** When the player drops the sacrificial item in the right room (and the creature is still there), several things need to happen in sequence. Add rows in `puzzles.json` with `trigger_verb=DROP`, `trigger_item=BIRD`, `trigger_room=19`, and `condition_room_item=SNAKE` on every row (so it only fires while the snake is still there):
 

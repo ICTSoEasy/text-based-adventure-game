@@ -20,13 +20,13 @@ A Python text-based adventure game built as a **workshop activity** — the goal
 - `ROOM.py` — Room class (id, short/long desc, exits dict, contains list)
 - `PLAYER.py` — Player class (all commands: LOOK, MOVE, GET, DROP, USE, ITEMS, CHEAT, HELP)
 - `THING.py` — Thing class (id, short/long desc, gettable flag)
-- `CREATE.py` — loads world from CSV files
+- `CREATE.py` — loads world from CSV/JSON files
 - `rooms.csv` — room data (exits as `DIRECTION:id|DIRECTION:id`)
-- `items.csv` — item data (gettable True/False, room_id for placement)
+- `items.json` — item data (gettable True/False, room_id for placement)
 
 ### Git Structure
 - `main` branch — clean book version (tagged `v1.0-book-original`)
 - `workshop` branch — new version under development (current)
 
 ### Workshop Design Goal
-Students should only need to edit `rooms.csv` and `items.csv` to build their own adventure. The Python files should handle everything else, including any puzzle/win logic — the question of how to make puzzles/win conditions data-driven (vs hardcoded in PLAYER.py) is still to be solved.
+Students should only need to edit `rooms.csv` and `items.json` to build their own adventure. The Python files should handle everything else, including any puzzle/win logic — the question of how to make puzzles/win conditions data-driven (vs hardcoded in PLAYER.py) is still to be solved.
