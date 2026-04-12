@@ -78,10 +78,16 @@ class PuzzleEngine:
         if self._f(puzzle, 'trigger_verb').upper() != verb.upper():
             return False
 
-        # trigger_item: if specified, must match
+        # trigger_item: if specified, must match the typed word and be in the current room or inventory
         ti = self._f(puzzle, 'trigger_item').upper()
         if ti and ti != item_name:
             return False
+        if ti:
+            room = self.game.getRoom(room_id)
+            in_room = room.ifContains(ti) if room else None
+            in_inv = player.hasItem(ti)
+            if not in_room and not in_inv:
+                return False
 
         # trigger_room: if specified, must match
         tr = self._f(puzzle, 'trigger_room')
@@ -106,6 +112,14 @@ class PuzzleEngine:
             room = self.game.getRoom(room_id)
             if not room.ifContains(cri):
                 return False
+
+        # condition_not_room_item: this item must NOT be in the current room (comma-separated)
+        cnri = self._f(puzzle, 'condition_not_room_item').upper()
+        if cnri:
+            room = self.game.getRoom(room_id)
+            for ni in [x.strip() for x in cnri.split(',')]:
+                if ni and room.ifContains(ni):
+                    return False
 
         # condition_item_state: item_name:state — named item must be in that state
         cis = self._f(puzzle, 'condition_item_state')

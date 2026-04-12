@@ -130,6 +130,7 @@ The puzzle engine connects player actions to game events. Each row is one effect
 | `condition_item` | Player must be carrying this item |
 | `condition_not_item` | Player must NOT be carrying this item |
 | `condition_room_item` | This item must be present in the current room |
+| `condition_not_room_item` | This item must NOT be present in the current room (comma-separated for multiple) |
 | `condition_item_state` | `item_name:state` — named item must be in this state (e.g. `grate:0`). Blank = any state |
 | `condition_item_turns_eq` | `item_name:value` — named item's turns remaining must equal value (e.g. `lamp:50`). Fires on exactly that turn. Blank = no check |
 | `condition_location_dark` | `true` = only fire when the player's location is dark; `false` = only fire when lit. Blank = either |

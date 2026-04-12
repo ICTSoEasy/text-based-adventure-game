@@ -11,6 +11,7 @@
   {"trigger_verb": "FORCE", "condition_location_dark": "false", "effect_type": "RESET_COUNTER", "effect_target": "dark_moves"},
   {"trigger_verb": "FORCE", "condition_counter_gte": "dark_moves:2", "chance_pct": "35", "effect_type": "LOSE", "message_file": "pit_death"},
 
+
   {"_comment": "Grate across a tunnel between rooms 8 and 9 - needs to be opened with keys to add the exits"},
   {"trigger_verb": "UNLOCK", "trigger_item": "GRATE", "trigger_room": "8", "condition_item": "KEYS", "condition_item_state": "grate:1", "message_file": "grate_already_unlocked"},
   {"trigger_verb": "UNLOCK", "trigger_item": "GRATE", "trigger_room": "8", "condition_item": "KEYS", "condition_item_state": "grate:0", "effect_type": "ADD_EXIT", "effect_target": "8", "effect_value": "DOWN:9"},
@@ -37,26 +38,37 @@
 
 
   {"_comment": "Bird in room 13 - needs cage to carry, rod1 frightens it. Dropping in snake room clears the snake."},
-  {"trigger_verb": "GET", "trigger_item": "BIRD", "trigger_room": "13", "condition_item": "ROD1", "effect_type": "PRINT_MSG", "message": "THE BIRD WAS UNAFRAID WHEN YOU ENTERED, BUT AS YOU APPROACH IT BECOMES DISTURBED AND YOU CANNOT CATCH IT."},
-  {"trigger_verb": "GET", "trigger_item": "BIRD", "trigger_room": "13", "condition_not_item": "ROD1,CAGE", "effect_type": "PRINT_MSG", "message": "YOU CAN CATCH THE BIRD, BUT YOU CANNOT CARRY IT."},
+  {"trigger_verb": "GET", "trigger_item": "BIRD", "trigger_room": "13", "condition_item": "ROD1", "effect_type": "PRINT_MSG", "message_file": "afraid_bird"},
+  {"trigger_verb": "GET", "trigger_item": "BIRD", "trigger_room": "13", "condition_not_item": "ROD1,CAGE", "effect_type": "PRINT_MSG", "message_file": "cant_carry_bird"},
   {"trigger_verb": "GET", "trigger_item": "BIRD", "trigger_room": "13", "condition_item": "CAGE", "condition_not_item": "ROD1", "effect_type": "GIVE_ITEM", "effect_target": "bird"},
   {"trigger_verb": "GET", "trigger_item": "BIRD", "trigger_room": "13", "condition_item": "CAGE", "condition_not_item": "ROD1", "effect_type": "SET_ITEM_STATE", "effect_target": "bird", "effect_value": "1"},
   {"trigger_verb": "GET", "trigger_item": "BIRD", "trigger_room": "13", "condition_item": "CAGE", "condition_not_item": "ROD1", "effect_type": "PRINT_MSG", "message": "OK."},
+  {"_comment": "Bird can be killed."},
+  {"trigger_verb": "ATTACK", "trigger_item": "BIRD", "message_file": "dead_bird","effect_type": "DESTROY_ITEM", "effect_target": "bird", "stop": true},
+  {"trigger_verb": "KILL", "trigger_item": "BIRD", "message_file": "dead_bird","effect_type": "DESTROY_ITEM", "effect_target": "bird", "stop": true},
+  {"trigger_verb": "HIT", "trigger_item": "BIRD", "message_file": "dead_bird","effect_type": "DESTROY_ITEM", "effect_target": "bird", "stop": true},
+
 
   {"_comment": "Snake in room 19 - blocks south/west exits. Drop bird (in cage) to drive it away."},
-  {"trigger_verb": "DROP", "trigger_item": "BIRD", "trigger_room": "19", "condition_room_item": "SNAKE", "effect_type": "PRINT_MSG", "message": "THE LITTLE BIRD ATTACKS THE GREEN SNAKE, AND IN AN ASTOUNDING FLURRY DRIVES THE SNAKE AWAY."},
+  {"trigger_verb": "DROP", "trigger_item": "BIRD", "trigger_room": "19", "condition_room_item": "SNAKE", "effect_type": "PRINT_MSG", "message_file": "bird_attacks"},
   {"trigger_verb": "DROP", "trigger_item": "BIRD", "trigger_room": "19", "condition_room_item": "SNAKE", "effect_type": "ADD_EXIT", "effect_target": "19", "effect_value": "SOUTH:36"},
   {"trigger_verb": "DROP", "trigger_item": "BIRD", "trigger_room": "19", "condition_room_item": "SNAKE", "effect_type": "ADD_EXIT", "effect_target": "19", "effect_value": "WEST:37"},
   {"trigger_verb": "DROP", "trigger_item": "BIRD", "trigger_room": "19", "condition_room_item": "SNAKE", "effect_type": "DESTROY_ITEM", "effect_target": "bird"},
   {"trigger_verb": "DROP", "trigger_item": "BIRD", "trigger_room": "19", "condition_room_item": "SNAKE", "effect_type": "DESTROY_ITEM", "effect_target": "snake"},
-  {"trigger_verb": "SOUTH", "trigger_room": "19", "condition_room_item": "SNAKE", "effect_type": "PRINT_MSG", "message": "You can't get by the snake."},
-  {"trigger_verb": "WEST", "trigger_room": "19", "condition_room_item": "SNAKE", "effect_type": "PRINT_MSG", "message": "You can't get by the snake."},
+  {"trigger_verb": "SOUTH", "trigger_room": "19", "condition_room_item": "SNAKE", "effect_type": "PRINT_MSG", "message_file": "snake_in_way"},
+  {"trigger_verb": "WEST", "trigger_room": "19", "condition_room_item": "SNAKE", "effect_type": "PRINT_MSG", "message_file": "snake_in_way"},
+  {"_comment": "Attacking the snake just gives a warning."},
+  {"trigger_verb": "ATTACK", "trigger_item": "SNAKE", "message_file": "attack_snake", "stop": true},
+  {"trigger_verb": "KILL", "trigger_item": "SNAKE", "message_file": "attack_snake", "stop": true},
+  {"trigger_verb": "HIT", "trigger_item": "SNAKE", "message_file": "attack_snake", "stop": true},
+
 
   {"_comment": "Instructions at start - do you want to see them?"},
   {"trigger_verb": "YES", "trigger_room": "1", "effect_type": "PRINT_MSG_FILE", "effect_target": "instructions"},
   {"trigger_verb": "YES", "trigger_room": "1", "effect_type": "SHOW_ROOM_LONG_DESC", "delay": 1},
   {"trigger_verb": "NO", "trigger_room": "1", "effect_type": "SHOW_ROOM_LONG_DESC", "delay": 1},
 
+  
   {"_comment": "Vase - safe drop onto pillow (pillow must be in room); otherwise shatters"},
   {"_comment": "GET vase: award 2 points once, block if broken, otherwise give item"},
   {"trigger_verb": "GET", "trigger_item": "VASE", "effect_type": "ADD_POINTS", "effect_value": "2", "once": true},
@@ -105,6 +117,14 @@
   {"trigger_verb": "WAVE", "trigger_item": "ROD1", "trigger_room": "27", "condition_item_state": "fissure:1", "effect_type": "REMOVE_EXIT", "effect_target": "17", "effect_value": "OVER"},
   {"trigger_verb": "WAVE", "trigger_item": "ROD1", "trigger_room": "27", "condition_item_state": "fissure:1", "effect_type": "REMOVE_EXIT", "effect_target": "27", "effect_value": "OVER"},
   {"trigger_verb": "WAVE", "trigger_item": "ROD1", "trigger_room": "27", "condition_item_state": "fissure:1", "effect_type": "SET_ITEM_STATE", "effect_target": "fissure", "effect_value": "0", "stop": true},
+
+
+  {"_comment": "=== ACTION COMMANDS - BUT NOT USED IN THE RIGHT PLACE/WITH THE RIGHT ITEM ==="},
+  {"_comment": "Attacking with no valid target in the room."},
+  {"trigger_verb": "ATTACK", "condition_not_room_item": "BIRD,SNAKE", "message_file": "nothing_to_attack", "stop": true},
+  {"trigger_verb": "KILL", "condition_not_room_item": "BIRD,SNAKE", "message_file": "nothing_to_attack", "stop": true},
+  {"trigger_verb": "HIT", "condition_not_room_item": "BIRD,SNAKE", "message_file": "nothing_to_attack", "stop": true},
+
 
   {"_comment": "=== FORCE MOVES - THESE AREN'T PUZZLES BUT FORCE YOU TO MOVE TO ANOTHER ROOM (OR DIE) WHEN YOU ENTER ==="},
   {"trigger_verb": "FORCE", "trigger_room": "16", "effect_type": "TELEPORT", "effect_value": "14", "delay": 1},
