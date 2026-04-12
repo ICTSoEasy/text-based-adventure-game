@@ -132,6 +132,9 @@
   {"trigger_verb": "ACROSS", "trigger_room": "27", "condition_item_state": "fissure:0", "message_file": "no_bridge"},
   {"trigger_verb": "CROSS", "trigger_room": "27", "condition_item_state": "fissure:0", "message_file": "no_bridge"},
   {"trigger_verb": "WEST", "trigger_room": "27", "condition_item_state": "fissure:0", "message_file": "no_bridge"},
+  {"_comment": "Try to jump"},
+  {"trigger_verb": "JUMP", "trigger_room": "17", "condition_item_state": "fissure:1", "message_file": "jump_bridge"},
+  {"trigger_verb": "JUMP", "trigger_room": "27", "condition_item_state": "fissure:1", "message_file": "jump_bridge"},
 
 
   {"_comment": "=== ACTION COMMANDS - BUT NOT USED IN THE RIGHT PLACE/WITH THE RIGHT ITEM ==="},
