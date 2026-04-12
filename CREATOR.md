@@ -151,8 +151,8 @@ The puzzle engine connects player actions to game events. Each row is one effect
 | `PRINT_MSG` | *(blank)* | *(blank)* | Print a message with no other effect. Equivalent to omitting `effect_type` and using `message` |
 | `PRINT_MSG_FILE` | message id | *(blank)* | Print a named message with no other effect. Equivalent to omitting `effect_type` and using `message_file` |
 | `TELEPORT` | *(blank)* | room id | Move the player to a room and show its description |
-| `ADD_EXIT` | room id | `DIRECTION:room_id` | Add an exit to a room |
-| `REMOVE_EXIT` | room id | `DIRECTION` | Remove an exit from a room |
+| `ADD_EXIT` | room id | `DIRECTION:room_id` — comma-separated for multiple (e.g. `OVER:27,EAST:27`) | Add one or more exits to a room |
+| `REMOVE_EXIT` | room id | `DIRECTION` — comma-separated for multiple | Remove one or more exits from a room |
 | `SET_ROOM_LONG_DESC` | room id | new description | Change a room's long description |
 | `SHOW_ROOM_LONG_DESC` | room id (or blank for current room) | *(blank)* | Print a room's long description |
 | `SET_ITEM_STATE` | item name | state number | Set the state of all items with that name (controls which `room_desc` is shown) |

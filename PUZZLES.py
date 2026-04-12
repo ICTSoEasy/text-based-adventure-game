@@ -196,11 +196,13 @@ class PuzzleEngine:
             pass  # message already printed above
 
         elif effect == 'ADD_EXIT':
-            direction, dest_room = value.split(':')
-            self.game.getRoom(int(target)).addExit(direction.strip(), int(dest_room.strip()))
+            for pair in value.split(','):
+                direction, dest_room = pair.split(':')
+                self.game.getRoom(int(target)).addExit(direction.strip(), int(dest_room.strip()))
 
         elif effect == 'REMOVE_EXIT':
-            self.game.getRoom(int(target)).removeExit(value)
+            for direction in value.split(','):
+                self.game.getRoom(int(target)).removeExit(direction.strip())
 
         elif effect == 'SET_ROOM_LONG_DESC':
             self.game.getRoom(int(target)).setLongDesc(value)
