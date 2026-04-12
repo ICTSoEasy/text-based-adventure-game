@@ -39,3 +39,68 @@ CHEAT 19
 SOUTH
 WEST
 DROP BIRD
+
+; test vase
+NO
+ENTER
+GET LAMP
+ON
+CHEAT 96
+GET PILLOW
+CHEAT 97
+GET VASE 
+;;; try DROP both - if vase first it breaks
+; DROP VASE
+; DROP PILLOW
+;;; try BREAK vase - should break
+;BREAK VASE
+;GET VASE
+;;; try CHEAT 3 and drop both in correct order for points
+CHEAT 3
+DROP PILLOW
+DROP VASE 
+
+; test oil
+NO
+ENTER
+GET BOTTLE
+GET LAMP
+ON
+CHEAT 25
+FILL BOTTLE
+CHEAT 94
+NORTH
+POUR OIL
+NORTH
+
+; test rod and crystal bridge over fissues
+NO
+ENTER
+GET LAMP
+ON
+CHEAT 11
+GET ROD
+CHEAT 17
+WAVE ROD
+LOOK
+JUMP
+WAVE ROD
+LOOK
+
+; test tablet
+NO
+ENTER
+GET LAMP
+ON
+CHEAT 101
+; now read
+READ
+
+; test trident/clam/oyster/pearl
+NO
+ENTER
+GET LAMP
+ON
+CHEAT 106
+GET TRIDENT
+
