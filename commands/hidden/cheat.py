@@ -1,12 +1,21 @@
-DESCRIPTION = "Teleport to a room by number (e.g. CHEAT 15), or CHEAT ITEMS for item debug table"
+DESCRIPTION = "Teleport to a room by number (e.g. CHEAT 15), CHEAT ITEMS or CHEAT COUNTERS"
 
 def execute(player, noun):
     if noun is None:
-        print('Cheat to where? (e.g. CHEAT 15) or CHEAT ITEMS')
+        print('Cheat to where? (e.g. CHEAT 15) or CHEAT ITEMS / CHEAT COUNTERS')
         return
 
     if noun.upper() == 'ITEMS':
         _cheat_items(player)
+        return
+
+    if noun.upper() == 'COUNTERS':
+        counters = player.game.counters
+        if not counters:
+            print('No counters set.')
+        else:
+            for name, value in sorted(counters.items()):
+                print(f'  {name}: {value}')
         return
 
     try:
