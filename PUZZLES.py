@@ -125,12 +125,13 @@ class PuzzleEngine:
                 if ni and player.hasItem(ni):
                     return False
 
-        # condition_room_item: this item must be in the current room
+        # condition_room_item: all listed items must be in the current room
         cri = self._f(puzzle, 'condition_room_item').upper()
         if cri:
             room = self.game.getRoom(room_id)
-            if not room.ifContains(cri):
-                return False
+            for ri in [x.strip() for x in cri.split(',')]:
+                if ri and not room.ifContains(ri):
+                    return False
 
         # condition_not_room_item: this item must NOT be in the current room (comma-separated)
         cnri = self._f(puzzle, 'condition_not_room_item').upper()
