@@ -26,7 +26,7 @@ class PuzzleEngine:
 
     def has_verb(self, verb):
         """Return True if any puzzle row uses this verb."""
-        return any(self._f(p, 'trigger_verb').upper() == verb.upper() for p in self.puzzles)
+        return any(verb.upper() in [v.strip() for v in self._f(p, 'trigger_verb').upper().split(',')] for p in self.puzzles)
 
     def trigger(self, player, verb, item_name, room_id):
         """Check all puzzles for a matching trigger and apply effects. Returns True if anything fired."""
@@ -74,8 +74,9 @@ class PuzzleEngine:
     def _matches(self, puzzle, player, verb, item_name, room_id):
         item_name = (item_name or '').upper()
 
-        # Verb must match
-        if self._f(puzzle, 'trigger_verb').upper() != verb.upper():
+        # Verb must match (comma-separated list allowed)
+        tv = self._f(puzzle, 'trigger_verb').upper()
+        if verb.upper() not in [v.strip() for v in tv.split(',')]:
             return False
 
         # trigger_item: comma-separated list of accepted noun patterns.
