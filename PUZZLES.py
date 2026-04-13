@@ -202,6 +202,13 @@ class PuzzleEngine:
             if self.game.counters.get(cci_name, 0) != int(cci_value):
                 return False
 
+        # condition_counter_not: counter_name:value — named counter must NOT equal value
+        ccn = self._f(puzzle, 'condition_counter_not')
+        if ccn:
+            ccn_name, ccn_value = ccn.split(':')
+            if self.game.counters.get(ccn_name, 0) == int(ccn_value):
+                return False
+
         # chance_pct: integer 1-100 — percentage chance this row fires at all
         pct = self._f(puzzle, 'chance_pct')
         if pct and not random.randint(1, 100) <= int(pct):
