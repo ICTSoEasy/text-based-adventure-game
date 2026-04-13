@@ -340,11 +340,6 @@ class PuzzleEngine:
                     self.game.getRoom(dest_id).putIn(item)
                     break
 
-        elif effect == 'INCREMENT_COUNTER':
-            self.game.counters[target] = self.game.counters.get(target, 0) + 1
-            if self.game.settings.get('debug', False):
-                print(f'  [counter] {target} = {self.game.counters[target]}')
-
         elif effect == 'RESET_COUNTER':
             self.game.counters[target] = 0
             if self.game.settings.get('debug', False):
