@@ -7,6 +7,7 @@ class Player:
         self.alive = True
         self.room = None
         self.items = []
+        self.companions = []
         self.game = None
 
     def isLocationLit(self):
@@ -133,16 +134,30 @@ class Player:
         if exits and direction in exits.keys():
             print('\nYou move.\n')
             self.room = exits[direction]
+            self._move_companions()
             self.look()
             return True
         else:
             print('I cannot move that way')
             return False
 
+    def _move_companions(self):
+        new_room = self.game.getRoom(self.room)
+        for companion in self.companions:
+            for room in self.game.rooms.values():
+                if companion in room.getContains():
+                    room.remove(companion)
+                    break
+            new_room.putIn(companion)
+            if companion.companion_message:
+                print(companion.companion_message)
+
     def listItems(self):
         count = 0
         print('Things you are holding:')
         for item in self.items:
+            if item in self.companions:
+                continue
             print('-', item.getShortDesc())
             count += 1
         if count == 0:

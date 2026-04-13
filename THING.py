@@ -15,6 +15,7 @@ class Thing:
         self.finding_bonus = 0
         self.deposit_bonus = 0
         self.deposit_room = None  # None = use global deposit_room setting
+        self.companion_message = None
 
     def getMakingLight(self):
         return self.making_light

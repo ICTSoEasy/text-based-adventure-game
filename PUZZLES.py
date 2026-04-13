@@ -254,6 +254,17 @@ class PuzzleEngine:
                         player.items.remove(inv_item)
                 self.game.destroyed_items.append(item)
 
+        elif effect == 'ADD_COMPANION':
+            item = self.game.findItem(target.upper())
+            if item:
+                for room in self.game.rooms.values():
+                    if item in room.getContains():
+                        room.remove(item)
+                        break
+                self.game.getRoom(player.getRoom()).putIn(item)
+                if item not in player.companions:
+                    player.companions.append(item)
+
         elif effect == 'CREATE_ITEM':
             name = target.upper()
             dest_id = int(value) if value else player.getRoom()
