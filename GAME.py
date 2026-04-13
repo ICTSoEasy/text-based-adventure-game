@@ -70,7 +70,7 @@ class Game:
                 return item
         return None
 
-    #Find ALL items matching a name across all rooms and player inventory (not destroyed)
+    #Find ALL items matching a name across all rooms, player inventory, and hidden items (not destroyed)
     def findAllItems(self, name):
         name = name.upper()
         found = []
@@ -82,6 +82,9 @@ class Game:
             for item in self.player.items:
                 if item.matchesName(name):
                     found.append(item)
+        for item in self.hidden_items:
+            if item.matchesName(name):
+                found.append(item)
         return found
 
     def _recalculate_score(self):
