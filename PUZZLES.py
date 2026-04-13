@@ -299,10 +299,18 @@ class PuzzleEngine:
         elif effect == 'SHOW_ITEM':
             dest_id = int(value) if value else player.getRoom()
             name = target.upper()
+            placed = False
             for item in list(self.game.hidden_items):
                 if item.matchesName(name):
                     self.game.hidden_items.remove(item)
                     self.game.getRoom(dest_id).putIn(item)
+                    placed = True
+            if not placed:
+                for item in list(self.game.unborn_items):
+                    if item.matchesName(name):
+                        self.game.unborn_items.remove(item)
+                        self.game.getRoom(dest_id).putIn(item)
+                        break
 
         elif effect == 'ADD_COMPANION':
             item = self.game.findItem(target.upper())
