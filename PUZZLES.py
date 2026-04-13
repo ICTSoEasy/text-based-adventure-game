@@ -269,6 +269,8 @@ class PuzzleEngine:
                 for inv_item in list(player.items):
                     if inv_item is item:
                         player.items.remove(inv_item)
+                if item in player.companions:
+                    player.companions.remove(item)
                 self.game.destroyed_items.append(item)
 
         elif effect == 'ADD_COMPANION':
