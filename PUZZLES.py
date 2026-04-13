@@ -141,6 +141,20 @@ class PuzzleEngine:
                 if ni and room.ifContains(ni):
                     return False
 
+        # condition_companion: all listed items must be current companions (comma-separated)
+        cc = self._f(puzzle, 'condition_companion').upper()
+        if cc:
+            for name in [x.strip() for x in cc.split(',')]:
+                if name and not any(c.matchesName(name) for c in player.companions):
+                    return False
+
+        # condition_not_companion: none of these may be current companions (comma-separated)
+        cnc = self._f(puzzle, 'condition_not_companion').upper()
+        if cnc:
+            for name in [x.strip() for x in cnc.split(',')]:
+                if name and any(c.matchesName(name) for c in player.companions):
+                    return False
+
         # condition_item_state: item_name:state — named item must be in that state
         cis = self._f(puzzle, 'condition_item_state')
         if cis:
