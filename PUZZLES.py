@@ -166,6 +166,13 @@ class PuzzleEngine:
                 if not items or items[0].state != int(cis_state):
                     return False
 
+        # condition_trigger_item_min_deposit: trigger item must have deposit_bonus >= this value
+        ctd = self._f(puzzle, 'condition_trigger_item_min_deposit')
+        if ctd:
+            trigger_item = self.game.findItem(item_name) if item_name else None
+            if not trigger_item or trigger_item.deposit_bonus < int(ctd):
+                return False
+
         # condition_item_turns_eq: item_name:value — named item's turns_remaining must equal value
         cite = self._f(puzzle, 'condition_item_turns_eq')
         if cite:
