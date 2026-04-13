@@ -157,13 +157,14 @@ class PuzzleEngine:
                 if name and any(c.matchesName(name) for c in player.companions):
                     return False
 
-        # condition_item_state: item_name:state — named item must be in that state
+        # condition_item_state: item_name:state — named item must be in that state (comma-separated for multiple)
         cis = self._f(puzzle, 'condition_item_state')
         if cis:
-            cis_name, cis_state = cis.split(':')
-            items = self.game.findAllItems(cis_name.upper())
-            if not items or items[0].state != int(cis_state):
-                return False
+            for pair in [p.strip() for p in cis.split(',')]:
+                cis_name, cis_state = pair.split(':')
+                items = self.game.findAllItems(cis_name.upper())
+                if not items or items[0].state != int(cis_state):
+                    return False
 
         # condition_item_turns_eq: item_name:value — named item's turns_remaining must equal value
         cite = self._f(puzzle, 'condition_item_turns_eq')
