@@ -202,6 +202,12 @@ class PuzzleEngine:
             if self.game.counters.get(cci_name, 0) != int(cci_value):
                 return False
 
+        # condition_counter_exists: counter_name — counter must have been set (exists at all)
+        cce = self._f(puzzle, 'condition_counter_exists')
+        if cce:
+            if cce not in self.game.counters:
+                return False
+
         # condition_counter_not: counter_name:value — named counter must NOT equal value
         ccn = self._f(puzzle, 'condition_counter_not')
         if ccn:

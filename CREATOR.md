@@ -141,6 +141,7 @@ The puzzle engine connects player actions to game events. Each row is one effect
 | `condition_counter_gte` | `counter_name:value` — named counter must be ≥ value (e.g. `dark_moves:2`). Blank = no check |
 | `condition_counter_is` | `counter_name:value` — named counter must equal this value exactly. Blank = no check |
 | `condition_counter_not` | `counter_name:value` — named counter must NOT equal this value. Blank = no check |
+| `condition_counter_exists` | `counter_name` — named counter must exist (has been set at least once) |
 | `effect_type` | What happens (see below). Can be omitted if you only want to print a message |
 | `effect_target` | What the effect acts on. Use the special value `TRIGGER_ITEM` to act on whatever item the player typed (e.g. to destroy whichever treasure was thrown) |
 | `effect_value` | Value for the effect |
