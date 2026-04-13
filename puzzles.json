@@ -1,396 +1,3005 @@
 [
-  {"_comment": "=== ACTUAL PUZZLE TYPE PUZZLES ==="},
-
-  {"_comment": "Lamp warnings - shown when lamp gets low on oil"},
-  {"trigger_verb": "FORCE", "condition_item": "LAMP", "condition_item_state": "lamp:1", "condition_item_turns_eq": "lamp:50", "effect_type": "PRINT_MSG", "message": "Your lamp is getting dim."},
-  {"trigger_verb": "FORCE", "condition_item": "LAMP", "condition_item_state": "lamp:1", "condition_item_turns_eq": "lamp:30", "effect_type": "PRINT_MSG", "message": "Your lamp is running very low."},
-  {"trigger_verb": "FORCE", "condition_item": "LAMP", "condition_item_turns_eq": "lamp:0", "effect_type": "PRINT_MSG", "message": "Your lamp has run out of power."},
-
-  {"_comment": "If you move in the dark, every move adds up. After move 1 there is a 35% chance you die"},
-  {"trigger_verb": "FORCE", "condition_location_dark": "true", "effect_type": "INCREMENT_COUNTER", "effect_target": "dark_moves"},
-  {"trigger_verb": "FORCE", "condition_location_dark": "false", "effect_type": "RESET_COUNTER", "effect_target": "dark_moves"},
-  {"trigger_verb": "FORCE", "condition_counter_gte": "dark_moves:2", "chance_pct": "35", "effect_type": "LOSE", "message_file": "pit_death"},
-
-
-  {"_comment": "Grate across a tunnel between rooms 8 and 9 - needs to be opened with keys to add the exits"},
-  {"trigger_verb": "UNLOCK", "trigger_item": "GRATE", "trigger_room": "8", "condition_item": "KEYS", "condition_item_state": "grate:1", "message_file": "grate_already_unlocked"},
-  {"trigger_verb": "UNLOCK", "trigger_item": "GRATE", "trigger_room": "8", "condition_item": "KEYS", "condition_item_state": "grate:0", "effect_type": "ADD_EXIT", "effect_target": "8", "effect_value": "DOWN:9"},
-  {"trigger_verb": "UNLOCK", "trigger_item": "GRATE", "trigger_room": "8", "condition_item": "KEYS", "condition_item_state": "grate:0", "effect_type": "ADD_EXIT", "effect_target": "9", "effect_value": "UP:8"},
-  {"trigger_verb": "UNLOCK", "trigger_item": "GRATE", "trigger_room": "8", "condition_item": "KEYS", "condition_item_state": "grate:0", "effect_type": "SET_ITEM_STATE", "effect_target": "grate", "effect_value": "1", "message_file": "grate_unlocked"},
-  {"trigger_verb": "UNLOCK", "trigger_item": "GRATE", "trigger_room": "9", "condition_item": "KEYS", "condition_item_state": "grate:1", "message_file": "grate_already_unlocked"},
-  {"trigger_verb": "UNLOCK", "trigger_item": "GRATE", "trigger_room": "9", "condition_item": "KEYS", "condition_item_state": "grate:0", "effect_type": "ADD_EXIT", "effect_target": "8", "effect_value": "DOWN:9"},
-  {"trigger_verb": "UNLOCK", "trigger_item": "GRATE", "trigger_room": "9", "condition_item": "KEYS", "condition_item_state": "grate:0", "effect_type": "ADD_EXIT", "effect_target": "9", "effect_value": "UP:8"},
-  {"trigger_verb": "UNLOCK", "trigger_item": "GRATE", "trigger_room": "9", "condition_item": "KEYS", "condition_item_state": "grate:0", "effect_type": "SET_ITEM_STATE", "effect_target": "grate", "effect_value": "1", "message_file": "grate_unlocked"},
-  {"trigger_verb": "UNLOCK", "trigger_item": "GRATE", "trigger_room": "8", "condition_item_state": "grate:0", "message_file": "no_keys"},
-  {"trigger_verb": "UNLOCK", "trigger_item": "GRATE", "trigger_room": "9", "condition_item_state": "grate:0", "message_file": "no_keys"},
-
-  {"_comment": "Grate can also be locked"},
-  {"trigger_verb": "LOCK", "trigger_item": "GRATE", "trigger_room": "8", "condition_item": "KEYS", "condition_item_state": "grate:0", "message_file": "grate_already_locked"},
-  {"trigger_verb": "LOCK", "trigger_item": "GRATE", "trigger_room": "8", "condition_item": "KEYS", "condition_item_state": "grate:1", "effect_type": "REMOVE_EXIT", "effect_target": "8", "effect_value": "DOWN"},
-  {"trigger_verb": "LOCK", "trigger_item": "GRATE", "trigger_room": "8", "condition_item": "KEYS", "condition_item_state": "grate:1", "effect_type": "REMOVE_EXIT", "effect_target": "9", "effect_value": "UP"},
-  {"trigger_verb": "LOCK", "trigger_item": "GRATE", "trigger_room": "8", "condition_item": "KEYS", "condition_item_state": "grate:1", "effect_type": "SET_ITEM_STATE", "effect_target": "grate", "effect_value": "0", "message_file": "grate_locked"},
-  {"trigger_verb": "LOCK", "trigger_item": "GRATE", "trigger_room": "9", "condition_item": "KEYS", "condition_item_state": "grate:0", "message_file": "grate_already_locked"},
-  {"trigger_verb": "LOCK", "trigger_item": "GRATE", "trigger_room": "9", "condition_item": "KEYS", "condition_item_state": "grate:1", "effect_type": "REMOVE_EXIT", "effect_target": "8", "effect_value": "DOWN"},
-  {"trigger_verb": "LOCK", "trigger_item": "GRATE", "trigger_room": "9", "condition_item": "KEYS", "condition_item_state": "grate:1", "effect_type": "REMOVE_EXIT", "effect_target": "9", "effect_value": "UP"},
-  {"trigger_verb": "LOCK", "trigger_item": "GRATE", "trigger_room": "9", "condition_item": "KEYS", "condition_item_state": "grate:1", "effect_type": "SET_ITEM_STATE", "effect_target": "grate", "effect_value": "0", "message_file": "grate_locked"},
-  {"trigger_verb": "LOCK", "trigger_item": "GRATE", "trigger_room": "8", "condition_item_state": "grate:1", "message_file": "no_keys"},
-  {"trigger_verb": "LOCK", "trigger_item": "GRATE", "trigger_room": "9", "condition_item_state": "grate:1", "message_file": "no_keys"},
-
-
-  {"_comment": "Bird in room 13 - needs cage to carry, rod1 frightens it. Dropping in snake room clears the snake."},
-  {"trigger_verb": "GET", "trigger_item": "BIRD", "trigger_room": "13", "condition_item": "ROD1", "effect_type": "PRINT_MSG", "message_file": "afraid_bird"},
-  {"trigger_verb": "GET", "trigger_item": "BIRD", "trigger_room": "13", "condition_not_item": "ROD1,CAGE", "effect_type": "PRINT_MSG", "message_file": "cant_carry_bird"},
-  {"trigger_verb": "GET", "trigger_item": "BIRD", "trigger_room": "13", "condition_item": "CAGE", "condition_not_item": "ROD1", "effect_type": "GIVE_ITEM", "effect_target": "bird"},
-  {"trigger_verb": "GET", "trigger_item": "BIRD", "trigger_room": "13", "condition_item": "CAGE", "condition_not_item": "ROD1", "effect_type": "SET_ITEM_STATE", "effect_target": "bird", "effect_value": "1"},
-  {"trigger_verb": "GET", "trigger_item": "BIRD", "trigger_room": "13", "condition_item": "CAGE", "condition_not_item": "ROD1", "effect_type": "PRINT_MSG", "message": "OK."},
-  {"_comment": "Bird can be killed."},
-  {"trigger_verb": "ATTACK", "trigger_item": "BIRD", "message_file": "dead_bird","effect_type": "DESTROY_ITEM", "effect_target": "bird", "stop": true},
-  {"trigger_verb": "KILL", "trigger_item": "BIRD", "message_file": "dead_bird","effect_type": "DESTROY_ITEM", "effect_target": "bird", "stop": true},
-  {"trigger_verb": "HIT", "trigger_item": "BIRD", "message_file": "dead_bird","effect_type": "DESTROY_ITEM", "effect_target": "bird", "stop": true},
-
-
-  {"_comment": "Snake in room 19 - blocks south/west exits. Drop bird (in cage) to drive it away."},
-  {"trigger_verb": "DROP", "trigger_item": "BIRD", "trigger_room": "19", "condition_room_item": "SNAKE", "effect_type": "PRINT_MSG", "message_file": "bird_attacks"},
-  {"trigger_verb": "DROP", "trigger_item": "BIRD", "trigger_room": "19", "condition_room_item": "SNAKE", "effect_type": "ADD_EXIT", "effect_target": "19", "effect_value": "SOUTH:36"},
-  {"trigger_verb": "DROP", "trigger_item": "BIRD", "trigger_room": "19", "condition_room_item": "SNAKE", "effect_type": "ADD_EXIT", "effect_target": "19", "effect_value": "WEST:37"},
-  {"trigger_verb": "DROP", "trigger_item": "BIRD", "trigger_room": "19", "condition_room_item": "SNAKE", "effect_type": "DESTROY_ITEM", "effect_target": "bird"},
-  {"trigger_verb": "DROP", "trigger_item": "BIRD", "trigger_room": "19", "condition_room_item": "SNAKE", "effect_type": "DESTROY_ITEM", "effect_target": "snake"},
-  {"trigger_verb": "SOUTH", "trigger_room": "19", "condition_room_item": "SNAKE", "effect_type": "PRINT_MSG", "message_file": "snake_in_way"},
-  {"trigger_verb": "WEST", "trigger_room": "19", "condition_room_item": "SNAKE", "effect_type": "PRINT_MSG", "message_file": "snake_in_way"},
-  {"_comment": "Attacking the snake just gives a warning."},
-  {"trigger_verb": "ATTACK", "trigger_item": "SNAKE", "message_file": "attack_snake", "stop": true},
-  {"trigger_verb": "KILL", "trigger_item": "SNAKE", "message_file": "attack_snake", "stop": true},
-  {"trigger_verb": "HIT", "trigger_item": "SNAKE", "message_file": "attack_snake", "stop": true},
-
-
-  {"_comment": "Instructions at start - do you want to see them?"},
-  {"trigger_verb": "YES", "trigger_room": "1", "effect_type": "PRINT_MSG_FILE", "effect_target": "instructions"},
-  {"trigger_verb": "YES", "trigger_room": "1", "effect_type": "SHOW_ROOM_LONG_DESC", "delay": 1},
-  {"trigger_verb": "NO", "trigger_room": "1", "effect_type": "SHOW_ROOM_LONG_DESC", "delay": 1},
-
-
-  {"_comment": "Vase - safe drop onto pillow (pillow must be in room); otherwise shatters"},
-  {"_comment": "Breaks."},
-  {"trigger_verb": "DROP", "trigger_item": "VASE", "condition_not_room_item": "PILLOW", "effect_type": "PRINT_MSG", "message_file": "drop_vase"},
-  {"trigger_verb": "DROP", "trigger_item": "VASE", "condition_not_room_item": "PILLOW", "effect_type": "DROP_ITEM", "effect_target": "vase"},
-  {"trigger_verb": "DROP", "trigger_item": "VASE", "condition_not_room_item": "PILLOW", "effect_type": "SET_ITEM_STATE", "effect_target": "vase", "effect_value": "2"},
-  {"trigger_verb": "DROP", "trigger_item": "VASE", "condition_not_room_item": "PILLOW", "effect_type": "SET_GETTABLE", "effect_target": "vase", "effect_value": "FALSE"},
-  {"trigger_verb": "BREAK", "trigger_item": "VASE", "effect_type": "DROP_ITEM", "effect_target": "vase", "message_file": "break_vase"},
-  {"trigger_verb": "BREAK", "trigger_item": "VASE", "effect_type": "SET_ITEM_STATE", "effect_target": "vase", "effect_value": "2"},
-  {"trigger_verb": "BREAK", "trigger_item": "VASE", "effect_type": "SET_GETTABLE", "effect_target": "vase", "effect_value": "FALSE"},
-  {"_comment": "Successful placement."},
-  {"trigger_verb": "DROP", "trigger_item": "VASE", "condition_room_item": "PILLOW", "effect_type": "PRINT_MSG", "message_file": "vase_resting"},
-  {"trigger_verb": "DROP", "trigger_item": "VASE", "condition_room_item": "PILLOW", "effect_type": "DROP_ITEM", "effect_target": "vase"},
-  {"trigger_verb": "DROP", "trigger_item": "VASE", "condition_room_item": "PILLOW", "effect_type": "SET_GETTABLE", "effect_target": "PILLOW", "effect_value": "FALSE"},
-  {"_comment": "Enable pillow gettage if vase picked up."},
-  {"trigger_verb": "GET", "trigger_item": "VASE", "condition_room_item": "PILLOW", "effect_type": "SET_GETTABLE", "effect_target": "PILLOW", "effect_value": "TRUE", "message": "Ok."},
-
-
-  {"_comment": "Bottle - FILL BOTTLE at oil pool (room 25) to collect oil"},
-  {"trigger_verb": "FILL", "trigger_item": "BOTTLE", "trigger_room": "25", "condition_item": "BOTTLE", "condition_room_item": "OIL", "effect_type": "PRINT_MSG", "message_file": "bottle_full_oil"},
-  {"trigger_verb": "FILL", "trigger_item": "BOTTLE", "trigger_room": "25", "condition_item": "BOTTLE", "condition_room_item": "OIL", "effect_type": "SET_ITEM_STATE", "effect_target": "bottle", "effect_value": "2", "stop": true},
-
-  {"_comment": "Door - POUR OIL on rusty door in room 94 to open it"},
-  {"trigger_verb": "POUR", "trigger_item": "OIL>bottle,>bottle,bottle", "trigger_room": "94", "condition_item": "BOTTLE", "condition_item_state": "bottle:2", "effect_type": "PRINT_MSG", "message_file": "oil_frees_door"},
-  {"trigger_verb": "POUR", "trigger_item": "OIL>bottle,>bottle,bottle", "trigger_room": "94", "condition_item": "BOTTLE", "condition_item_state": "bottle:2", "effect_type": "ADD_EXIT", "effect_target": "94", "effect_value": "NORTH:95"},
-  {"trigger_verb": "POUR", "trigger_item": "OIL>bottle,>bottle,bottle", "trigger_room": "94", "condition_item": "BOTTLE", "condition_item_state": "bottle:2", "effect_type": "SET_ITEM_STATE", "effect_target": "door", "effect_value": "1"},
-  {"trigger_verb": "POUR", "trigger_item": "OIL>bottle,>bottle,bottle", "trigger_room": "94", "condition_item": "BOTTLE", "condition_item_state": "bottle:2", "effect_type": "SET_ITEM_STATE", "effect_target": "bottle", "effect_value": "1", "stop": true},
-  {"trigger_verb": "NORTH", "trigger_room": "94", "condition_item_state": "door:0", "effect_type": "PRINT_MSG", "message_file": "door_rusty"},
-
-
-  {"_comment": "Fissure - WAVE ROD to raise/lower crystal bridge between rooms 17 and 27 (note: quite a few synonyms!"},
-  {"trigger_verb": "WAVE", "trigger_item": "ROD1", "trigger_room": "17", "condition_item_state": "fissure:0", "effect_type": "PRINT_MSG", "message_file": "crystal_bridge_appears"},
-  {"trigger_verb": "WAVE", "trigger_item": "ROD1", "trigger_room": "17", "condition_item_state": "fissure:0", "effect_type": "ADD_EXIT", "effect_target": "17", "effect_value": "OVER:27,ACROSS:27,CROSS:27,WEST:27"},
-  {"trigger_verb": "WAVE", "trigger_item": "ROD1", "trigger_room": "17", "condition_item_state": "fissure:0", "effect_type": "ADD_EXIT", "effect_target": "27", "effect_value": "OVER:17,ACROSS:17,CROSS:17,EAST:17"},
-  {"trigger_verb": "WAVE", "trigger_item": "ROD1", "trigger_room": "17", "condition_item_state": "fissure:0", "effect_type": "SET_ITEM_STATE", "effect_target": "fissure", "effect_value": "1", "stop": true},
-  {"trigger_verb": "WAVE", "trigger_item": "ROD1", "trigger_room": "17", "condition_item_state": "fissure:1", "effect_type": "PRINT_MSG", "message_file": "crystal_bridge_vanish"},
-  {"trigger_verb": "WAVE", "trigger_item": "ROD1", "trigger_room": "17", "condition_item_state": "fissure:1", "effect_type": "REMOVE_EXIT", "effect_target": "17", "effect_value": "OVER,ACROSS,CROSS,WEST"},
-  {"trigger_verb": "WAVE", "trigger_item": "ROD1", "trigger_room": "17", "condition_item_state": "fissure:1", "effect_type": "REMOVE_EXIT", "effect_target": "27", "effect_value": "OVER,ACROSS,CROSS,EAST"},
-  {"trigger_verb": "WAVE", "trigger_item": "ROD1", "trigger_room": "17", "condition_item_state": "fissure:1", "effect_type": "SET_ITEM_STATE", "effect_target": "fissure", "effect_value": "0", "stop": true},
-  {"trigger_verb": "WAVE", "trigger_item": "ROD1", "trigger_room": "27", "condition_item_state": "fissure:0", "effect_type": "PRINT_MSG", "message_file": "crystal_bridge_appears"},
-  {"trigger_verb": "WAVE", "trigger_item": "ROD1", "trigger_room": "27", "condition_item_state": "fissure:0", "effect_type": "ADD_EXIT", "effect_target": "17", "effect_value": "OVER:27,ACROSS:27,CROSS:27,WEST:27"},
-  {"trigger_verb": "WAVE", "trigger_item": "ROD1", "trigger_room": "27", "condition_item_state": "fissure:0", "effect_type": "ADD_EXIT", "effect_target": "27", "effect_value": "OVER:17,ACROSS:17,CROSS:17,EAST:17"},
-  {"trigger_verb": "WAVE", "trigger_item": "ROD1", "trigger_room": "27", "condition_item_state": "fissure:0", "effect_type": "SET_ITEM_STATE", "effect_target": "fissure", "effect_value": "1", "stop": true},
-  {"trigger_verb": "WAVE", "trigger_item": "ROD1", "trigger_room": "27", "condition_item_state": "fissure:1", "effect_type": "PRINT_MSG", "message_file": "crystal_bridge_vanish"},
-  {"trigger_verb": "WAVE", "trigger_item": "ROD1", "trigger_room": "27", "condition_item_state": "fissure:1", "effect_type": "REMOVE_EXIT", "effect_target": "17", "effect_value": "OVER,ACROSS,CROSS,WEST"},
-  {"trigger_verb": "WAVE", "trigger_item": "ROD1", "trigger_room": "27", "condition_item_state": "fissure:1", "effect_type": "REMOVE_EXIT", "effect_target": "27", "effect_value": "OVER,ACROSS,CROSS,EAST"},
-  {"trigger_verb": "WAVE", "trigger_item": "ROD1", "trigger_room": "27", "condition_item_state": "fissure:1", "effect_type": "SET_ITEM_STATE", "effect_target": "fissure", "effect_value": "0", "stop": true},
-  {"_comment": "No way across if no bridge"},
-  {"trigger_verb": "OVER", "trigger_room": "17", "condition_item_state": "fissure:0", "message_file": "no_bridge"},
-  {"trigger_verb": "ACROSS", "trigger_room": "17", "condition_item_state": "fissure:0", "message_file": "no_bridge"},
-  {"trigger_verb": "CROSS", "trigger_room": "17", "condition_item_state": "fissure:0", "message_file": "no_bridge"},
-  {"trigger_verb": "WEST", "trigger_room": "17", "condition_item_state": "fissure:0", "message_file": "no_bridge"},
-  {"trigger_verb": "OVER", "trigger_room": "27", "condition_item_state": "fissure:0", "message_file": "no_bridge"},
-  {"trigger_verb": "ACROSS", "trigger_room": "27", "condition_item_state": "fissure:0", "message_file": "no_bridge"},
-  {"trigger_verb": "CROSS", "trigger_room": "27", "condition_item_state": "fissure:0", "message_file": "no_bridge"},
-  {"trigger_verb": "WEST", "trigger_room": "27", "condition_item_state": "fissure:0", "message_file": "no_bridge"},
-  {"_comment": "Try to jump"},
-  {"trigger_verb": "JUMP", "trigger_room": "17", "condition_item_state": "fissure:1", "message_file": "jump_bridge"},
-  {"trigger_verb": "JUMP", "trigger_room": "27", "condition_item_state": "fissure:1", "message_file": "jump_bridge"},
-
-
-  {"_comment": "Stone tablet can be read."},
-  {"trigger_verb": "READ", "trigger_room": "101", "message_file": "stone_read"},
-
-
-  {"_comment": "Trident, Clam, Oyster, Pearl."},
-  {"trigger_verb": "DOWN", "trigger_room": "103", "condition_item": "CLAM", "message_file": "carrying_clam_down"},
-  {"trigger_verb": "OPEN", "trigger_item": "clam,>clam", "condition_item": "CLAM", "message_file": "carrying_clam_open"},
-  {"trigger_verb": "OPEN", "trigger_item": "clam,>clam", "condition_room_item": "CLAM", "condition_not_item": "trident", "message_file": "open_clam_no_trident"},
-  {"trigger_verb": "OPEN", "trigger_item": "clam,>clam", "condition_room_item": "CLAM", "condition_item": "trident", "effect_type": "CREATE_ITEM", "effect_target": "oyster"},
-  {"trigger_verb": "OPEN", "trigger_item": "clam,>clam", "condition_room_item": "CLAM", "condition_item": "trident", "effect_type": "CREATE_ITEM", "effect_target": "pearl", "effect_value": "105"},
-  {"trigger_verb": "OPEN", "trigger_item": "clam,>clam", "condition_room_item": "CLAM", "condition_item": "trident", "message_file": "pearl_rolls_out", "effect_type": "DESTROY_ITEM", "effect_target": "clam"},
-  {"trigger_verb": "DOWN", "trigger_room": "103", "condition_item": "OYSTER", "message_file": "carrying_oyster_down"},
-  {"trigger_verb": "OPEN", "trigger_item": "oyster,>oyster", "condition_item": "OYSTER", "message_file": "carrying_oyster_open"},
-  {"trigger_verb": "OPEN", "trigger_item": "oyster,>oyster", "condition_room_item": "OYSTER", "condition_not_item": "trident", "message_file": "open_oyster_no_trident"},
-  {"trigger_verb": "OPEN", "trigger_item": "oyster,>oyster", "condition_room_item": "OYSTER", "condition_item": "trident", "message_file": "oyster_insides"},
-  {"_comment": "Attacking the shells just gives a warning."},
-  {"trigger_verb": "ATTACK", "trigger_item": "oyster,>oyster,>clam,clam", "message_file": "attack_shell", "stop": true},
-  {"trigger_verb": "KILL", "trigger_item": "oyster,>oyster,>clam,clam", "message_file": "attack_shell", "stop": true},
-  {"trigger_verb": "HIT", "trigger_item": "oyster,>oyster,>clam,clam", "message_file": "attack_shell", "stop": true},
-
-
-  {"_comment": "Magazine."},
-  {"trigger_verb": "READ", "trigger_item": "magazine,>magazine", "condition_item": "MAGAZINE", "message_file": "dwarvish_mag"},
-
-
-  {"_comment": "=== ACTION COMMANDS - BUT NOT USED IN THE RIGHT PLACE/WITH THE RIGHT ITEM ==="},
-  {"_comment": "Attacking with no valid target in the room."},
-  {"trigger_verb": "ATTACK", "condition_not_room_item": "BIRD,SNAKE,OYSTER,CLAM", "message_file": "nothing_to_attack", "stop": true},
-  {"trigger_verb": "KILL", "condition_not_room_item": "BIRD,SNAKE,OYSTER,CLAM", "message_file": "nothing_to_attack", "stop": true},
-  {"trigger_verb": "HIT", "condition_not_room_item": "BIRD,SNAKE,OYSTER,CLAM", "message_file": "nothing_to_attack", "stop": true},
-
-
-  {"_comment": "=== FORCE MOVES - THESE AREN'T PUZZLES BUT FORCE YOU TO MOVE TO ANOTHER ROOM (OR DIE) WHEN YOU ENTER ==="},
-  {"trigger_verb": "FORCE", "trigger_room": "16", "effect_type": "TELEPORT", "effect_value": "14", "delay": 1},
-  {"trigger_verb": "FORCE", "trigger_room": "20", "effect_type": "LOSE", "delay": 1},
-  {"trigger_verb": "FORCE", "trigger_room": "26", "effect_type": "TELEPORT", "effect_value": "88", "delay": 1},
-  {"trigger_verb": "FORCE", "trigger_room": "32", "effect_type": "TELEPORT", "effect_value": "19", "delay": 1},
-  {"trigger_verb": "FORCE", "trigger_room": "40", "effect_type": "TELEPORT", "effect_value": "41", "delay": 1},
-  {"trigger_verb": "FORCE", "trigger_room": "59", "effect_type": "TELEPORT", "effect_value": "27", "delay": 1},
-  {"trigger_verb": "FORCE", "trigger_room": "79", "effect_type": "TELEPORT", "effect_value": "3", "delay": 1},
-
-  {"_comment": "=== MOVEMENT COMMANDS - USE THE RIGHT MOVEMENT WORD TO MOVE. MAY OR MAY NOT ALIGN TO COMPASS MOVEMENTS ==="},
-  {"trigger_verb": "ROAD", "trigger_room": "1", "effect_type": "TELEPORT", "effect_value": "2"},
-  {"trigger_verb": "HILL", "trigger_room": "1", "effect_type": "TELEPORT", "effect_value": "2"},
-  {"trigger_verb": "ENTER", "trigger_room": "1", "effect_type": "TELEPORT", "effect_value": "3"},
-  {"trigger_verb": "BUILDING", "trigger_room": "1", "effect_type": "TELEPORT", "effect_value": "3"},
-  {"trigger_verb": "DOWNSTREAM", "trigger_room": "1", "effect_type": "TELEPORT", "effect_value": "4"},
-  {"trigger_verb": "GULLY", "trigger_room": "1", "effect_type": "TELEPORT", "effect_value": "4"},
-  {"trigger_verb": "STREAM", "trigger_room": "1", "effect_type": "TELEPORT", "effect_value": "4"},
-  {"trigger_verb": "FOREST", "trigger_room": "1", "effect_type": "TELEPORT", "effect_value": "5"},
-  {"trigger_verb": "DEPRESSION", "trigger_room": "1", "effect_type": "TELEPORT", "effect_value": "8"},
-  {"trigger_verb": "ROAD", "trigger_room": "2", "effect_type": "TELEPORT", "effect_value": "1"},
-  {"trigger_verb": "HILL", "trigger_room": "2", "effect_type": "TELEPORT", "effect_value": "1"},
-  {"trigger_verb": "BUILDING", "trigger_room": "2", "effect_type": "TELEPORT", "effect_value": "1"},
-  {"trigger_verb": "FORWARD", "trigger_room": "2", "effect_type": "TELEPORT", "effect_value": "1"},
-  {"trigger_verb": "FOREST", "trigger_room": "2", "effect_type": "TELEPORT", "effect_value": "5"},
-  {"trigger_verb": "ENTER", "trigger_room": "3", "effect_type": "TELEPORT", "effect_value": "1"},
-  {"trigger_verb": "OUT", "trigger_room": "3", "effect_type": "TELEPORT", "effect_value": "1"},
-  {"trigger_verb": "OUTDOORS", "trigger_room": "3", "effect_type": "TELEPORT", "effect_value": "1"},
-  {"trigger_verb": "XYZZY", "trigger_room": "3", "effect_type": "TELEPORT", "effect_value": "11"},
-  {"trigger_verb": "PLUGH", "trigger_room": "3", "effect_type": "TELEPORT", "effect_value": "33"},
-  {"trigger_verb": "DOWNSTREAM", "trigger_room": "3", "effect_type": "TELEPORT", "effect_value": "79"},
-  {"trigger_verb": "STREAM", "trigger_room": "3", "effect_type": "TELEPORT", "effect_value": "79"},
-  {"trigger_verb": "UPSTREAM", "trigger_room": "4", "effect_type": "TELEPORT", "effect_value": "1"},
-  {"trigger_verb": "BUILDING", "trigger_room": "4", "effect_type": "TELEPORT", "effect_value": "1"},
-  {"trigger_verb": "FOREST", "trigger_room": "4", "effect_type": "TELEPORT", "effect_value": "5"},
-  {"trigger_verb": "DOWNSTREAM", "trigger_room": "4", "effect_type": "TELEPORT", "effect_value": "7"},
-  {"trigger_verb": "DEPRESSION", "trigger_room": "4", "effect_type": "TELEPORT", "effect_value": "8"},
-  {"trigger_verb": "VALLEY", "trigger_room": "5", "effect_type": "TELEPORT", "effect_value": "4"},
-  {"trigger_verb": "FOREST", "trigger_room": "5", "effect_type": "TELEPORT", "effect_value": "6"},
-  {"trigger_verb": "ROAD", "trigger_room": "6", "effect_type": "TELEPORT", "effect_value": "1"},
-  {"trigger_verb": "HILL", "trigger_room": "6", "effect_type": "TELEPORT", "effect_value": "1"},
-  {"trigger_verb": "VALLEY", "trigger_room": "6", "effect_type": "TELEPORT", "effect_value": "4"},
-  {"trigger_verb": "FOREST", "trigger_room": "6", "effect_type": "TELEPORT", "effect_value": "5"},
-  {"trigger_verb": "BUILDING", "trigger_room": "7", "effect_type": "TELEPORT", "effect_value": "1"},
-  {"trigger_verb": "UPSTREAM", "trigger_room": "7", "effect_type": "TELEPORT", "effect_value": "4"},
-  {"trigger_verb": "FOREST", "trigger_room": "7", "effect_type": "TELEPORT", "effect_value": "5"},
-  {"trigger_verb": "DOWNSTREAM", "trigger_room": "7", "effect_type": "TELEPORT", "effect_value": "8"},
-  {"trigger_verb": "ROCK", "trigger_room": "7", "effect_type": "TELEPORT", "effect_value": "8"},
-  {"trigger_verb": "BED", "trigger_room": "7", "effect_type": "TELEPORT", "effect_value": "8"},
-  {"trigger_verb": "FOREST", "trigger_room": "8", "effect_type": "TELEPORT", "effect_value": "5"},
-  {"trigger_verb": "BUILDING", "trigger_room": "8", "effect_type": "TELEPORT", "effect_value": "1"},
-  {"trigger_verb": "UPSTREAM", "trigger_room": "8", "effect_type": "TELEPORT", "effect_value": "7"},
-  {"trigger_verb": "GULLY", "trigger_room": "8", "effect_type": "TELEPORT", "effect_value": "7"},
-  {"trigger_verb": "CRAWL", "trigger_room": "9", "effect_type": "TELEPORT", "effect_value": "10"},
-  {"trigger_verb": "COBBLES", "trigger_room": "9", "effect_type": "TELEPORT", "effect_value": "10"},
-  {"trigger_verb": "ENTER", "trigger_room": "9", "effect_type": "TELEPORT", "effect_value": "10"},
-  {"trigger_verb": "PIT", "trigger_room": "9", "effect_type": "TELEPORT", "effect_value": "14"},
-  {"trigger_verb": "DEBRIS", "trigger_room": "9", "effect_type": "TELEPORT", "effect_value": "11"},
-  {"trigger_verb": "OUT", "trigger_room": "10", "effect_type": "TELEPORT", "effect_value": "9"},
-  {"trigger_verb": "SURFACE", "trigger_room": "10", "effect_type": "TELEPORT", "effect_value": "9"},
-  {"trigger_verb": "ENTER", "trigger_room": "10", "effect_type": "TELEPORT", "effect_value": "11"},
-  {"trigger_verb": "DARK", "trigger_room": "10", "effect_type": "TELEPORT", "effect_value": "11"},
-  {"trigger_verb": "DEBRIS", "trigger_room": "10", "effect_type": "TELEPORT", "effect_value": "11"},
-  {"trigger_verb": "PIT", "trigger_room": "10", "effect_type": "TELEPORT", "effect_value": "14"},
-  {"trigger_verb": "ENTRANCE", "trigger_room": "11", "effect_type": "TELEPORT", "effect_value": "9"},
-  {"trigger_verb": "CRAWL", "trigger_room": "11", "effect_type": "TELEPORT", "effect_value": "10"},
-  {"trigger_verb": "COBBLES", "trigger_room": "11", "effect_type": "TELEPORT", "effect_value": "10"},
-  {"trigger_verb": "PASSAGE", "trigger_room": "11", "effect_type": "TELEPORT", "effect_value": "10"},
-  {"trigger_verb": "LOW", "trigger_room": "11", "effect_type": "TELEPORT", "effect_value": "10"},
-  {"trigger_verb": "CANYON", "trigger_room": "11", "effect_type": "TELEPORT", "effect_value": "12"},
-  {"trigger_verb": "ENTER", "trigger_room": "11", "effect_type": "TELEPORT", "effect_value": "12"},
-  {"trigger_verb": "XYZZY", "trigger_room": "11", "effect_type": "TELEPORT", "effect_value": "3"},
-  {"trigger_verb": "PIT", "trigger_room": "11", "effect_type": "TELEPORT", "effect_value": "14"},
-  {"trigger_verb": "ENTRANCE", "trigger_room": "12", "effect_type": "TELEPORT", "effect_value": "9"},
-  {"trigger_verb": "DEBRIS", "trigger_room": "12", "effect_type": "TELEPORT", "effect_value": "11"},
-  {"trigger_verb": "ENTER", "trigger_room": "12", "effect_type": "TELEPORT", "effect_value": "13"},
-  {"trigger_verb": "PIT", "trigger_room": "12", "effect_type": "TELEPORT", "effect_value": "14"},
-  {"trigger_verb": "ENTRANCE", "trigger_room": "13", "effect_type": "TELEPORT", "effect_value": "9"},
-  {"trigger_verb": "DEBRIS", "trigger_room": "13", "effect_type": "TELEPORT", "effect_value": "11"},
-  {"trigger_verb": "CANYON", "trigger_room": "13", "effect_type": "TELEPORT", "effect_value": "12"},
-  {"trigger_verb": "PASSAGE", "trigger_room": "13", "effect_type": "TELEPORT", "effect_value": "14"},
-  {"trigger_verb": "PIT", "trigger_room": "13", "effect_type": "TELEPORT", "effect_value": "14"},
-  {"trigger_verb": "ENTRANCE", "trigger_room": "14", "effect_type": "TELEPORT", "effect_value": "9"},
-  {"trigger_verb": "DEBRIS", "trigger_room": "14", "effect_type": "TELEPORT", "effect_value": "11"},
-  {"trigger_verb": "PASSAGE", "trigger_room": "14", "effect_type": "TELEPORT", "effect_value": "13"},
-  {"trigger_verb": "CRACK", "trigger_room": "14", "effect_type": "TELEPORT", "effect_value": "16"},
-  {"trigger_verb": "STEPS", "trigger_room": "14", "effect_type": "TELEPORT", "effect_value": "15"},
-  {"trigger_verb": "STEPS", "trigger_room": "15", "effect_type": "TELEPORT", "effect_value": "14"},
-  {"trigger_verb": "LEFT", "trigger_room": "15", "effect_type": "TELEPORT", "effect_value": "18"},
-  {"trigger_verb": "FORWARD", "trigger_room": "15", "effect_type": "TELEPORT", "effect_value": "17"},
-  {"trigger_verb": "HALL", "trigger_room": "15", "effect_type": "TELEPORT", "effect_value": "17"},
-  {"trigger_verb": "STAIRS", "trigger_room": "15", "effect_type": "TELEPORT", "effect_value": "19"},
-  {"trigger_verb": "Y2", "trigger_room": "15", "effect_type": "TELEPORT", "effect_value": "34"},
-  {"trigger_verb": "HALL", "trigger_room": "17", "effect_type": "TELEPORT", "effect_value": "15"},
-  {"trigger_verb": "HALL", "trigger_room": "18", "effect_type": "TELEPORT", "effect_value": "15"},
-  {"trigger_verb": "OUT", "trigger_room": "18", "effect_type": "TELEPORT", "effect_value": "15"},
-  {"trigger_verb": "STAIRS", "trigger_room": "19", "effect_type": "TELEPORT", "effect_value": "15"},
-  {"trigger_verb": "SECRET", "trigger_room": "19", "effect_type": "TELEPORT", "effect_value": "74"},
-  {"trigger_verb": "ACROSS", "trigger_room": "23", "effect_type": "TELEPORT", "effect_value": "67"},
-  {"trigger_verb": "SLAB", "trigger_room": "23", "effect_type": "TELEPORT", "effect_value": "68"},
-  {"trigger_verb": "PIT", "trigger_room": "23", "effect_type": "TELEPORT", "effect_value": "25"},
-  {"trigger_verb": "OUT", "trigger_room": "24", "effect_type": "TELEPORT", "effect_value": "67"},
-  {"trigger_verb": "OUT", "trigger_room": "25", "effect_type": "TELEPORT", "effect_value": "23"},
-  {"trigger_verb": "CLIMB", "trigger_room": "25", "effect_type": "TELEPORT", "effect_value": "26"},
-  {"trigger_verb": "HALL", "trigger_room": "28", "effect_type": "TELEPORT", "effect_value": "19"},
-  {"trigger_verb": "OUT", "trigger_room": "28", "effect_type": "TELEPORT", "effect_value": "19"},
-  {"trigger_verb": "Y2", "trigger_room": "28", "effect_type": "TELEPORT", "effect_value": "33"},
-  {"trigger_verb": "HOLE", "trigger_room": "28", "effect_type": "TELEPORT", "effect_value": "36"},
-  {"trigger_verb": "HALL", "trigger_room": "29", "effect_type": "TELEPORT", "effect_value": "19"},
-  {"trigger_verb": "OUT", "trigger_room": "29", "effect_type": "TELEPORT", "effect_value": "19"},
-  {"trigger_verb": "HALL", "trigger_room": "30", "effect_type": "TELEPORT", "effect_value": "19"},
-  {"trigger_verb": "OUT", "trigger_room": "30", "effect_type": "TELEPORT", "effect_value": "19"},
-  {"trigger_verb": "PLUGH", "trigger_room": "33", "effect_type": "TELEPORT", "effect_value": "3"},
-  {"trigger_verb": "WALL", "trigger_room": "33", "effect_type": "TELEPORT", "effect_value": "34"},
-  {"trigger_verb": "BROKEN", "trigger_room": "33", "effect_type": "TELEPORT", "effect_value": "34"},
-  {"trigger_verb": "PLOVER", "trigger_room": "33", "effect_type": "TELEPORT", "effect_value": "100"},
-  {"trigger_verb": "Y2", "trigger_room": "34", "effect_type": "TELEPORT", "effect_value": "33"},
-  {"trigger_verb": "Y2", "trigger_room": "35", "effect_type": "TELEPORT", "effect_value": "33"},
-  {"trigger_verb": "JUMP", "trigger_room": "35", "effect_type": "TELEPORT", "effect_value": "20"},
-  {"trigger_verb": "CRAWL", "trigger_room": "36", "effect_type": "TELEPORT", "effect_value": "37"},
-  {"trigger_verb": "HOLE", "trigger_room": "36", "effect_type": "TELEPORT", "effect_value": "28"},
-  {"trigger_verb": "BEDQUILT", "trigger_room": "36", "effect_type": "TELEPORT", "effect_value": "65"},
-  {"trigger_verb": "CRAWL", "trigger_room": "37", "effect_type": "TELEPORT", "effect_value": "36"},
-  {"trigger_verb": "PIT", "trigger_room": "37", "effect_type": "TELEPORT", "effect_value": "38"},
-  {"trigger_verb": "CLIMB", "trigger_room": "37", "effect_type": "TELEPORT", "effect_value": "38"},
-  {"trigger_verb": "CLIMB", "trigger_room": "38", "effect_type": "TELEPORT", "effect_value": "37"},
-  {"trigger_verb": "OUT", "trigger_room": "38", "effect_type": "TELEPORT", "effect_value": "37"},
-  {"trigger_verb": "PASSAGE", "trigger_room": "39", "effect_type": "TELEPORT", "effect_value": "36"},
-  {"trigger_verb": "HOLE", "trigger_room": "39", "effect_type": "TELEPORT", "effect_value": "64"},
-  {"trigger_verb": "FLOOR", "trigger_room": "39", "effect_type": "TELEPORT", "effect_value": "64"},
-  {"trigger_verb": "BEDQUILT", "trigger_room": "39", "effect_type": "TELEPORT", "effect_value": "65"},
-  {"trigger_verb": "PASSAGE", "trigger_room": "41", "effect_type": "TELEPORT", "effect_value": "42"},
-  {"trigger_verb": "CLIMB", "trigger_room": "41", "effect_type": "TELEPORT", "effect_value": "42"},
-  {"trigger_verb": "CRAWL", "trigger_room": "41", "effect_type": "TELEPORT", "effect_value": "60"},
-  {"trigger_verb": "OUT", "trigger_room": "46", "effect_type": "TELEPORT", "effect_value": "45"},
-  {"trigger_verb": "OUT", "trigger_room": "47", "effect_type": "TELEPORT", "effect_value": "45"},
-  {"trigger_verb": "OUT", "trigger_room": "48", "effect_type": "TELEPORT", "effect_value": "44"},
-  {"trigger_verb": "OUT", "trigger_room": "54", "effect_type": "TELEPORT", "effect_value": "53"},
-  {"trigger_verb": "OUT", "trigger_room": "56", "effect_type": "TELEPORT", "effect_value": "55"},
-  {"trigger_verb": "CLIMB", "trigger_room": "57", "effect_type": "TELEPORT", "effect_value": "13"},
-  {"trigger_verb": "OUT", "trigger_room": "58", "effect_type": "TELEPORT", "effect_value": "57"},
-  {"trigger_verb": "CRAWL", "trigger_room": "60", "effect_type": "TELEPORT", "effect_value": "41"},
-  {"trigger_verb": "HOLE", "trigger_room": "60", "effect_type": "TELEPORT", "effect_value": "62"},
-  {"trigger_verb": "OUT", "trigger_room": "63", "effect_type": "TELEPORT", "effect_value": "62"},
-  {"trigger_verb": "CLIMB", "trigger_room": "64", "effect_type": "TELEPORT", "effect_value": "39"},
-  {"trigger_verb": "BEDQUILT", "trigger_room": "64", "effect_type": "TELEPORT", "effect_value": "65"},
-  {"trigger_verb": "SHELL", "trigger_room": "64", "effect_type": "TELEPORT", "effect_value": "103"},
-  {"trigger_verb": "SLAB", "trigger_room": "65", "effect_type": "TELEPORT", "effect_value": "68"},
-  {"trigger_verb": "CANYON", "trigger_room": "66", "effect_type": "TELEPORT", "effect_value": "77"},
-  {"trigger_verb": "ORIENTAL", "trigger_room": "66", "effect_type": "TELEPORT", "effect_value": "97"},
-  {"trigger_verb": "ACROSS", "trigger_room": "67", "effect_type": "TELEPORT", "effect_value": "23"},
-  {"trigger_verb": "PIT", "trigger_room": "67", "effect_type": "TELEPORT", "effect_value": "24"},
-  {"trigger_verb": "CLIMB", "trigger_room": "68", "effect_type": "TELEPORT", "effect_value": "69"},
-  {"trigger_verb": "SLAB", "trigger_room": "69", "effect_type": "TELEPORT", "effect_value": "68"},
-  {"trigger_verb": "RESERVOIR", "trigger_room": "69", "effect_type": "TELEPORT", "effect_value": "113"},
-  {"trigger_verb": "PASSAGE", "trigger_room": "70", "effect_type": "TELEPORT", "effect_value": "65"},
-  {"trigger_verb": "BEDQUILT", "trigger_room": "72", "effect_type": "TELEPORT", "effect_value": "65"},
-  {"trigger_verb": "ORIENTAL", "trigger_room": "72", "effect_type": "TELEPORT", "effect_value": "97"},
-  {"trigger_verb": "CRAWL", "trigger_room": "73", "effect_type": "TELEPORT", "effect_value": "72"},
-  {"trigger_verb": "OUT", "trigger_room": "73", "effect_type": "TELEPORT", "effect_value": "72"},
-  {"trigger_verb": "CRAWL", "trigger_room": "77", "effect_type": "TELEPORT", "effect_value": "66"},
-  {"trigger_verb": "OUT", "trigger_room": "81", "effect_type": "TELEPORT", "effect_value": "80"},
-  {"trigger_verb": "OUT", "trigger_room": "82", "effect_type": "TELEPORT", "effect_value": "44"},
-  {"trigger_verb": "OUT", "trigger_room": "85", "effect_type": "TELEPORT", "effect_value": "83"},
-  {"trigger_verb": "OUT", "trigger_room": "86", "effect_type": "TELEPORT", "effect_value": "52"},
-  {"trigger_verb": "CLIMB", "trigger_room": "88", "effect_type": "TELEPORT", "effect_value": "25"},
-  {"trigger_verb": "JUMP", "trigger_room": "88", "effect_type": "TELEPORT", "effect_value": "20"},
-  {"trigger_verb": "GIANT", "trigger_room": "88", "effect_type": "TELEPORT", "effect_value": "92"},
-  {"trigger_verb": "CAVERN", "trigger_room": "91", "effect_type": "TELEPORT", "effect_value": "95"},
-  {"trigger_verb": "PASSAGE", "trigger_room": "91", "effect_type": "TELEPORT", "effect_value": "95"},
-  {"trigger_verb": "CLIMB", "trigger_room": "91", "effect_type": "TELEPORT", "effect_value": "72"},
-  {"trigger_verb": "GIANT", "trigger_room": "93", "effect_type": "TELEPORT", "effect_value": "92"},
-  {"trigger_verb": "OUT", "trigger_room": "93", "effect_type": "TELEPORT", "effect_value": "92"},
-  {"trigger_verb": "GIANT", "trigger_room": "94", "effect_type": "TELEPORT", "effect_value": "92"},
-  {"trigger_verb": "PASSAGE", "trigger_room": "94", "effect_type": "TELEPORT", "effect_value": "92"},
-  {"trigger_verb": "OUT", "trigger_room": "95", "effect_type": "TELEPORT", "effect_value": "94"},
-  {"trigger_verb": "GIANT", "trigger_room": "95", "effect_type": "TELEPORT", "effect_value": "92"},
-  {"trigger_verb": "OUT", "trigger_room": "96", "effect_type": "TELEPORT", "effect_value": "66"},
-  {"trigger_verb": "CRAWL", "trigger_room": "97", "effect_type": "TELEPORT", "effect_value": "72"},
-  {"trigger_verb": "CAVERN", "trigger_room": "97", "effect_type": "TELEPORT", "effect_value": "98"},
-  {"trigger_verb": "ORIENTAL", "trigger_room": "98", "effect_type": "TELEPORT", "effect_value": "97"},
-  {"trigger_verb": "CAVERN", "trigger_room": "99", "effect_type": "TELEPORT", "effect_value": "98"},
-  {"trigger_verb": "PASSAGE", "trigger_room": "99", "effect_type": "TELEPORT", "effect_value": "301"},
-  {"trigger_verb": "PASSAGE", "trigger_room": "100", "effect_type": "TELEPORT", "effect_value": "301"},
-  {"trigger_verb": "OUT", "trigger_room": "100", "effect_type": "TELEPORT", "effect_value": "301"},
-  {"trigger_verb": "PLOVER", "trigger_room": "100", "effect_type": "TELEPORT", "effect_value": "33"},
-  {"trigger_verb": "DARK", "trigger_room": "100", "effect_type": "TELEPORT", "effect_value": "101"},
-  {"trigger_verb": "PLOVER", "trigger_room": "101", "effect_type": "TELEPORT", "effect_value": "100"},
-  {"trigger_verb": "OUT", "trigger_room": "101", "effect_type": "TELEPORT", "effect_value": "100"},
-  {"trigger_verb": "SHELL", "trigger_room": "102", "effect_type": "TELEPORT", "effect_value": "103"},
-  {"trigger_verb": "OUT", "trigger_room": "102", "effect_type": "TELEPORT", "effect_value": "103"},
-  {"trigger_verb": "HALL", "trigger_room": "103", "effect_type": "TELEPORT", "effect_value": "102"},
-  {"trigger_verb": "SHELL", "trigger_room": "104", "effect_type": "TELEPORT", "effect_value": "103"},
-  {"trigger_verb": "OUT", "trigger_room": "105", "effect_type": "TELEPORT", "effect_value": "104"},
-  {"trigger_verb": "SHELL", "trigger_room": "105", "effect_type": "TELEPORT", "effect_value": "103"},
-  {"trigger_verb": "RESERVOIR", "trigger_room": "109", "effect_type": "TELEPORT", "effect_value": "113"},
-  {"trigger_verb": "JUMP", "trigger_room": "110", "effect_type": "TELEPORT", "effect_value": "20"},
-  {"trigger_verb": "OUT", "trigger_room": "113", "effect_type": "TELEPORT", "effect_value": "109"},
-  {"trigger_verb": "OVER", "trigger_room": "117", "effect_type": "TELEPORT", "effect_value": "303"},
-  {"trigger_verb": "OUT", "trigger_room": "119", "effect_type": "TELEPORT", "effect_value": "69"},
-  {"trigger_verb": "OUT", "trigger_room": "121", "effect_type": "TELEPORT", "effect_value": "74"},
-  {"trigger_verb": "OVER", "trigger_room": "122", "effect_type": "TELEPORT", "effect_value": "303"},
-  {"trigger_verb": "FORK", "trigger_room": "122", "effect_type": "TELEPORT", "effect_value": "124"},
-  {"trigger_verb": "VIEW", "trigger_room": "122", "effect_type": "TELEPORT", "effect_value": "126"},
-  {"trigger_verb": "BARREN", "trigger_room": "122", "effect_type": "TELEPORT", "effect_value": "129"},
-  {"trigger_verb": "FORK", "trigger_room": "123", "effect_type": "TELEPORT", "effect_value": "124"},
-  {"trigger_verb": "VIEW", "trigger_room": "123", "effect_type": "TELEPORT", "effect_value": "126"},
-  {"trigger_verb": "BARREN", "trigger_room": "123", "effect_type": "TELEPORT", "effect_value": "129"},
-  {"trigger_verb": "LEFT", "trigger_room": "124", "effect_type": "TELEPORT", "effect_value": "125"},
-  {"trigger_verb": "RIGHT", "trigger_room": "124", "effect_type": "TELEPORT", "effect_value": "128"},
-  {"trigger_verb": "VIEW", "trigger_room": "124", "effect_type": "TELEPORT", "effect_value": "126"},
-  {"trigger_verb": "BARREN", "trigger_room": "124", "effect_type": "TELEPORT", "effect_value": "129"},
-  {"trigger_verb": "FORK", "trigger_room": "125", "effect_type": "TELEPORT", "effect_value": "124"},
-  {"trigger_verb": "VIEW", "trigger_room": "125", "effect_type": "TELEPORT", "effect_value": "126"},
-  {"trigger_verb": "CRAWL", "trigger_room": "125", "effect_type": "TELEPORT", "effect_value": "127"},
-  {"trigger_verb": "PASSAGE", "trigger_room": "126", "effect_type": "TELEPORT", "effect_value": "125"},
-  {"trigger_verb": "OUT", "trigger_room": "126", "effect_type": "TELEPORT", "effect_value": "125"},
-  {"trigger_verb": "FORK", "trigger_room": "126", "effect_type": "TELEPORT", "effect_value": "124"},
-  {"trigger_verb": "OUT", "trigger_room": "127", "effect_type": "TELEPORT", "effect_value": "125"},
-  {"trigger_verb": "CRAWL", "trigger_room": "127", "effect_type": "TELEPORT", "effect_value": "125"},
-  {"trigger_verb": "FORK", "trigger_room": "127", "effect_type": "TELEPORT", "effect_value": "124"},
-  {"trigger_verb": "VIEW", "trigger_room": "127", "effect_type": "TELEPORT", "effect_value": "126"},
-  {"trigger_verb": "FORK", "trigger_room": "128", "effect_type": "TELEPORT", "effect_value": "124"},
-  {"trigger_verb": "BARREN", "trigger_room": "128", "effect_type": "TELEPORT", "effect_value": "129"},
-  {"trigger_verb": "VIEW", "trigger_room": "128", "effect_type": "TELEPORT", "effect_value": "126"},
-  {"trigger_verb": "FORK", "trigger_room": "129", "effect_type": "TELEPORT", "effect_value": "124"},
-  {"trigger_verb": "ENTER", "trigger_room": "129", "effect_type": "TELEPORT", "effect_value": "130"},
-  {"trigger_verb": "BARREN", "trigger_room": "129", "effect_type": "TELEPORT", "effect_value": "130"},
-  {"trigger_verb": "VIEW", "trigger_room": "129", "effect_type": "TELEPORT", "effect_value": "126"},
-  {"trigger_verb": "OUT", "trigger_room": "130", "effect_type": "TELEPORT", "effect_value": "129"},
-  {"trigger_verb": "FORK", "trigger_room": "130", "effect_type": "TELEPORT", "effect_value": "124"},
-  {"trigger_verb": "VIEW", "trigger_room": "130", "effect_type": "TELEPORT", "effect_value": "126"},
-  {"trigger_verb": "OUT", "trigger_room": "140", "effect_type": "TELEPORT", "effect_value": "112"}
+  {
+    "_comment": "=== ACTUAL PUZZLE TYPE PUZZLES ==="
+  },
+  {
+    "_comment": "Lamp warnings - shown when lamp gets low on oil"
+  },
+  {
+    "id": 1000,
+    "trigger_verb": "FORCE",
+    "condition_item": "LAMP",
+    "condition_item_state": "lamp:1",
+    "condition_item_turns_eq": "lamp:50",
+    "effect_type": "PRINT_MSG",
+    "message": "Your lamp is getting dim."
+  },
+  {
+    "id": 1001,
+    "trigger_verb": "FORCE",
+    "condition_item": "LAMP",
+    "condition_item_state": "lamp:1",
+    "condition_item_turns_eq": "lamp:30",
+    "effect_type": "PRINT_MSG",
+    "message": "Your lamp is running very low."
+  },
+  {
+    "id": 1002,
+    "trigger_verb": "FORCE",
+    "condition_item": "LAMP",
+    "condition_item_turns_eq": "lamp:0",
+    "effect_type": "PRINT_MSG",
+    "message": "Your lamp has run out of power."
+  },
+  {
+    "_comment": "If you move in the dark, every move adds up. After move 1 there is a 35% chance you die"
+  },
+  {
+    "id": 1003,
+    "trigger_verb": "FORCE",
+    "condition_location_dark": "true",
+    "effect_type": "INCREMENT_COUNTER",
+    "effect_target": "dark_moves"
+  },
+  {
+    "id": 1004,
+    "trigger_verb": "FORCE",
+    "condition_location_dark": "false",
+    "effect_type": "RESET_COUNTER",
+    "effect_target": "dark_moves"
+  },
+  {
+    "id": 1005,
+    "trigger_verb": "FORCE",
+    "condition_counter_gte": "dark_moves:2",
+    "chance_pct": "35",
+    "effect_type": "LOSE",
+    "message_file": "pit_death"
+  },
+  {
+    "_comment": "Grate across a tunnel between rooms 8 and 9 - needs to be opened with keys to add the exits"
+  },
+  {
+    "id": 1006,
+    "trigger_verb": "UNLOCK",
+    "trigger_item": "GRATE",
+    "trigger_room": "8",
+    "condition_item": "KEYS",
+    "condition_item_state": "grate:1",
+    "message_file": "grate_already_unlocked"
+  },
+  {
+    "id": 1007,
+    "trigger_verb": "UNLOCK",
+    "trigger_item": "GRATE",
+    "trigger_room": "8",
+    "condition_item": "KEYS",
+    "condition_item_state": "grate:0",
+    "effect_type": "ADD_EXIT",
+    "effect_target": "8",
+    "effect_value": "DOWN:9"
+  },
+  {
+    "id": 1008,
+    "trigger_verb": "UNLOCK",
+    "trigger_item": "GRATE",
+    "trigger_room": "8",
+    "condition_item": "KEYS",
+    "condition_item_state": "grate:0",
+    "effect_type": "ADD_EXIT",
+    "effect_target": "9",
+    "effect_value": "UP:8"
+  },
+  {
+    "id": 1009,
+    "trigger_verb": "UNLOCK",
+    "trigger_item": "GRATE",
+    "trigger_room": "8",
+    "condition_item": "KEYS",
+    "condition_item_state": "grate:0",
+    "effect_type": "SET_ITEM_STATE",
+    "effect_target": "grate",
+    "effect_value": "1",
+    "message_file": "grate_unlocked"
+  },
+  {
+    "id": 1010,
+    "trigger_verb": "UNLOCK",
+    "trigger_item": "GRATE",
+    "trigger_room": "9",
+    "condition_item": "KEYS",
+    "condition_item_state": "grate:1",
+    "message_file": "grate_already_unlocked"
+  },
+  {
+    "id": 1011,
+    "trigger_verb": "UNLOCK",
+    "trigger_item": "GRATE",
+    "trigger_room": "9",
+    "condition_item": "KEYS",
+    "condition_item_state": "grate:0",
+    "effect_type": "ADD_EXIT",
+    "effect_target": "8",
+    "effect_value": "DOWN:9"
+  },
+  {
+    "id": 1012,
+    "trigger_verb": "UNLOCK",
+    "trigger_item": "GRATE",
+    "trigger_room": "9",
+    "condition_item": "KEYS",
+    "condition_item_state": "grate:0",
+    "effect_type": "ADD_EXIT",
+    "effect_target": "9",
+    "effect_value": "UP:8"
+  },
+  {
+    "id": 1013,
+    "trigger_verb": "UNLOCK",
+    "trigger_item": "GRATE",
+    "trigger_room": "9",
+    "condition_item": "KEYS",
+    "condition_item_state": "grate:0",
+    "effect_type": "SET_ITEM_STATE",
+    "effect_target": "grate",
+    "effect_value": "1",
+    "message_file": "grate_unlocked"
+  },
+  {
+    "id": 1014,
+    "trigger_verb": "UNLOCK",
+    "trigger_item": "GRATE",
+    "trigger_room": "8",
+    "condition_item_state": "grate:0",
+    "message_file": "no_keys"
+  },
+  {
+    "id": 1015,
+    "trigger_verb": "UNLOCK",
+    "trigger_item": "GRATE",
+    "trigger_room": "9",
+    "condition_item_state": "grate:0",
+    "message_file": "no_keys"
+  },
+  {
+    "_comment": "Grate can also be locked"
+  },
+  {
+    "id": 1016,
+    "trigger_verb": "LOCK",
+    "trigger_item": "GRATE",
+    "trigger_room": "8",
+    "condition_item": "KEYS",
+    "condition_item_state": "grate:0",
+    "message_file": "grate_already_locked"
+  },
+  {
+    "id": 1017,
+    "trigger_verb": "LOCK",
+    "trigger_item": "GRATE",
+    "trigger_room": "8",
+    "condition_item": "KEYS",
+    "condition_item_state": "grate:1",
+    "effect_type": "REMOVE_EXIT",
+    "effect_target": "8",
+    "effect_value": "DOWN"
+  },
+  {
+    "id": 1018,
+    "trigger_verb": "LOCK",
+    "trigger_item": "GRATE",
+    "trigger_room": "8",
+    "condition_item": "KEYS",
+    "condition_item_state": "grate:1",
+    "effect_type": "REMOVE_EXIT",
+    "effect_target": "9",
+    "effect_value": "UP"
+  },
+  {
+    "id": 1019,
+    "trigger_verb": "LOCK",
+    "trigger_item": "GRATE",
+    "trigger_room": "8",
+    "condition_item": "KEYS",
+    "condition_item_state": "grate:1",
+    "effect_type": "SET_ITEM_STATE",
+    "effect_target": "grate",
+    "effect_value": "0",
+    "message_file": "grate_locked"
+  },
+  {
+    "id": 1020,
+    "trigger_verb": "LOCK",
+    "trigger_item": "GRATE",
+    "trigger_room": "9",
+    "condition_item": "KEYS",
+    "condition_item_state": "grate:0",
+    "message_file": "grate_already_locked"
+  },
+  {
+    "id": 1021,
+    "trigger_verb": "LOCK",
+    "trigger_item": "GRATE",
+    "trigger_room": "9",
+    "condition_item": "KEYS",
+    "condition_item_state": "grate:1",
+    "effect_type": "REMOVE_EXIT",
+    "effect_target": "8",
+    "effect_value": "DOWN"
+  },
+  {
+    "id": 1022,
+    "trigger_verb": "LOCK",
+    "trigger_item": "GRATE",
+    "trigger_room": "9",
+    "condition_item": "KEYS",
+    "condition_item_state": "grate:1",
+    "effect_type": "REMOVE_EXIT",
+    "effect_target": "9",
+    "effect_value": "UP"
+  },
+  {
+    "id": 1023,
+    "trigger_verb": "LOCK",
+    "trigger_item": "GRATE",
+    "trigger_room": "9",
+    "condition_item": "KEYS",
+    "condition_item_state": "grate:1",
+    "effect_type": "SET_ITEM_STATE",
+    "effect_target": "grate",
+    "effect_value": "0",
+    "message_file": "grate_locked"
+  },
+  {
+    "id": 1024,
+    "trigger_verb": "LOCK",
+    "trigger_item": "GRATE",
+    "trigger_room": "8",
+    "condition_item_state": "grate:1",
+    "message_file": "no_keys"
+  },
+  {
+    "id": 1025,
+    "trigger_verb": "LOCK",
+    "trigger_item": "GRATE",
+    "trigger_room": "9",
+    "condition_item_state": "grate:1",
+    "message_file": "no_keys"
+  },
+  {
+    "_comment": "Bird in room 13 - needs cage to carry, rod1 frightens it. Dropping in snake room clears the snake."
+  },
+  {
+    "id": 1026,
+    "trigger_verb": "GET",
+    "trigger_item": "BIRD",
+    "trigger_room": "13",
+    "condition_item": "ROD1",
+    "effect_type": "PRINT_MSG",
+    "message_file": "afraid_bird"
+  },
+  {
+    "id": 1027,
+    "trigger_verb": "GET",
+    "trigger_item": "BIRD",
+    "trigger_room": "13",
+    "condition_not_item": "ROD1,CAGE",
+    "effect_type": "PRINT_MSG",
+    "message_file": "cant_carry_bird"
+  },
+  {
+    "id": 1028,
+    "trigger_verb": "GET",
+    "trigger_item": "BIRD",
+    "trigger_room": "13",
+    "condition_item": "CAGE",
+    "condition_not_item": "ROD1",
+    "effect_type": "GIVE_ITEM",
+    "effect_target": "bird"
+  },
+  {
+    "id": 1029,
+    "trigger_verb": "GET",
+    "trigger_item": "BIRD",
+    "trigger_room": "13",
+    "condition_item": "CAGE",
+    "condition_not_item": "ROD1",
+    "effect_type": "SET_ITEM_STATE",
+    "effect_target": "bird",
+    "effect_value": "1"
+  },
+  {
+    "id": 1030,
+    "trigger_verb": "GET",
+    "trigger_item": "BIRD",
+    "trigger_room": "13",
+    "condition_item": "CAGE",
+    "condition_not_item": "ROD1",
+    "effect_type": "PRINT_MSG",
+    "message": "OK."
+  },
+  {
+    "_comment": "Bird can be killed."
+  },
+  {
+    "id": 1031,
+    "trigger_verb": "ATTACK",
+    "trigger_item": "BIRD",
+    "message_file": "dead_bird",
+    "effect_type": "DESTROY_ITEM",
+    "effect_target": "bird",
+    "stop": true
+  },
+  {
+    "id": 1032,
+    "trigger_verb": "KILL",
+    "trigger_item": "BIRD",
+    "message_file": "dead_bird",
+    "effect_type": "DESTROY_ITEM",
+    "effect_target": "bird",
+    "stop": true
+  },
+  {
+    "id": 1033,
+    "trigger_verb": "HIT",
+    "trigger_item": "BIRD",
+    "message_file": "dead_bird",
+    "effect_type": "DESTROY_ITEM",
+    "effect_target": "bird",
+    "stop": true
+  },
+  {
+    "_comment": "Snake in room 19 - blocks south/west exits. Drop bird (in cage) to drive it away."
+  },
+  {
+    "id": 1034,
+    "trigger_verb": "DROP",
+    "trigger_item": "BIRD",
+    "trigger_room": "19",
+    "condition_room_item": "SNAKE",
+    "effect_type": "PRINT_MSG",
+    "message_file": "bird_attacks"
+  },
+  {
+    "id": 1035,
+    "trigger_verb": "DROP",
+    "trigger_item": "BIRD",
+    "trigger_room": "19",
+    "condition_room_item": "SNAKE",
+    "effect_type": "ADD_EXIT",
+    "effect_target": "19",
+    "effect_value": "SOUTH:36"
+  },
+  {
+    "id": 1036,
+    "trigger_verb": "DROP",
+    "trigger_item": "BIRD",
+    "trigger_room": "19",
+    "condition_room_item": "SNAKE",
+    "effect_type": "ADD_EXIT",
+    "effect_target": "19",
+    "effect_value": "WEST:37"
+  },
+  {
+    "id": 1037,
+    "trigger_verb": "DROP",
+    "trigger_item": "BIRD",
+    "trigger_room": "19",
+    "condition_room_item": "SNAKE",
+    "effect_type": "DESTROY_ITEM",
+    "effect_target": "bird"
+  },
+  {
+    "id": 1038,
+    "trigger_verb": "DROP",
+    "trigger_item": "BIRD",
+    "trigger_room": "19",
+    "condition_room_item": "SNAKE",
+    "effect_type": "DESTROY_ITEM",
+    "effect_target": "snake"
+  },
+  {
+    "id": 1039,
+    "trigger_verb": "SOUTH",
+    "trigger_room": "19",
+    "condition_room_item": "SNAKE",
+    "effect_type": "PRINT_MSG",
+    "message_file": "snake_in_way"
+  },
+  {
+    "id": 1040,
+    "trigger_verb": "WEST",
+    "trigger_room": "19",
+    "condition_room_item": "SNAKE",
+    "effect_type": "PRINT_MSG",
+    "message_file": "snake_in_way"
+  },
+  {
+    "_comment": "Attacking the snake just gives a warning."
+  },
+  {
+    "id": 1041,
+    "trigger_verb": "ATTACK",
+    "trigger_item": "SNAKE",
+    "message_file": "attack_snake",
+    "stop": true
+  },
+  {
+    "id": 1042,
+    "trigger_verb": "KILL",
+    "trigger_item": "SNAKE",
+    "message_file": "attack_snake",
+    "stop": true
+  },
+  {
+    "id": 1043,
+    "trigger_verb": "HIT",
+    "trigger_item": "SNAKE",
+    "message_file": "attack_snake",
+    "stop": true
+  },
+  {
+    "_comment": "Instructions at start - do you want to see them?"
+  },
+  {
+    "id": 1044,
+    "trigger_verb": "YES",
+    "trigger_room": "1",
+    "effect_type": "PRINT_MSG_FILE",
+    "effect_target": "instructions"
+  },
+  {
+    "id": 1045,
+    "trigger_verb": "YES",
+    "trigger_room": "1",
+    "effect_type": "SHOW_ROOM_LONG_DESC",
+    "delay": 1
+  },
+  {
+    "id": 1046,
+    "trigger_verb": "NO",
+    "trigger_room": "1",
+    "effect_type": "SHOW_ROOM_LONG_DESC",
+    "delay": 1
+  },
+  {
+    "_comment": "Vase - safe drop onto pillow (pillow must be in room); otherwise shatters"
+  },
+  {
+    "_comment": "Breaks."
+  },
+  {
+    "id": 1047,
+    "trigger_verb": "DROP",
+    "trigger_item": "VASE",
+    "condition_not_room_item": "PILLOW",
+    "effect_type": "PRINT_MSG",
+    "message_file": "drop_vase"
+  },
+  {
+    "id": 1048,
+    "trigger_verb": "DROP",
+    "trigger_item": "VASE",
+    "condition_not_room_item": "PILLOW",
+    "effect_type": "DROP_ITEM",
+    "effect_target": "vase"
+  },
+  {
+    "id": 1049,
+    "trigger_verb": "DROP",
+    "trigger_item": "VASE",
+    "condition_not_room_item": "PILLOW",
+    "effect_type": "SET_ITEM_STATE",
+    "effect_target": "vase",
+    "effect_value": "2"
+  },
+  {
+    "id": 1050,
+    "trigger_verb": "DROP",
+    "trigger_item": "VASE",
+    "condition_not_room_item": "PILLOW",
+    "effect_type": "SET_GETTABLE",
+    "effect_target": "vase",
+    "effect_value": "FALSE"
+  },
+  {
+    "id": 1051,
+    "trigger_verb": "BREAK",
+    "trigger_item": "VASE",
+    "effect_type": "DROP_ITEM",
+    "effect_target": "vase",
+    "message_file": "break_vase"
+  },
+  {
+    "id": 1052,
+    "trigger_verb": "BREAK",
+    "trigger_item": "VASE",
+    "effect_type": "SET_ITEM_STATE",
+    "effect_target": "vase",
+    "effect_value": "2"
+  },
+  {
+    "id": 1053,
+    "trigger_verb": "BREAK",
+    "trigger_item": "VASE",
+    "effect_type": "SET_GETTABLE",
+    "effect_target": "vase",
+    "effect_value": "FALSE"
+  },
+  {
+    "_comment": "Successful placement."
+  },
+  {
+    "id": 1054,
+    "trigger_verb": "DROP",
+    "trigger_item": "VASE",
+    "condition_room_item": "PILLOW",
+    "effect_type": "PRINT_MSG",
+    "message_file": "vase_resting"
+  },
+  {
+    "id": 1055,
+    "trigger_verb": "DROP",
+    "trigger_item": "VASE",
+    "condition_room_item": "PILLOW",
+    "effect_type": "DROP_ITEM",
+    "effect_target": "vase"
+  },
+  {
+    "id": 1056,
+    "trigger_verb": "DROP",
+    "trigger_item": "VASE",
+    "condition_room_item": "PILLOW",
+    "effect_type": "SET_GETTABLE",
+    "effect_target": "PILLOW",
+    "effect_value": "FALSE"
+  },
+  {
+    "_comment": "Enable pillow gettage if vase picked up."
+  },
+  {
+    "id": 1057,
+    "trigger_verb": "GET",
+    "trigger_item": "VASE",
+    "condition_room_item": "PILLOW",
+    "effect_type": "SET_GETTABLE",
+    "effect_target": "PILLOW",
+    "effect_value": "TRUE",
+    "message": "Ok."
+  },
+  {
+    "_comment": "Bottle - FILL BOTTLE at oil pool (room 25) to collect oil"
+  },
+  {
+    "id": 1058,
+    "trigger_verb": "FILL",
+    "trigger_item": "BOTTLE",
+    "trigger_room": "25",
+    "condition_item": "BOTTLE",
+    "condition_room_item": "OIL",
+    "effect_type": "PRINT_MSG",
+    "message_file": "bottle_full_oil"
+  },
+  {
+    "id": 1059,
+    "trigger_verb": "FILL",
+    "trigger_item": "BOTTLE",
+    "trigger_room": "25",
+    "condition_item": "BOTTLE",
+    "condition_room_item": "OIL",
+    "effect_type": "SET_ITEM_STATE",
+    "effect_target": "bottle",
+    "effect_value": "2",
+    "stop": true
+  },
+  {
+    "_comment": "Door - POUR OIL on rusty door in room 94 to open it"
+  },
+  {
+    "id": 1060,
+    "trigger_verb": "POUR",
+    "trigger_item": "OIL>bottle,>bottle,bottle",
+    "trigger_room": "94",
+    "condition_item": "BOTTLE",
+    "condition_item_state": "bottle:2",
+    "effect_type": "PRINT_MSG",
+    "message_file": "oil_frees_door"
+  },
+  {
+    "id": 1061,
+    "trigger_verb": "POUR",
+    "trigger_item": "OIL>bottle,>bottle,bottle",
+    "trigger_room": "94",
+    "condition_item": "BOTTLE",
+    "condition_item_state": "bottle:2",
+    "effect_type": "ADD_EXIT",
+    "effect_target": "94",
+    "effect_value": "NORTH:95"
+  },
+  {
+    "id": 1062,
+    "trigger_verb": "POUR",
+    "trigger_item": "OIL>bottle,>bottle,bottle",
+    "trigger_room": "94",
+    "condition_item": "BOTTLE",
+    "condition_item_state": "bottle:2",
+    "effect_type": "SET_ITEM_STATE",
+    "effect_target": "door",
+    "effect_value": "1"
+  },
+  {
+    "id": 1063,
+    "trigger_verb": "POUR",
+    "trigger_item": "OIL>bottle,>bottle,bottle",
+    "trigger_room": "94",
+    "condition_item": "BOTTLE",
+    "condition_item_state": "bottle:2",
+    "effect_type": "SET_ITEM_STATE",
+    "effect_target": "bottle",
+    "effect_value": "1",
+    "stop": true
+  },
+  {
+    "id": 1064,
+    "trigger_verb": "NORTH",
+    "trigger_room": "94",
+    "condition_item_state": "door:0",
+    "effect_type": "PRINT_MSG",
+    "message_file": "door_rusty"
+  },
+  {
+    "_comment": "Fissure - WAVE ROD to raise/lower crystal bridge between rooms 17 and 27 (note: quite a few synonyms!"
+  },
+  {
+    "id": 1065,
+    "trigger_verb": "WAVE",
+    "trigger_item": "ROD1",
+    "trigger_room": "17",
+    "condition_item_state": "fissure:0",
+    "effect_type": "PRINT_MSG",
+    "message_file": "crystal_bridge_appears"
+  },
+  {
+    "id": 1066,
+    "trigger_verb": "WAVE",
+    "trigger_item": "ROD1",
+    "trigger_room": "17",
+    "condition_item_state": "fissure:0",
+    "effect_type": "ADD_EXIT",
+    "effect_target": "17",
+    "effect_value": "OVER:27,ACROSS:27,CROSS:27,WEST:27"
+  },
+  {
+    "id": 1067,
+    "trigger_verb": "WAVE",
+    "trigger_item": "ROD1",
+    "trigger_room": "17",
+    "condition_item_state": "fissure:0",
+    "effect_type": "ADD_EXIT",
+    "effect_target": "27",
+    "effect_value": "OVER:17,ACROSS:17,CROSS:17,EAST:17"
+  },
+  {
+    "id": 1068,
+    "trigger_verb": "WAVE",
+    "trigger_item": "ROD1",
+    "trigger_room": "17",
+    "condition_item_state": "fissure:0",
+    "effect_type": "SET_ITEM_STATE",
+    "effect_target": "fissure",
+    "effect_value": "1",
+    "stop": true
+  },
+  {
+    "id": 1069,
+    "trigger_verb": "WAVE",
+    "trigger_item": "ROD1",
+    "trigger_room": "17",
+    "condition_item_state": "fissure:1",
+    "effect_type": "PRINT_MSG",
+    "message_file": "crystal_bridge_vanish"
+  },
+  {
+    "id": 1070,
+    "trigger_verb": "WAVE",
+    "trigger_item": "ROD1",
+    "trigger_room": "17",
+    "condition_item_state": "fissure:1",
+    "effect_type": "REMOVE_EXIT",
+    "effect_target": "17",
+    "effect_value": "OVER,ACROSS,CROSS,WEST"
+  },
+  {
+    "id": 1071,
+    "trigger_verb": "WAVE",
+    "trigger_item": "ROD1",
+    "trigger_room": "17",
+    "condition_item_state": "fissure:1",
+    "effect_type": "REMOVE_EXIT",
+    "effect_target": "27",
+    "effect_value": "OVER,ACROSS,CROSS,EAST"
+  },
+  {
+    "id": 1072,
+    "trigger_verb": "WAVE",
+    "trigger_item": "ROD1",
+    "trigger_room": "17",
+    "condition_item_state": "fissure:1",
+    "effect_type": "SET_ITEM_STATE",
+    "effect_target": "fissure",
+    "effect_value": "0",
+    "stop": true
+  },
+  {
+    "id": 1073,
+    "trigger_verb": "WAVE",
+    "trigger_item": "ROD1",
+    "trigger_room": "27",
+    "condition_item_state": "fissure:0",
+    "effect_type": "PRINT_MSG",
+    "message_file": "crystal_bridge_appears"
+  },
+  {
+    "id": 1074,
+    "trigger_verb": "WAVE",
+    "trigger_item": "ROD1",
+    "trigger_room": "27",
+    "condition_item_state": "fissure:0",
+    "effect_type": "ADD_EXIT",
+    "effect_target": "17",
+    "effect_value": "OVER:27,ACROSS:27,CROSS:27,WEST:27"
+  },
+  {
+    "id": 1075,
+    "trigger_verb": "WAVE",
+    "trigger_item": "ROD1",
+    "trigger_room": "27",
+    "condition_item_state": "fissure:0",
+    "effect_type": "ADD_EXIT",
+    "effect_target": "27",
+    "effect_value": "OVER:17,ACROSS:17,CROSS:17,EAST:17"
+  },
+  {
+    "id": 1076,
+    "trigger_verb": "WAVE",
+    "trigger_item": "ROD1",
+    "trigger_room": "27",
+    "condition_item_state": "fissure:0",
+    "effect_type": "SET_ITEM_STATE",
+    "effect_target": "fissure",
+    "effect_value": "1",
+    "stop": true
+  },
+  {
+    "id": 1077,
+    "trigger_verb": "WAVE",
+    "trigger_item": "ROD1",
+    "trigger_room": "27",
+    "condition_item_state": "fissure:1",
+    "effect_type": "PRINT_MSG",
+    "message_file": "crystal_bridge_vanish"
+  },
+  {
+    "id": 1078,
+    "trigger_verb": "WAVE",
+    "trigger_item": "ROD1",
+    "trigger_room": "27",
+    "condition_item_state": "fissure:1",
+    "effect_type": "REMOVE_EXIT",
+    "effect_target": "17",
+    "effect_value": "OVER,ACROSS,CROSS,WEST"
+  },
+  {
+    "id": 1079,
+    "trigger_verb": "WAVE",
+    "trigger_item": "ROD1",
+    "trigger_room": "27",
+    "condition_item_state": "fissure:1",
+    "effect_type": "REMOVE_EXIT",
+    "effect_target": "27",
+    "effect_value": "OVER,ACROSS,CROSS,EAST"
+  },
+  {
+    "id": 1080,
+    "trigger_verb": "WAVE",
+    "trigger_item": "ROD1",
+    "trigger_room": "27",
+    "condition_item_state": "fissure:1",
+    "effect_type": "SET_ITEM_STATE",
+    "effect_target": "fissure",
+    "effect_value": "0",
+    "stop": true
+  },
+  {
+    "_comment": "No way across if no bridge"
+  },
+  {
+    "id": 1081,
+    "trigger_verb": "OVER",
+    "trigger_room": "17",
+    "condition_item_state": "fissure:0",
+    "message_file": "no_bridge"
+  },
+  {
+    "id": 1082,
+    "trigger_verb": "ACROSS",
+    "trigger_room": "17",
+    "condition_item_state": "fissure:0",
+    "message_file": "no_bridge"
+  },
+  {
+    "id": 1083,
+    "trigger_verb": "CROSS",
+    "trigger_room": "17",
+    "condition_item_state": "fissure:0",
+    "message_file": "no_bridge"
+  },
+  {
+    "id": 1084,
+    "trigger_verb": "WEST",
+    "trigger_room": "17",
+    "condition_item_state": "fissure:0",
+    "message_file": "no_bridge"
+  },
+  {
+    "id": 1085,
+    "trigger_verb": "OVER",
+    "trigger_room": "27",
+    "condition_item_state": "fissure:0",
+    "message_file": "no_bridge"
+  },
+  {
+    "id": 1086,
+    "trigger_verb": "ACROSS",
+    "trigger_room": "27",
+    "condition_item_state": "fissure:0",
+    "message_file": "no_bridge"
+  },
+  {
+    "id": 1087,
+    "trigger_verb": "CROSS",
+    "trigger_room": "27",
+    "condition_item_state": "fissure:0",
+    "message_file": "no_bridge"
+  },
+  {
+    "id": 1088,
+    "trigger_verb": "WEST",
+    "trigger_room": "27",
+    "condition_item_state": "fissure:0",
+    "message_file": "no_bridge"
+  },
+  {
+    "_comment": "Try to jump"
+  },
+  {
+    "id": 1089,
+    "trigger_verb": "JUMP",
+    "trigger_room": "17",
+    "condition_item_state": "fissure:1",
+    "message_file": "jump_bridge"
+  },
+  {
+    "id": 1090,
+    "trigger_verb": "JUMP",
+    "trigger_room": "27",
+    "condition_item_state": "fissure:1",
+    "message_file": "jump_bridge"
+  },
+  {
+    "_comment": "Stone tablet can be read."
+  },
+  {
+    "id": 1091,
+    "trigger_verb": "READ",
+    "trigger_room": "101",
+    "message_file": "stone_read"
+  },
+  {
+    "_comment": "Trident, Clam, Oyster, Pearl."
+  },
+  {
+    "id": 1092,
+    "trigger_verb": "DOWN",
+    "trigger_room": "103",
+    "condition_item": "CLAM",
+    "message_file": "carrying_clam_down"
+  },
+  {
+    "id": 1093,
+    "trigger_verb": "OPEN",
+    "trigger_item": "clam,>clam",
+    "condition_item": "CLAM",
+    "message_file": "carrying_clam_open"
+  },
+  {
+    "id": 1094,
+    "trigger_verb": "OPEN",
+    "trigger_item": "clam,>clam",
+    "condition_room_item": "CLAM",
+    "condition_not_item": "trident",
+    "message_file": "open_clam_no_trident"
+  },
+  {
+    "id": 1095,
+    "trigger_verb": "OPEN",
+    "trigger_item": "clam,>clam",
+    "condition_room_item": "CLAM",
+    "condition_item": "trident",
+    "effect_type": "CREATE_ITEM",
+    "effect_target": "oyster"
+  },
+  {
+    "id": 1096,
+    "trigger_verb": "OPEN",
+    "trigger_item": "clam,>clam",
+    "condition_room_item": "CLAM",
+    "condition_item": "trident",
+    "effect_type": "CREATE_ITEM",
+    "effect_target": "pearl",
+    "effect_value": "105"
+  },
+  {
+    "id": 1097,
+    "trigger_verb": "OPEN",
+    "trigger_item": "clam,>clam",
+    "condition_room_item": "CLAM",
+    "condition_item": "trident",
+    "message_file": "pearl_rolls_out",
+    "effect_type": "DESTROY_ITEM",
+    "effect_target": "clam"
+  },
+  {
+    "id": 1098,
+    "trigger_verb": "DOWN",
+    "trigger_room": "103",
+    "condition_item": "OYSTER",
+    "message_file": "carrying_oyster_down"
+  },
+  {
+    "id": 1099,
+    "trigger_verb": "OPEN",
+    "trigger_item": "oyster,>oyster",
+    "condition_item": "OYSTER",
+    "message_file": "carrying_oyster_open"
+  },
+  {
+    "id": 1100,
+    "trigger_verb": "OPEN",
+    "trigger_item": "oyster,>oyster",
+    "condition_room_item": "OYSTER",
+    "condition_not_item": "trident",
+    "message_file": "open_oyster_no_trident"
+  },
+  {
+    "id": 1101,
+    "trigger_verb": "OPEN",
+    "trigger_item": "oyster,>oyster",
+    "condition_room_item": "OYSTER",
+    "condition_item": "trident",
+    "message_file": "oyster_insides"
+  },
+  {
+    "_comment": "Attacking the shells just gives a warning."
+  },
+  {
+    "id": 1102,
+    "trigger_verb": "ATTACK",
+    "trigger_item": "oyster,>oyster,>clam,clam",
+    "message_file": "attack_shell",
+    "stop": true
+  },
+  {
+    "id": 1103,
+    "trigger_verb": "KILL",
+    "trigger_item": "oyster,>oyster,>clam,clam",
+    "message_file": "attack_shell",
+    "stop": true
+  },
+  {
+    "id": 1104,
+    "trigger_verb": "HIT",
+    "trigger_item": "oyster,>oyster,>clam,clam",
+    "message_file": "attack_shell",
+    "stop": true
+  },
+  {
+    "_comment": "Magazine."
+  },
+  {
+    "id": 1105,
+    "trigger_verb": "READ",
+    "trigger_item": "magazine,>magazine,issue>magazine,magaz>magazine,spelu>magazine,spelunker>magazine",
+    "condition_item": "MAGAZINE",
+    "message_file": "dwarvish_mag"
+  },
+  {
+    "_comment": "Food/Bear."
+  },
+  {
+    "id": 1106,
+    "trigger_verb": "EAT",
+    "trigger_item": "food,>food,devou>food,devour>food",
+    "condition_item": "FOOD",
+    "message_file": "delicious_food",
+    "effect_type": "DESTROY_ITEM",
+    "effect_target": "food"
+  },
+  {
+    "id": 1107,
+    "trigger_verb": "FEED",
+    "trigger_item": "bear,>bear",
+    "condition_item": "FOOD",
+    "condition_room_item": "BEAR",
+    "effect_type": "SET_ITEM_STATE",
+    "effect_target": "BEAR",
+    "effect_value": 1,
+    "message_file": "bear_eats"
+  },
+  {
+    "id": 1108,
+    "trigger_verb": "FEED",
+    "trigger_item": "bear,>bear",
+    "condition_item": "FOOD",
+    "condition_room_item": "BEAR",
+    "effect_type": "DESTROY_ITEM",
+    "effect_target": "FOOD",
+    "stop": true
+  },
+  {
+    "id": 1109,
+    "trigger_verb": "FEED",
+    "trigger_item": "bear,>bear",
+    "condition_not_item": "FOOD",
+    "condition_room_item": "BEAR",
+    "message_file": "bear_cant_eat",
+    "stop": true
+  },
+  {
+    "id": 1110,
+    "trigger_verb": "UNLOCK",
+    "trigger_item": "chain,>chain,golde>chain,golden>chain",
+    "condition_item": "KEYS",
+    "condition_room_item": "BEAR,CHAIN",
+    "condition_item_state": "bear:1",
+    "effect_type": "SET_ITEM_STATE",
+    "effect_target": "CHAIN",
+    "effect_value": 0,
+    "message_file": "chain_unlocked",
+    "stop": true
+  },
+  {
+    "id": 1111,
+    "trigger_verb": "UNLOCK",
+    "trigger_item": "chain,>chain,golde>chain,golden>chain",
+    "condition_item": "KEYS",
+    "condition_room_item": "BEAR,CHAIN",
+    "condition_item_state": "bear:0",
+    "message_file": "bear_blocks_chain",
+    "stop": true
+  },
+  {
+    "id": 1112,
+    "trigger_verb": "LOCK",
+    "trigger_item": "chain,>chain,golde>chain,golden>chain",
+    "condition_item": "KEYS",
+    "trigger_room": 130,
+    "condition_room_item": "CHAIN",
+    "condition_item_state": "chain:0",
+    "effect_type": "SET_ITEM_STATE",
+    "effect_target": "CHAIN",
+    "effect_value": 2,
+    "message_file": "chain_locked",
+    "stop": true
+  },
+  {
+    "id": 1113,
+    "trigger_verb": "LOCK",
+    "trigger_item": "chain,>chain,golde>chain,golden>chain",
+    "condition_item": "KEYS",
+    "trigger_room": 130,
+    "condition_room_item": "CHAIN",
+    "condition_item_state": "chain:1",
+    "message_file": "chain_still_locked_bear",
+    "stop": true
+  },
+  {
+    "id": 1114,
+    "trigger_verb": "LOCK",
+    "trigger_item": "chain,>chain,golde>chain,golden>chain",
+    "condition_item": "KEYS",
+    "trigger_room": 130,
+    "condition_room_item": "CHAIN",
+    "condition_item_state": "chain:2",
+    "message_file": "chain_still_locked_wall",
+    "stop": true
+  },
+  {
+    "id": 1115,
+    "trigger_verb": "GET",
+    "trigger_item": "chain,>chain,golde>chain,golden>chain",
+    "condition_room_item": "CHAIN",
+    "condition_item_state": "chain:0",
+    "effect_type": "GIVE_ITEM",
+    "effect_target": "chain",
+    "stop": true,
+    "message": "Ok."
+  },
+  {
+    "id": 1116,
+    "trigger_verb": "GET",
+    "trigger_item": "bear",
+    "condition_room_item": "BEAR",
+    "condition_item_state": "BEAR:1",
+    "effect_type": "SET_ITEM_STATE",
+    "effect_target": "BEAR",
+    "effect_value": 2
+  },
+  {
+    "id": 1117,
+    "trigger_verb": "GET",
+    "trigger_item": "bear",
+    "condition_room_item": "BEAR",
+    "condition_item_state": "BEAR:2",
+    "effect_type": "ADD_COMPANION",
+    "effect_target": "BEAR",
+    "message": "Ok.",
+    "stop": true
+  },
+  {
+    "_comment": "Bear/Troll/Chasm."
+  },
+  {
+    "id": 1118,
+    "trigger_verb": "FORCE",
+    "trigger_room": 117,
+    "condition_room_item": "BEAR,TROLL",
+    "message_file": "bear_chases_troll"
+  },
+  {
+    "id": 1119,
+    "trigger_verb": "FORCE",
+    "trigger_room": 117,
+    "condition_room_item": "BEAR,TROLL",
+    "effect_type": "CREATE_ITEM",
+    "effect_target": "phony_troll",
+    "effect_value": 117
+  },
+  {
+    "id": 1120,
+    "trigger_verb": "FORCE",
+    "trigger_room": 117,
+    "condition_room_item": "BEAR,TROLL",
+    "effect_type": "CREATE_ITEM",
+    "effect_target": "phony_troll",
+    "effect_value": 122
+  },
+  {
+    "id": 1121,
+    "trigger_verb": "FORCE",
+    "trigger_room": 117,
+    "condition_room_item": "BEAR,PHONY_TROLL,TROLL",
+    "effect_type": "DESTROY_ITEM",
+    "effect_target": "troll"
+  },
+  {
+    "id": 1122,
+    "trigger_verb": "FORCE",
+    "trigger_room": 117,
+    "condition_room_item": "BEAR,PHONY_TROLL",
+    "effect_type": "ADD_EXIT",
+    "effect_target": 117,
+    "effect_value": "OVER:122,ACROSS:122,CROSS:122,NE:122"
+  },
+  {
+    "id": 1123,
+    "trigger_verb": "FORCE",
+    "trigger_room": 117,
+    "condition_room_item": "BEAR,PHONY_TROLL",
+    "effect_type": "ADD_EXIT",
+    "effect_target": 122,
+    "effect_value": "OVER:117,ACROSS:117,CROSS:117,SW:117",
+    "stop": true
+  },
+  {
+    "id": 1124,
+    "trigger_verb": "FORCE",
+    "trigger_room": 122,
+    "condition_room_item": "BEAR,TROLL",
+    "message_file": "bear_chases_troll"
+  },
+  {
+    "id": 1125,
+    "trigger_verb": "FORCE",
+    "trigger_room": 122,
+    "condition_room_item": "BEAR,TROLL",
+    "effect_type": "CREATE_ITEM",
+    "effect_target": "phony_troll",
+    "effect_value": 117
+  },
+  {
+    "id": 1126,
+    "trigger_verb": "FORCE",
+    "trigger_room": 122,
+    "condition_room_item": "BEAR,TROLL",
+    "effect_type": "CREATE_ITEM",
+    "effect_target": "phony_troll",
+    "effect_value": 122
+  },
+  {
+    "id": 1127,
+    "trigger_verb": "FORCE",
+    "trigger_room": 122,
+    "condition_room_item": "BEAR,PHONY_TROLL,TROLL",
+    "effect_type": "DESTROY_ITEM",
+    "effect_target": "troll",
+    "stop": true
+  },
+  {
+    "id": 1128,
+    "trigger_verb": "FORCE",
+    "trigger_room": 117,
+    "condition_room_item": "BEAR,PHONY_TROLL",
+    "effect_type": "ADD_EXIT",
+    "effect_target": 117,
+    "effect_value": "OVER:122,ACROSS:122,CROSS:122,NE:122"
+  },
+  {
+    "id": 1129,
+    "trigger_verb": "FORCE",
+    "trigger_room": 117,
+    "condition_room_item": "BEAR,PHONY_TROLL",
+    "effect_type": "ADD_EXIT",
+    "effect_target": 122,
+    "effect_value": "OVER:117,ACROSS:117,CROSS:117,SW:117",
+    "stop": true
+  },
+  {
+    "id": 1130,
+    "trigger_verb": "ATTACK",
+    "trigger_item": "troll,>troll",
+    "trggger_room": 117,
+    "message_file": "attack_troll"
+  },
+  {
+    "id": 1131,
+    "trigger_verb": "ATTACK",
+    "trigger_item": "troll,>troll",
+    "trggger_room": 122,
+    "message_file": "attack_troll"
+  },
+  {
+    "id": 1132,
+    "trigger_verb": "KILL",
+    "trigger_item": "troll,>troll",
+    "trggger_room": 117,
+    "message_file": "attack_troll"
+  },
+  {
+    "id": 1133,
+    "trigger_verb": "KILL",
+    "trigger_item": "troll,>troll",
+    "trggger_room": 122,
+    "message_file": "attack_troll"
+  },
+  {
+    "id": 1134,
+    "trigger_verb": "HIT",
+    "trigger_item": "troll,>troll",
+    "trggger_room": 117,
+    "message_file": "attack_troll"
+  },
+  {
+    "id": 1135,
+    "trigger_verb": "HIT",
+    "trigger_item": "troll,>troll",
+    "trggger_room": 122,
+    "message_file": "attack_troll"
+  },
+  {
+    "id": 1136,
+    "trigger_verb": "NORTHEAST,NE,OVER,ACROSS,CROSS",
+    "trigger_room": 117,
+    "condition_companion": "BEAR",
+    "effect_type": "SET_ITEM_STATE",
+    "effect_target": "chasm",
+    "effect_value": 1
+  },
+  {
+    "id": 1137,
+    "trigger_verb": "NORTHEAST,NE,OVER,ACROSS,CROSS",
+    "trigger_room": 117,
+    "condition_companion": "BEAR",
+    "message_file": "fall_in_chasm",
+    "effect_type": "lose"
+  },
+  {
+    "id": 1138,
+    "trigger_verb": "NORTHEAST,NE,OVER,ACROSS,CROSS",
+    "trigger_room": 117,
+    "condition_companion": "BEAR",
+    "effect_type": "REMOVE_EXIT",
+    "effect_target": 117,
+    "effect_value": "OVER,ACROSS,CROSS,NE"
+  },
+  {
+    "id": 1139,
+    "trigger_verb": "NORTHEAST,NE,OVER,ACROSS,CROSS",
+    "trigger_room": 117,
+    "condition_companion": "BEAR",
+    "effect_type": "REMOVE_EXIT",
+    "effect_target": 122,
+    "effect_value": "OVER,ACROSS,CROSS,SW"
+  },
+  {
+    "id": 1140,
+    "trigger_verb": "NORTHEAST,NE,OVER,ACROSS,CROSS",
+    "trigger_room": 117,
+    "condition_companion": "BEAR",
+    "effect_type": "DESTROY_ITEM",
+    "effect_target": "bear",
+    "stop": true
+  },
+  {
+    "id": 1141,
+    "trigger_verb": "NORTHEAST,NE,OVER,ACROSS,CROSS",
+    "trigger_room": 122,
+    "condition_companion": "BEAR",
+    "effect_type": "SET_ITEM_STATE",
+    "effect_target": "chasm",
+    "effect_value": 1
+  },
+  {
+    "id": 1142,
+    "trigger_verb": "SOUTHWEST,SW,OVER,ACROSS,CROSS",
+    "trigger_room": 122,
+    "condition_companion": "BEAR",
+    "message_file": "fall_in_chasm",
+    "effect_type": "lose",
+    "stop": true
+  },
+  {
+    "_comment": "=== ACTION/DEFAULT COMMANDS - BUT NOT USED IN THE RIGHT PLACE/WITH THE RIGHT ITEM ==="
+  },
+  {
+    "_comment": "Attacking with no valid target in the room."
+  },
+  {
+    "id": 1143,
+    "trigger_verb": "ATTACK",
+    "condition_not_room_item": "BIRD,SNAKE,OYSTER,CLAM,TROLL",
+    "message_file": "nothing_to_attack",
+    "stop": true
+  },
+  {
+    "id": 1144,
+    "trigger_verb": "KILL",
+    "condition_not_room_item": "BIRD,SNAKE,OYSTER,CLAM,TROLL",
+    "message_file": "nothing_to_attack",
+    "stop": true
+  },
+  {
+    "id": 1145,
+    "trigger_verb": "HIT",
+    "condition_not_room_item": "BIRD,SNAKE,OYSTER,CLAM,TROLL",
+    "message_file": "nothing_to_attack",
+    "stop": true
+  },
+  {
+    "_comment": "Feeding without food"
+  },
+  {
+    "id": 1146,
+    "trigger_verb": "FEED",
+    "condition_not_item": "FOOD",
+    "message_file": "default_feed_no_food"
+  },
+  {
+    "_comment": "=== FORCE MOVES - THESE AREN'T PUZZLES BUT FORCE YOU TO MOVE TO ANOTHER ROOM (OR DIE) WHEN YOU ENTER ==="
+  },
+  {
+    "id": 1147,
+    "trigger_verb": "FORCE",
+    "trigger_room": "16",
+    "effect_type": "TELEPORT",
+    "effect_value": "14",
+    "delay": 1
+  },
+  {
+    "id": 1148,
+    "trigger_verb": "FORCE",
+    "trigger_room": "20",
+    "effect_type": "LOSE",
+    "delay": 1
+  },
+  {
+    "id": 1149,
+    "trigger_verb": "FORCE",
+    "trigger_room": "26",
+    "effect_type": "TELEPORT",
+    "effect_value": "88",
+    "delay": 1
+  },
+  {
+    "id": 1150,
+    "trigger_verb": "FORCE",
+    "trigger_room": "32",
+    "effect_type": "TELEPORT",
+    "effect_value": "19",
+    "delay": 1
+  },
+  {
+    "id": 1151,
+    "trigger_verb": "FORCE",
+    "trigger_room": "40",
+    "effect_type": "TELEPORT",
+    "effect_value": "41",
+    "delay": 1
+  },
+  {
+    "id": 1152,
+    "trigger_verb": "FORCE",
+    "trigger_room": "59",
+    "effect_type": "TELEPORT",
+    "effect_value": "27",
+    "delay": 1
+  },
+  {
+    "id": 1153,
+    "trigger_verb": "FORCE",
+    "trigger_room": "79",
+    "effect_type": "TELEPORT",
+    "effect_value": "3",
+    "delay": 1
+  },
+  {
+    "_comment": "=== MOVEMENT COMMANDS - USE THE RIGHT MOVEMENT WORD TO MOVE. MAY OR MAY NOT ALIGN TO COMPASS MOVEMENTS ==="
+  },
+  {
+    "id": 5000,
+    "trigger_verb": "ROAD",
+    "trigger_room": "1",
+    "effect_type": "TELEPORT",
+    "effect_value": "2"
+  },
+  {
+    "id": 5001,
+    "trigger_verb": "HILL",
+    "trigger_room": "1",
+    "effect_type": "TELEPORT",
+    "effect_value": "2"
+  },
+  {
+    "id": 5002,
+    "trigger_verb": "ENTER",
+    "trigger_room": "1",
+    "effect_type": "TELEPORT",
+    "effect_value": "3"
+  },
+  {
+    "id": 5003,
+    "trigger_verb": "BUILDING",
+    "trigger_room": "1",
+    "effect_type": "TELEPORT",
+    "effect_value": "3"
+  },
+  {
+    "id": 5004,
+    "trigger_verb": "DOWNSTREAM",
+    "trigger_room": "1",
+    "effect_type": "TELEPORT",
+    "effect_value": "4"
+  },
+  {
+    "id": 5005,
+    "trigger_verb": "GULLY",
+    "trigger_room": "1",
+    "effect_type": "TELEPORT",
+    "effect_value": "4"
+  },
+  {
+    "id": 5006,
+    "trigger_verb": "STREAM",
+    "trigger_room": "1",
+    "effect_type": "TELEPORT",
+    "effect_value": "4"
+  },
+  {
+    "id": 5007,
+    "trigger_verb": "FOREST",
+    "trigger_room": "1",
+    "effect_type": "TELEPORT",
+    "effect_value": "5"
+  },
+  {
+    "id": 5008,
+    "trigger_verb": "DEPRESSION",
+    "trigger_room": "1",
+    "effect_type": "TELEPORT",
+    "effect_value": "8"
+  },
+  {
+    "id": 5009,
+    "trigger_verb": "ROAD",
+    "trigger_room": "2",
+    "effect_type": "TELEPORT",
+    "effect_value": "1"
+  },
+  {
+    "id": 5010,
+    "trigger_verb": "HILL",
+    "trigger_room": "2",
+    "effect_type": "TELEPORT",
+    "effect_value": "1"
+  },
+  {
+    "id": 5011,
+    "trigger_verb": "BUILDING",
+    "trigger_room": "2",
+    "effect_type": "TELEPORT",
+    "effect_value": "1"
+  },
+  {
+    "id": 5012,
+    "trigger_verb": "FORWARD",
+    "trigger_room": "2",
+    "effect_type": "TELEPORT",
+    "effect_value": "1"
+  },
+  {
+    "id": 5013,
+    "trigger_verb": "FOREST",
+    "trigger_room": "2",
+    "effect_type": "TELEPORT",
+    "effect_value": "5"
+  },
+  {
+    "id": 5014,
+    "trigger_verb": "ENTER",
+    "trigger_room": "3",
+    "effect_type": "TELEPORT",
+    "effect_value": "1"
+  },
+  {
+    "id": 5015,
+    "trigger_verb": "OUT",
+    "trigger_room": "3",
+    "effect_type": "TELEPORT",
+    "effect_value": "1"
+  },
+  {
+    "id": 5016,
+    "trigger_verb": "OUTDOORS",
+    "trigger_room": "3",
+    "effect_type": "TELEPORT",
+    "effect_value": "1"
+  },
+  {
+    "id": 5017,
+    "trigger_verb": "XYZZY",
+    "trigger_room": "3",
+    "effect_type": "TELEPORT",
+    "effect_value": "11"
+  },
+  {
+    "id": 5018,
+    "trigger_verb": "PLUGH",
+    "trigger_room": "3",
+    "effect_type": "TELEPORT",
+    "effect_value": "33"
+  },
+  {
+    "id": 5019,
+    "trigger_verb": "DOWNSTREAM",
+    "trigger_room": "3",
+    "effect_type": "TELEPORT",
+    "effect_value": "79"
+  },
+  {
+    "id": 5020,
+    "trigger_verb": "STREAM",
+    "trigger_room": "3",
+    "effect_type": "TELEPORT",
+    "effect_value": "79"
+  },
+  {
+    "id": 5021,
+    "trigger_verb": "UPSTREAM",
+    "trigger_room": "4",
+    "effect_type": "TELEPORT",
+    "effect_value": "1"
+  },
+  {
+    "id": 5022,
+    "trigger_verb": "BUILDING",
+    "trigger_room": "4",
+    "effect_type": "TELEPORT",
+    "effect_value": "1"
+  },
+  {
+    "id": 5023,
+    "trigger_verb": "FOREST",
+    "trigger_room": "4",
+    "effect_type": "TELEPORT",
+    "effect_value": "5"
+  },
+  {
+    "id": 5024,
+    "trigger_verb": "DOWNSTREAM",
+    "trigger_room": "4",
+    "effect_type": "TELEPORT",
+    "effect_value": "7"
+  },
+  {
+    "id": 5025,
+    "trigger_verb": "DEPRESSION",
+    "trigger_room": "4",
+    "effect_type": "TELEPORT",
+    "effect_value": "8"
+  },
+  {
+    "id": 5026,
+    "trigger_verb": "VALLEY",
+    "trigger_room": "5",
+    "effect_type": "TELEPORT",
+    "effect_value": "4"
+  },
+  {
+    "id": 5027,
+    "trigger_verb": "FOREST",
+    "trigger_room": "5",
+    "effect_type": "TELEPORT",
+    "effect_value": "6"
+  },
+  {
+    "id": 5028,
+    "trigger_verb": "ROAD",
+    "trigger_room": "6",
+    "effect_type": "TELEPORT",
+    "effect_value": "1"
+  },
+  {
+    "id": 5029,
+    "trigger_verb": "HILL",
+    "trigger_room": "6",
+    "effect_type": "TELEPORT",
+    "effect_value": "1"
+  },
+  {
+    "id": 5030,
+    "trigger_verb": "VALLEY",
+    "trigger_room": "6",
+    "effect_type": "TELEPORT",
+    "effect_value": "4"
+  },
+  {
+    "id": 5031,
+    "trigger_verb": "FOREST",
+    "trigger_room": "6",
+    "effect_type": "TELEPORT",
+    "effect_value": "5"
+  },
+  {
+    "id": 5032,
+    "trigger_verb": "BUILDING",
+    "trigger_room": "7",
+    "effect_type": "TELEPORT",
+    "effect_value": "1"
+  },
+  {
+    "id": 5033,
+    "trigger_verb": "UPSTREAM",
+    "trigger_room": "7",
+    "effect_type": "TELEPORT",
+    "effect_value": "4"
+  },
+  {
+    "id": 5034,
+    "trigger_verb": "FOREST",
+    "trigger_room": "7",
+    "effect_type": "TELEPORT",
+    "effect_value": "5"
+  },
+  {
+    "id": 5035,
+    "trigger_verb": "DOWNSTREAM",
+    "trigger_room": "7",
+    "effect_type": "TELEPORT",
+    "effect_value": "8"
+  },
+  {
+    "id": 5036,
+    "trigger_verb": "ROCK",
+    "trigger_room": "7",
+    "effect_type": "TELEPORT",
+    "effect_value": "8"
+  },
+  {
+    "id": 5037,
+    "trigger_verb": "BED",
+    "trigger_room": "7",
+    "effect_type": "TELEPORT",
+    "effect_value": "8"
+  },
+  {
+    "id": 5038,
+    "trigger_verb": "FOREST",
+    "trigger_room": "8",
+    "effect_type": "TELEPORT",
+    "effect_value": "5"
+  },
+  {
+    "id": 5039,
+    "trigger_verb": "BUILDING",
+    "trigger_room": "8",
+    "effect_type": "TELEPORT",
+    "effect_value": "1"
+  },
+  {
+    "id": 5040,
+    "trigger_verb": "UPSTREAM",
+    "trigger_room": "8",
+    "effect_type": "TELEPORT",
+    "effect_value": "7"
+  },
+  {
+    "id": 5041,
+    "trigger_verb": "GULLY",
+    "trigger_room": "8",
+    "effect_type": "TELEPORT",
+    "effect_value": "7"
+  },
+  {
+    "id": 5042,
+    "trigger_verb": "CRAWL",
+    "trigger_room": "9",
+    "effect_type": "TELEPORT",
+    "effect_value": "10"
+  },
+  {
+    "id": 5043,
+    "trigger_verb": "COBBLES",
+    "trigger_room": "9",
+    "effect_type": "TELEPORT",
+    "effect_value": "10"
+  },
+  {
+    "id": 5044,
+    "trigger_verb": "ENTER",
+    "trigger_room": "9",
+    "effect_type": "TELEPORT",
+    "effect_value": "10"
+  },
+  {
+    "id": 5045,
+    "trigger_verb": "PIT",
+    "trigger_room": "9",
+    "effect_type": "TELEPORT",
+    "effect_value": "14"
+  },
+  {
+    "id": 5046,
+    "trigger_verb": "DEBRIS",
+    "trigger_room": "9",
+    "effect_type": "TELEPORT",
+    "effect_value": "11"
+  },
+  {
+    "id": 5047,
+    "trigger_verb": "OUT",
+    "trigger_room": "10",
+    "effect_type": "TELEPORT",
+    "effect_value": "9"
+  },
+  {
+    "id": 5048,
+    "trigger_verb": "SURFACE",
+    "trigger_room": "10",
+    "effect_type": "TELEPORT",
+    "effect_value": "9"
+  },
+  {
+    "id": 5049,
+    "trigger_verb": "ENTER",
+    "trigger_room": "10",
+    "effect_type": "TELEPORT",
+    "effect_value": "11"
+  },
+  {
+    "id": 5050,
+    "trigger_verb": "DARK",
+    "trigger_room": "10",
+    "effect_type": "TELEPORT",
+    "effect_value": "11"
+  },
+  {
+    "id": 5051,
+    "trigger_verb": "DEBRIS",
+    "trigger_room": "10",
+    "effect_type": "TELEPORT",
+    "effect_value": "11"
+  },
+  {
+    "id": 5052,
+    "trigger_verb": "PIT",
+    "trigger_room": "10",
+    "effect_type": "TELEPORT",
+    "effect_value": "14"
+  },
+  {
+    "id": 5053,
+    "trigger_verb": "ENTRANCE",
+    "trigger_room": "11",
+    "effect_type": "TELEPORT",
+    "effect_value": "9"
+  },
+  {
+    "id": 5054,
+    "trigger_verb": "CRAWL",
+    "trigger_room": "11",
+    "effect_type": "TELEPORT",
+    "effect_value": "10"
+  },
+  {
+    "id": 5055,
+    "trigger_verb": "COBBLES",
+    "trigger_room": "11",
+    "effect_type": "TELEPORT",
+    "effect_value": "10"
+  },
+  {
+    "id": 5056,
+    "trigger_verb": "PASSAGE",
+    "trigger_room": "11",
+    "effect_type": "TELEPORT",
+    "effect_value": "10"
+  },
+  {
+    "id": 5057,
+    "trigger_verb": "LOW",
+    "trigger_room": "11",
+    "effect_type": "TELEPORT",
+    "effect_value": "10"
+  },
+  {
+    "id": 5058,
+    "trigger_verb": "CANYON",
+    "trigger_room": "11",
+    "effect_type": "TELEPORT",
+    "effect_value": "12"
+  },
+  {
+    "id": 5059,
+    "trigger_verb": "ENTER",
+    "trigger_room": "11",
+    "effect_type": "TELEPORT",
+    "effect_value": "12"
+  },
+  {
+    "id": 5060,
+    "trigger_verb": "XYZZY",
+    "trigger_room": "11",
+    "effect_type": "TELEPORT",
+    "effect_value": "3"
+  },
+  {
+    "id": 5061,
+    "trigger_verb": "PIT",
+    "trigger_room": "11",
+    "effect_type": "TELEPORT",
+    "effect_value": "14"
+  },
+  {
+    "id": 5062,
+    "trigger_verb": "ENTRANCE",
+    "trigger_room": "12",
+    "effect_type": "TELEPORT",
+    "effect_value": "9"
+  },
+  {
+    "id": 5063,
+    "trigger_verb": "DEBRIS",
+    "trigger_room": "12",
+    "effect_type": "TELEPORT",
+    "effect_value": "11"
+  },
+  {
+    "id": 5064,
+    "trigger_verb": "ENTER",
+    "trigger_room": "12",
+    "effect_type": "TELEPORT",
+    "effect_value": "13"
+  },
+  {
+    "id": 5065,
+    "trigger_verb": "PIT",
+    "trigger_room": "12",
+    "effect_type": "TELEPORT",
+    "effect_value": "14"
+  },
+  {
+    "id": 5066,
+    "trigger_verb": "ENTRANCE",
+    "trigger_room": "13",
+    "effect_type": "TELEPORT",
+    "effect_value": "9"
+  },
+  {
+    "id": 5067,
+    "trigger_verb": "DEBRIS",
+    "trigger_room": "13",
+    "effect_type": "TELEPORT",
+    "effect_value": "11"
+  },
+  {
+    "id": 5068,
+    "trigger_verb": "CANYON",
+    "trigger_room": "13",
+    "effect_type": "TELEPORT",
+    "effect_value": "12"
+  },
+  {
+    "id": 5069,
+    "trigger_verb": "PASSAGE",
+    "trigger_room": "13",
+    "effect_type": "TELEPORT",
+    "effect_value": "14"
+  },
+  {
+    "id": 5070,
+    "trigger_verb": "PIT",
+    "trigger_room": "13",
+    "effect_type": "TELEPORT",
+    "effect_value": "14"
+  },
+  {
+    "id": 5071,
+    "trigger_verb": "ENTRANCE",
+    "trigger_room": "14",
+    "effect_type": "TELEPORT",
+    "effect_value": "9"
+  },
+  {
+    "id": 5072,
+    "trigger_verb": "DEBRIS",
+    "trigger_room": "14",
+    "effect_type": "TELEPORT",
+    "effect_value": "11"
+  },
+  {
+    "id": 5073,
+    "trigger_verb": "PASSAGE",
+    "trigger_room": "14",
+    "effect_type": "TELEPORT",
+    "effect_value": "13"
+  },
+  {
+    "id": 5074,
+    "trigger_verb": "CRACK",
+    "trigger_room": "14",
+    "effect_type": "TELEPORT",
+    "effect_value": "16"
+  },
+  {
+    "id": 5075,
+    "trigger_verb": "STEPS",
+    "trigger_room": "14",
+    "effect_type": "TELEPORT",
+    "effect_value": "15"
+  },
+  {
+    "id": 5076,
+    "trigger_verb": "STEPS",
+    "trigger_room": "15",
+    "effect_type": "TELEPORT",
+    "effect_value": "14"
+  },
+  {
+    "id": 5077,
+    "trigger_verb": "LEFT",
+    "trigger_room": "15",
+    "effect_type": "TELEPORT",
+    "effect_value": "18"
+  },
+  {
+    "id": 5078,
+    "trigger_verb": "FORWARD",
+    "trigger_room": "15",
+    "effect_type": "TELEPORT",
+    "effect_value": "17"
+  },
+  {
+    "id": 5079,
+    "trigger_verb": "HALL",
+    "trigger_room": "15",
+    "effect_type": "TELEPORT",
+    "effect_value": "17"
+  },
+  {
+    "id": 5080,
+    "trigger_verb": "STAIRS",
+    "trigger_room": "15",
+    "effect_type": "TELEPORT",
+    "effect_value": "19"
+  },
+  {
+    "id": 5081,
+    "trigger_verb": "Y2",
+    "trigger_room": "15",
+    "effect_type": "TELEPORT",
+    "effect_value": "34"
+  },
+  {
+    "id": 5082,
+    "trigger_verb": "HALL",
+    "trigger_room": "17",
+    "effect_type": "TELEPORT",
+    "effect_value": "15"
+  },
+  {
+    "id": 5083,
+    "trigger_verb": "HALL",
+    "trigger_room": "18",
+    "effect_type": "TELEPORT",
+    "effect_value": "15"
+  },
+  {
+    "id": 5084,
+    "trigger_verb": "OUT",
+    "trigger_room": "18",
+    "effect_type": "TELEPORT",
+    "effect_value": "15"
+  },
+  {
+    "id": 5085,
+    "trigger_verb": "STAIRS",
+    "trigger_room": "19",
+    "effect_type": "TELEPORT",
+    "effect_value": "15"
+  },
+  {
+    "id": 5086,
+    "trigger_verb": "SECRET",
+    "trigger_room": "19",
+    "effect_type": "TELEPORT",
+    "effect_value": "74"
+  },
+  {
+    "id": 5087,
+    "trigger_verb": "ACROSS",
+    "trigger_room": "23",
+    "effect_type": "TELEPORT",
+    "effect_value": "67"
+  },
+  {
+    "id": 5088,
+    "trigger_verb": "SLAB",
+    "trigger_room": "23",
+    "effect_type": "TELEPORT",
+    "effect_value": "68"
+  },
+  {
+    "id": 5089,
+    "trigger_verb": "PIT",
+    "trigger_room": "23",
+    "effect_type": "TELEPORT",
+    "effect_value": "25"
+  },
+  {
+    "id": 5090,
+    "trigger_verb": "OUT",
+    "trigger_room": "24",
+    "effect_type": "TELEPORT",
+    "effect_value": "67"
+  },
+  {
+    "id": 5091,
+    "trigger_verb": "OUT",
+    "trigger_room": "25",
+    "effect_type": "TELEPORT",
+    "effect_value": "23"
+  },
+  {
+    "id": 5092,
+    "trigger_verb": "CLIMB",
+    "trigger_room": "25",
+    "effect_type": "TELEPORT",
+    "effect_value": "26"
+  },
+  {
+    "id": 5093,
+    "trigger_verb": "HALL",
+    "trigger_room": "28",
+    "effect_type": "TELEPORT",
+    "effect_value": "19"
+  },
+  {
+    "id": 5094,
+    "trigger_verb": "OUT",
+    "trigger_room": "28",
+    "effect_type": "TELEPORT",
+    "effect_value": "19"
+  },
+  {
+    "id": 5095,
+    "trigger_verb": "Y2",
+    "trigger_room": "28",
+    "effect_type": "TELEPORT",
+    "effect_value": "33"
+  },
+  {
+    "id": 5096,
+    "trigger_verb": "HOLE",
+    "trigger_room": "28",
+    "effect_type": "TELEPORT",
+    "effect_value": "36"
+  },
+  {
+    "id": 5097,
+    "trigger_verb": "HALL",
+    "trigger_room": "29",
+    "effect_type": "TELEPORT",
+    "effect_value": "19"
+  },
+  {
+    "id": 5098,
+    "trigger_verb": "OUT",
+    "trigger_room": "29",
+    "effect_type": "TELEPORT",
+    "effect_value": "19"
+  },
+  {
+    "id": 5099,
+    "trigger_verb": "HALL",
+    "trigger_room": "30",
+    "effect_type": "TELEPORT",
+    "effect_value": "19"
+  },
+  {
+    "id": 5100,
+    "trigger_verb": "OUT",
+    "trigger_room": "30",
+    "effect_type": "TELEPORT",
+    "effect_value": "19"
+  },
+  {
+    "id": 5101,
+    "trigger_verb": "PLUGH",
+    "trigger_room": "33",
+    "effect_type": "TELEPORT",
+    "effect_value": "3"
+  },
+  {
+    "id": 5102,
+    "trigger_verb": "WALL",
+    "trigger_room": "33",
+    "effect_type": "TELEPORT",
+    "effect_value": "34"
+  },
+  {
+    "id": 5103,
+    "trigger_verb": "BROKEN",
+    "trigger_room": "33",
+    "effect_type": "TELEPORT",
+    "effect_value": "34"
+  },
+  {
+    "id": 5104,
+    "trigger_verb": "PLOVER",
+    "trigger_room": "33",
+    "effect_type": "TELEPORT",
+    "effect_value": "100"
+  },
+  {
+    "id": 5105,
+    "trigger_verb": "Y2",
+    "trigger_room": "34",
+    "effect_type": "TELEPORT",
+    "effect_value": "33"
+  },
+  {
+    "id": 5106,
+    "trigger_verb": "Y2",
+    "trigger_room": "35",
+    "effect_type": "TELEPORT",
+    "effect_value": "33"
+  },
+  {
+    "id": 5107,
+    "trigger_verb": "JUMP",
+    "trigger_room": "35",
+    "effect_type": "TELEPORT",
+    "effect_value": "20"
+  },
+  {
+    "id": 5108,
+    "trigger_verb": "CRAWL",
+    "trigger_room": "36",
+    "effect_type": "TELEPORT",
+    "effect_value": "37"
+  },
+  {
+    "id": 5109,
+    "trigger_verb": "HOLE",
+    "trigger_room": "36",
+    "effect_type": "TELEPORT",
+    "effect_value": "28"
+  },
+  {
+    "id": 5110,
+    "trigger_verb": "BEDQUILT",
+    "trigger_room": "36",
+    "effect_type": "TELEPORT",
+    "effect_value": "65"
+  },
+  {
+    "id": 5111,
+    "trigger_verb": "CRAWL",
+    "trigger_room": "37",
+    "effect_type": "TELEPORT",
+    "effect_value": "36"
+  },
+  {
+    "id": 5112,
+    "trigger_verb": "PIT",
+    "trigger_room": "37",
+    "effect_type": "TELEPORT",
+    "effect_value": "38"
+  },
+  {
+    "id": 5113,
+    "trigger_verb": "CLIMB",
+    "trigger_room": "37",
+    "effect_type": "TELEPORT",
+    "effect_value": "38"
+  },
+  {
+    "id": 5114,
+    "trigger_verb": "CLIMB",
+    "trigger_room": "38",
+    "effect_type": "TELEPORT",
+    "effect_value": "37"
+  },
+  {
+    "id": 5115,
+    "trigger_verb": "OUT",
+    "trigger_room": "38",
+    "effect_type": "TELEPORT",
+    "effect_value": "37"
+  },
+  {
+    "id": 5116,
+    "trigger_verb": "PASSAGE",
+    "trigger_room": "39",
+    "effect_type": "TELEPORT",
+    "effect_value": "36"
+  },
+  {
+    "id": 5117,
+    "trigger_verb": "HOLE",
+    "trigger_room": "39",
+    "effect_type": "TELEPORT",
+    "effect_value": "64"
+  },
+  {
+    "id": 5118,
+    "trigger_verb": "FLOOR",
+    "trigger_room": "39",
+    "effect_type": "TELEPORT",
+    "effect_value": "64"
+  },
+  {
+    "id": 5119,
+    "trigger_verb": "BEDQUILT",
+    "trigger_room": "39",
+    "effect_type": "TELEPORT",
+    "effect_value": "65"
+  },
+  {
+    "id": 5120,
+    "trigger_verb": "PASSAGE",
+    "trigger_room": "41",
+    "effect_type": "TELEPORT",
+    "effect_value": "42"
+  },
+  {
+    "id": 5121,
+    "trigger_verb": "CLIMB",
+    "trigger_room": "41",
+    "effect_type": "TELEPORT",
+    "effect_value": "42"
+  },
+  {
+    "id": 5122,
+    "trigger_verb": "CRAWL",
+    "trigger_room": "41",
+    "effect_type": "TELEPORT",
+    "effect_value": "60"
+  },
+  {
+    "id": 5123,
+    "trigger_verb": "OUT",
+    "trigger_room": "46",
+    "effect_type": "TELEPORT",
+    "effect_value": "45"
+  },
+  {
+    "id": 5124,
+    "trigger_verb": "OUT",
+    "trigger_room": "47",
+    "effect_type": "TELEPORT",
+    "effect_value": "45"
+  },
+  {
+    "id": 5125,
+    "trigger_verb": "OUT",
+    "trigger_room": "48",
+    "effect_type": "TELEPORT",
+    "effect_value": "44"
+  },
+  {
+    "id": 5126,
+    "trigger_verb": "OUT",
+    "trigger_room": "54",
+    "effect_type": "TELEPORT",
+    "effect_value": "53"
+  },
+  {
+    "id": 5127,
+    "trigger_verb": "OUT",
+    "trigger_room": "56",
+    "effect_type": "TELEPORT",
+    "effect_value": "55"
+  },
+  {
+    "id": 5128,
+    "trigger_verb": "CLIMB",
+    "trigger_room": "57",
+    "effect_type": "TELEPORT",
+    "effect_value": "13"
+  },
+  {
+    "id": 5129,
+    "trigger_verb": "OUT",
+    "trigger_room": "58",
+    "effect_type": "TELEPORT",
+    "effect_value": "57"
+  },
+  {
+    "id": 5130,
+    "trigger_verb": "CRAWL",
+    "trigger_room": "60",
+    "effect_type": "TELEPORT",
+    "effect_value": "41"
+  },
+  {
+    "id": 5131,
+    "trigger_verb": "HOLE",
+    "trigger_room": "60",
+    "effect_type": "TELEPORT",
+    "effect_value": "62"
+  },
+  {
+    "id": 5132,
+    "trigger_verb": "OUT",
+    "trigger_room": "63",
+    "effect_type": "TELEPORT",
+    "effect_value": "62"
+  },
+  {
+    "id": 5133,
+    "trigger_verb": "CLIMB",
+    "trigger_room": "64",
+    "effect_type": "TELEPORT",
+    "effect_value": "39"
+  },
+  {
+    "id": 5134,
+    "trigger_verb": "BEDQUILT",
+    "trigger_room": "64",
+    "effect_type": "TELEPORT",
+    "effect_value": "65"
+  },
+  {
+    "id": 5135,
+    "trigger_verb": "SHELL",
+    "trigger_room": "64",
+    "effect_type": "TELEPORT",
+    "effect_value": "103"
+  },
+  {
+    "id": 5136,
+    "trigger_verb": "SLAB",
+    "trigger_room": "65",
+    "effect_type": "TELEPORT",
+    "effect_value": "68"
+  },
+  {
+    "id": 5137,
+    "trigger_verb": "CANYON",
+    "trigger_room": "66",
+    "effect_type": "TELEPORT",
+    "effect_value": "77"
+  },
+  {
+    "id": 5138,
+    "trigger_verb": "ORIENTAL",
+    "trigger_room": "66",
+    "effect_type": "TELEPORT",
+    "effect_value": "97"
+  },
+  {
+    "id": 5139,
+    "trigger_verb": "ACROSS",
+    "trigger_room": "67",
+    "effect_type": "TELEPORT",
+    "effect_value": "23"
+  },
+  {
+    "id": 5140,
+    "trigger_verb": "PIT",
+    "trigger_room": "67",
+    "effect_type": "TELEPORT",
+    "effect_value": "24"
+  },
+  {
+    "id": 5141,
+    "trigger_verb": "CLIMB",
+    "trigger_room": "68",
+    "effect_type": "TELEPORT",
+    "effect_value": "69"
+  },
+  {
+    "id": 5142,
+    "trigger_verb": "SLAB",
+    "trigger_room": "69",
+    "effect_type": "TELEPORT",
+    "effect_value": "68"
+  },
+  {
+    "id": 5143,
+    "trigger_verb": "RESERVOIR",
+    "trigger_room": "69",
+    "effect_type": "TELEPORT",
+    "effect_value": "113"
+  },
+  {
+    "id": 5144,
+    "trigger_verb": "PASSAGE",
+    "trigger_room": "70",
+    "effect_type": "TELEPORT",
+    "effect_value": "65"
+  },
+  {
+    "id": 5145,
+    "trigger_verb": "BEDQUILT",
+    "trigger_room": "72",
+    "effect_type": "TELEPORT",
+    "effect_value": "65"
+  },
+  {
+    "id": 5146,
+    "trigger_verb": "ORIENTAL",
+    "trigger_room": "72",
+    "effect_type": "TELEPORT",
+    "effect_value": "97"
+  },
+  {
+    "id": 5147,
+    "trigger_verb": "CRAWL",
+    "trigger_room": "73",
+    "effect_type": "TELEPORT",
+    "effect_value": "72"
+  },
+  {
+    "id": 5148,
+    "trigger_verb": "OUT",
+    "trigger_room": "73",
+    "effect_type": "TELEPORT",
+    "effect_value": "72"
+  },
+  {
+    "id": 5149,
+    "trigger_verb": "CRAWL",
+    "trigger_room": "77",
+    "effect_type": "TELEPORT",
+    "effect_value": "66"
+  },
+  {
+    "id": 5150,
+    "trigger_verb": "OUT",
+    "trigger_room": "81",
+    "effect_type": "TELEPORT",
+    "effect_value": "80"
+  },
+  {
+    "id": 5151,
+    "trigger_verb": "OUT",
+    "trigger_room": "82",
+    "effect_type": "TELEPORT",
+    "effect_value": "44"
+  },
+  {
+    "id": 5152,
+    "trigger_verb": "OUT",
+    "trigger_room": "85",
+    "effect_type": "TELEPORT",
+    "effect_value": "83"
+  },
+  {
+    "id": 5153,
+    "trigger_verb": "OUT",
+    "trigger_room": "86",
+    "effect_type": "TELEPORT",
+    "effect_value": "52"
+  },
+  {
+    "id": 5154,
+    "trigger_verb": "CLIMB",
+    "trigger_room": "88",
+    "effect_type": "TELEPORT",
+    "effect_value": "25"
+  },
+  {
+    "id": 5155,
+    "trigger_verb": "JUMP",
+    "trigger_room": "88",
+    "effect_type": "TELEPORT",
+    "effect_value": "20"
+  },
+  {
+    "id": 5156,
+    "trigger_verb": "GIANT",
+    "trigger_room": "88",
+    "effect_type": "TELEPORT",
+    "effect_value": "92"
+  },
+  {
+    "id": 5157,
+    "trigger_verb": "CAVERN",
+    "trigger_room": "91",
+    "effect_type": "TELEPORT",
+    "effect_value": "95"
+  },
+  {
+    "id": 5158,
+    "trigger_verb": "PASSAGE",
+    "trigger_room": "91",
+    "effect_type": "TELEPORT",
+    "effect_value": "95"
+  },
+  {
+    "id": 5159,
+    "trigger_verb": "CLIMB",
+    "trigger_room": "91",
+    "effect_type": "TELEPORT",
+    "effect_value": "72"
+  },
+  {
+    "id": 5160,
+    "trigger_verb": "GIANT",
+    "trigger_room": "93",
+    "effect_type": "TELEPORT",
+    "effect_value": "92"
+  },
+  {
+    "id": 5161,
+    "trigger_verb": "OUT",
+    "trigger_room": "93",
+    "effect_type": "TELEPORT",
+    "effect_value": "92"
+  },
+  {
+    "id": 5162,
+    "trigger_verb": "GIANT",
+    "trigger_room": "94",
+    "effect_type": "TELEPORT",
+    "effect_value": "92"
+  },
+  {
+    "id": 5163,
+    "trigger_verb": "PASSAGE",
+    "trigger_room": "94",
+    "effect_type": "TELEPORT",
+    "effect_value": "92"
+  },
+  {
+    "id": 5164,
+    "trigger_verb": "OUT",
+    "trigger_room": "95",
+    "effect_type": "TELEPORT",
+    "effect_value": "94"
+  },
+  {
+    "id": 5165,
+    "trigger_verb": "GIANT",
+    "trigger_room": "95",
+    "effect_type": "TELEPORT",
+    "effect_value": "92"
+  },
+  {
+    "id": 5166,
+    "trigger_verb": "OUT",
+    "trigger_room": "96",
+    "effect_type": "TELEPORT",
+    "effect_value": "66"
+  },
+  {
+    "id": 5167,
+    "trigger_verb": "CRAWL",
+    "trigger_room": "97",
+    "effect_type": "TELEPORT",
+    "effect_value": "72"
+  },
+  {
+    "id": 5168,
+    "trigger_verb": "CAVERN",
+    "trigger_room": "97",
+    "effect_type": "TELEPORT",
+    "effect_value": "98"
+  },
+  {
+    "id": 5169,
+    "trigger_verb": "ORIENTAL",
+    "trigger_room": "98",
+    "effect_type": "TELEPORT",
+    "effect_value": "97"
+  },
+  {
+    "id": 5170,
+    "trigger_verb": "CAVERN",
+    "trigger_room": "99",
+    "effect_type": "TELEPORT",
+    "effect_value": "98"
+  },
+  {
+    "id": 5171,
+    "trigger_verb": "PASSAGE",
+    "trigger_room": "99",
+    "effect_type": "TELEPORT",
+    "effect_value": "301"
+  },
+  {
+    "id": 5172,
+    "trigger_verb": "PASSAGE",
+    "trigger_room": "100",
+    "effect_type": "TELEPORT",
+    "effect_value": "301"
+  },
+  {
+    "id": 5173,
+    "trigger_verb": "OUT",
+    "trigger_room": "100",
+    "effect_type": "TELEPORT",
+    "effect_value": "301"
+  },
+  {
+    "id": 5174,
+    "trigger_verb": "PLOVER",
+    "trigger_room": "100",
+    "effect_type": "TELEPORT",
+    "effect_value": "33"
+  },
+  {
+    "id": 5175,
+    "trigger_verb": "DARK",
+    "trigger_room": "100",
+    "effect_type": "TELEPORT",
+    "effect_value": "101"
+  },
+  {
+    "id": 5176,
+    "trigger_verb": "PLOVER",
+    "trigger_room": "101",
+    "effect_type": "TELEPORT",
+    "effect_value": "100"
+  },
+  {
+    "id": 5177,
+    "trigger_verb": "OUT",
+    "trigger_room": "101",
+    "effect_type": "TELEPORT",
+    "effect_value": "100"
+  },
+  {
+    "id": 5178,
+    "trigger_verb": "SHELL",
+    "trigger_room": "102",
+    "effect_type": "TELEPORT",
+    "effect_value": "103"
+  },
+  {
+    "id": 5179,
+    "trigger_verb": "OUT",
+    "trigger_room": "102",
+    "effect_type": "TELEPORT",
+    "effect_value": "103"
+  },
+  {
+    "id": 5180,
+    "trigger_verb": "HALL",
+    "trigger_room": "103",
+    "effect_type": "TELEPORT",
+    "effect_value": "102"
+  },
+  {
+    "id": 5181,
+    "trigger_verb": "SHELL",
+    "trigger_room": "104",
+    "effect_type": "TELEPORT",
+    "effect_value": "103"
+  },
+  {
+    "id": 5182,
+    "trigger_verb": "OUT",
+    "trigger_room": "105",
+    "effect_type": "TELEPORT",
+    "effect_value": "104"
+  },
+  {
+    "id": 5183,
+    "trigger_verb": "SHELL",
+    "trigger_room": "105",
+    "effect_type": "TELEPORT",
+    "effect_value": "103"
+  },
+  {
+    "id": 5184,
+    "trigger_verb": "RESERVOIR",
+    "trigger_room": "109",
+    "effect_type": "TELEPORT",
+    "effect_value": "113"
+  },
+  {
+    "id": 5185,
+    "trigger_verb": "JUMP",
+    "trigger_room": "110",
+    "effect_type": "TELEPORT",
+    "effect_value": "20"
+  },
+  {
+    "id": 5186,
+    "trigger_verb": "OUT",
+    "trigger_room": "113",
+    "effect_type": "TELEPORT",
+    "effect_value": "109"
+  },
+  {
+    "id": 5187,
+    "trigger_verb": "OUT",
+    "trigger_room": "119",
+    "effect_type": "TELEPORT",
+    "effect_value": "69"
+  },
+  {
+    "id": 5188,
+    "trigger_verb": "OUT",
+    "trigger_room": "121",
+    "effect_type": "TELEPORT",
+    "effect_value": "74"
+  },
+  {
+    "id": 5189,
+    "trigger_verb": "FORK",
+    "trigger_room": "122",
+    "effect_type": "TELEPORT",
+    "effect_value": "124"
+  },
+  {
+    "id": 5190,
+    "trigger_verb": "VIEW",
+    "trigger_room": "122",
+    "effect_type": "TELEPORT",
+    "effect_value": "126"
+  },
+  {
+    "id": 5191,
+    "trigger_verb": "BARREN",
+    "trigger_room": "122",
+    "effect_type": "TELEPORT",
+    "effect_value": "129"
+  },
+  {
+    "id": 5192,
+    "trigger_verb": "FORK",
+    "trigger_room": "123",
+    "effect_type": "TELEPORT",
+    "effect_value": "124"
+  },
+  {
+    "id": 5193,
+    "trigger_verb": "VIEW",
+    "trigger_room": "123",
+    "effect_type": "TELEPORT",
+    "effect_value": "126"
+  },
+  {
+    "id": 5194,
+    "trigger_verb": "BARREN",
+    "trigger_room": "123",
+    "effect_type": "TELEPORT",
+    "effect_value": "129"
+  },
+  {
+    "id": 5195,
+    "trigger_verb": "LEFT",
+    "trigger_room": "124",
+    "effect_type": "TELEPORT",
+    "effect_value": "125"
+  },
+  {
+    "id": 5196,
+    "trigger_verb": "RIGHT",
+    "trigger_room": "124",
+    "effect_type": "TELEPORT",
+    "effect_value": "128"
+  },
+  {
+    "id": 5197,
+    "trigger_verb": "VIEW",
+    "trigger_room": "124",
+    "effect_type": "TELEPORT",
+    "effect_value": "126"
+  },
+  {
+    "id": 5198,
+    "trigger_verb": "BARREN",
+    "trigger_room": "124",
+    "effect_type": "TELEPORT",
+    "effect_value": "129"
+  },
+  {
+    "id": 5199,
+    "trigger_verb": "FORK",
+    "trigger_room": "125",
+    "effect_type": "TELEPORT",
+    "effect_value": "124"
+  },
+  {
+    "id": 5200,
+    "trigger_verb": "VIEW",
+    "trigger_room": "125",
+    "effect_type": "TELEPORT",
+    "effect_value": "126"
+  },
+  {
+    "id": 5201,
+    "trigger_verb": "CRAWL",
+    "trigger_room": "125",
+    "effect_type": "TELEPORT",
+    "effect_value": "127"
+  },
+  {
+    "id": 5202,
+    "trigger_verb": "PASSAGE",
+    "trigger_room": "126",
+    "effect_type": "TELEPORT",
+    "effect_value": "125"
+  },
+  {
+    "id": 5203,
+    "trigger_verb": "OUT",
+    "trigger_room": "126",
+    "effect_type": "TELEPORT",
+    "effect_value": "125"
+  },
+  {
+    "id": 5204,
+    "trigger_verb": "FORK",
+    "trigger_room": "126",
+    "effect_type": "TELEPORT",
+    "effect_value": "124"
+  },
+  {
+    "id": 5205,
+    "trigger_verb": "OUT",
+    "trigger_room": "127",
+    "effect_type": "TELEPORT",
+    "effect_value": "125"
+  },
+  {
+    "id": 5206,
+    "trigger_verb": "CRAWL",
+    "trigger_room": "127",
+    "effect_type": "TELEPORT",
+    "effect_value": "125"
+  },
+  {
+    "id": 5207,
+    "trigger_verb": "FORK",
+    "trigger_room": "127",
+    "effect_type": "TELEPORT",
+    "effect_value": "124"
+  },
+  {
+    "id": 5208,
+    "trigger_verb": "VIEW",
+    "trigger_room": "127",
+    "effect_type": "TELEPORT",
+    "effect_value": "126"
+  },
+  {
+    "id": 5209,
+    "trigger_verb": "FORK",
+    "trigger_room": "128",
+    "effect_type": "TELEPORT",
+    "effect_value": "124"
+  },
+  {
+    "id": 5210,
+    "trigger_verb": "BARREN",
+    "trigger_room": "128",
+    "effect_type": "TELEPORT",
+    "effect_value": "129"
+  },
+  {
+    "id": 5211,
+    "trigger_verb": "VIEW",
+    "trigger_room": "128",
+    "effect_type": "TELEPORT",
+    "effect_value": "126"
+  },
+  {
+    "id": 5212,
+    "trigger_verb": "FORK",
+    "trigger_room": "129",
+    "effect_type": "TELEPORT",
+    "effect_value": "124"
+  },
+  {
+    "id": 5213,
+    "trigger_verb": "ENTER",
+    "trigger_room": "129",
+    "effect_type": "TELEPORT",
+    "effect_value": "130"
+  },
+  {
+    "id": 5214,
+    "trigger_verb": "BARREN",
+    "trigger_room": "129",
+    "effect_type": "TELEPORT",
+    "effect_value": "130"
+  },
+  {
+    "id": 5215,
+    "trigger_verb": "VIEW",
+    "trigger_room": "129",
+    "effect_type": "TELEPORT",
+    "effect_value": "126"
+  },
+  {
+    "id": 5216,
+    "trigger_verb": "OUT",
+    "trigger_room": "130",
+    "effect_type": "TELEPORT",
+    "effect_value": "129"
+  },
+  {
+    "id": 5217,
+    "trigger_verb": "EXIT",
+    "trigger_room": "130",
+    "effect_type": "TELEPORT",
+    "effect_value": "129"
+  },
+  {
+    "id": 5218,
+    "trigger_verb": "FORK",
+    "trigger_room": "130",
+    "effect_type": "TELEPORT",
+    "effect_value": "124"
+  },
+  {
+    "id": 5219,
+    "trigger_verb": "VIEW",
+    "trigger_room": "130",
+    "effect_type": "TELEPORT",
+    "effect_value": "126"
+  },
+  {
+    "id": 5220,
+    "trigger_verb": "OUT",
+    "trigger_room": "140",
+    "effect_type": "TELEPORT",
+    "effect_value": "112"
+  }
 ]

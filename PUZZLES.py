@@ -51,11 +51,12 @@ class PuzzleEngine:
                 continue
 
             if debug:
+                pid = puzzle.get('id', '?')
                 tv = self._f(puzzle, 'trigger_verb')
                 ti = self._f(puzzle, 'trigger_item')
                 tr = self._f(puzzle, 'trigger_room')
                 ef = self._f(puzzle, 'effect_type')
-                print(f'  [puzzle] {tv} {ti} room={tr} → {ef}')
+                print(f'  [puzzle #{pid}] {tv} {ti} room={tr} → {ef}')
 
             self._apply(player, puzzle)
             fired_any = True
