@@ -305,6 +305,7 @@ class PuzzleEngine:
                     self.game.hidden_items.remove(item)
                     self.game.getRoom(dest_id).putIn(item)
                     placed = True
+                    break
             if not placed:
                 for item in list(self.game.unborn_items):
                     if item.matchesName(name):
