@@ -208,6 +208,12 @@ class PuzzleEngine:
             if cce not in self.game.counters:
                 return False
 
+        # condition_counter_not_exists: counter_name — counter must NOT exist
+        ccne = self._f(puzzle, 'condition_counter_not_exists')
+        if ccne:
+            if ccne in self.game.counters:
+                return False
+
         # condition_counter_not: counter_name:value — named counter must NOT equal value
         ccn = self._f(puzzle, 'condition_counter_not')
         if ccn:
