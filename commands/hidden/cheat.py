@@ -37,6 +37,8 @@ def _cheat_items(player):
         rows.append(_row(item, 'DESTROYED'))
     for item in game.unborn_items:
         rows.append(_row(item, 'UNBORN'))
+    for item in game.hidden_items:
+        rows.append(_row(item, 'HIDDEN'))
 
     if not rows:
         print('No items found.')
