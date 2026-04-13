@@ -50,11 +50,14 @@
   {"id": 1032, "id_words": ["CHASM"], "short_desc": "chasm", "room_desc": ["A RICKETY WOODEN BRIDGE EXTENDS ACROSS THE CHASM, VANISHING INTO THE MIST.  A SIGN POSTED ON THE BRIDGE READS, \"STOP! PAY TROLL!\"", "THE WRECKAGE OF A BRIDGE (AND A DEAD BEAR) CAN BE SEEN AT THE BOTTOM OF THE CHASM."], "gettable": false, "room_id": 122},
   {"id": 33, "id_words": ["TROLL"], "short_desc": "troll", "room_desc": ["A BURLY TROLL STANDS BY THE BRIDGE AND INSISTS YOU THROW HIM A TREASURE BEFORE YOU MAY CROSS.", "THE TROLL STEPS OUT FROM BENEATH THE BRIDGE AND BLOCKS YOUR WAY.", ""], "gettable": false, "room_id": 117},
   {"id": 1033, "id_words": ["TROLL"], "short_desc": "troll", "room_desc": ["A BURLY TROLL STANDS BY THE BRIDGE AND INSISTS YOU THROW HIM A TREASURE BEFORE YOU MAY CROSS.", "THE TROLL STEPS OUT FROM BENEATH THE BRIDGE AND BLOCKS YOUR WAY.", ""], "gettable": false, "room_id": 122},
-  {"id": 34, "id_words": ["TROLL"], "short_desc": "phony troll", "room_desc": ["THE TROLL IS NOWHERE TO BE SEEN."], "gettable": false, "room_id": 0, "unborn": true},
-  {"id": 1034, "id_words": ["TROLL"], "short_desc": "phony troll", "room_desc": ["THE TROLL IS NOWHERE TO BE SEEN."], "gettable": false, "room_id": 0, "unborn": true},
+  {"id": 34, "id_words": ["PHONY_TROLL"], "short_desc": "phony troll", "room_desc": ["THE TROLL IS NOWHERE TO BE SEEN."], "gettable": false, "room_id": 0, "unborn": true},
+  {"id": 1034, "id_words": ["PHONY_TROLL"], "short_desc": "phony troll", "room_desc": ["THE TROLL IS NOWHERE TO BE SEEN."], "gettable": false, "room_id": 0, "unborn": true},
 
   {"_comment": "=== FOOD/BEAR ==="},
   {"id": 19, "id_words": ["FOOD", "RATIO", "RATIONS"], "short_desc": "Tasty food", "room_desc": ["THERE IS FOOD HERE."], "gettable": true, "room_id": 3},
   {"id": 35, "id_words": ["BEAR"], "short_desc": "A BEAR", "room_desc": ["THERE IS A FEROCIOUS CAVE BEAR EYING YOU FROM THE FAR END OF THE ROOM!","THERE IS A GENTLE CAVE BEAR SITTING PLACIDLY IN ONE CORNER.","THERE IS A CONTENTED-LOOKING BEAR WANDERING ABOUT NEARBY."], "gettable": false, "room_id": 130, "companion_message": "YOU ARE BEING FOLLOWED BY A VERY LARGE, TAME BEAR."},
-  {"id": 64, "id_words": ["CHAIN", "GOLDE", "GOLDEN"], "short_desc": "A GOLDEN CHAIN", "room_desc": ["THERE IS A GOLDEN CHAIN LYING IN A HEAP ON THE FLOOR.", "THE BEAR IS LOCKED TO THE WALL WITH A GOLDEN CHAIN!", "THERE IS A GOLDEN CHAIN LOCKED TO THE WALL."], "gettable": false, "room_id": 130, "state": 1, "finding_bonus": 2, "deposit_bonus": 14}
+  {"id": 64, "id_words": ["CHAIN", "GOLDE", "GOLDEN"], "short_desc": "A GOLDEN CHAIN", "room_desc": ["THERE IS A GOLDEN CHAIN LYING IN A HEAP ON THE FLOOR.", "THE BEAR IS LOCKED TO THE WALL WITH A GOLDEN CHAIN!", "THERE IS A GOLDEN CHAIN LOCKED TO THE WALL."], "gettable": false, "room_id": 130, "state": 1, "finding_bonus": 2, "deposit_bonus": 14},
+
+  {"_comment": "=== GOLDEN EGGS ==="},
+  {"id": 56, "id_words": ["EGGS","EGG","NEST"], "short_desc": "Golden Eggs", "room_desc": ["THERE IS A LARGE NEST HERE, FULL OF GOLDEN EGGS","THE NEST OF GOLDEN EGGS HAS VANISHED!","DONE!"], "gettable": true, "room_id": 92, "finding_bonus": 2, "deposit_bonus": 14}
 ]
