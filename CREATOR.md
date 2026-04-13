@@ -140,7 +140,7 @@ The puzzle engine connects player actions to game events. Each row is one effect
 | `condition_location_dark` | `true` = only fire when the player's location is dark; `false` = only fire when lit. Blank = either |
 | `condition_counter_gte` | `counter_name:value` — named counter must be ≥ value (e.g. `dark_moves:2`). Blank = no check |
 | `effect_type` | What happens (see below). Can be omitted if you only want to print a message |
-| `effect_target` | What the effect acts on |
+| `effect_target` | What the effect acts on. Use the special value `TRIGGER_ITEM` to act on whatever item the player typed (e.g. to destroy whichever treasure was thrown) |
 | `effect_value` | Value for the effect |
 | `message` | Text to print when this row fires — printed before the effect runs. Can be added to any effect type, not just `PRINT_MSG`. Takes priority over `message_file` |
 | `message_file` | ID of a message in `messages.csv` to print when this row fires. Used if `message` is blank. Can be added to any effect type |
@@ -165,6 +165,8 @@ The puzzle engine connects player actions to game events. Each row is one effect
 | `INCREMENT_COUNTER` | counter name | *(blank)* | Add 1 to a named counter (created at 0 if it doesn't exist) |
 | `RESET_COUNTER` | counter name | *(blank)* | Reset a named counter to 0 |
 | `DESTROY_ITEM` | item name | *(blank)* | Remove an item from the game entirely, wherever it is (room or player inventory) |
+| `HIDE_ITEM` | item name | *(blank)* | Remove an item from play temporarily (not destroyed — can be brought back with `SHOW_ITEM`) |
+| `SHOW_ITEM` | item name | room id (blank = current room) | Bring a hidden item back into play in the specified room |
 | `CREATE_ITEM` | item name | room id (blank = current room) | Bring an unborn item into the world, placing it in the specified room |
 | `WIN` | *(blank)* | *(blank)* | End the game with a win |
 | `LOSE` | *(blank)* | *(blank)* | Kill the player |

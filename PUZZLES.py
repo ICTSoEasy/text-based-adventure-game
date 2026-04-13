@@ -58,7 +58,7 @@ class PuzzleEngine:
                 ef = self._f(puzzle, 'effect_type')
                 print(f'  [puzzle #{pid}] {tv} {ti} room={tr} → {ef}')
 
-            self._apply(player, puzzle)
+            self._apply(player, puzzle, item_name)
             fired_any = True
 
             if once is True or str(once).lower() == 'true':
@@ -202,9 +202,11 @@ class PuzzleEngine:
 
         return True
 
-    def _apply(self, player, puzzle):
+    def _apply(self, player, puzzle, item_name=None):
         effect = self._f(puzzle, 'effect_type').upper()
         target = self._f(puzzle, 'effect_target')
+        if target and target.upper() == 'TRIGGER_ITEM':
+            target = item_name or ''
         value = self._f(puzzle, 'effect_value')
         message = self._f(puzzle, 'message')
         delay_raw = puzzle.get('delay') or 0
@@ -280,6 +282,27 @@ class PuzzleEngine:
                 if item in player.companions:
                     player.companions.remove(item)
                 self.game.destroyed_items.append(item)
+
+        elif effect == 'HIDE_ITEM':
+            for item in self.game.findAllItems(target.upper()):
+                for room in self.game.rooms.values():
+                    if item in room.getContains():
+                        room.remove(item)
+                        break
+                if item in player.items:
+                    player.items.remove(item)
+                if item in player.companions:
+                    player.companions.remove(item)
+                if item not in self.game.hidden_items:
+                    self.game.hidden_items.append(item)
+
+        elif effect == 'SHOW_ITEM':
+            dest_id = int(value) if value else player.getRoom()
+            name = target.upper()
+            for item in list(self.game.hidden_items):
+                if item.matchesName(name):
+                    self.game.hidden_items.remove(item)
+                    self.game.getRoom(dest_id).putIn(item)
 
         elif effect == 'ADD_COMPANION':
             item = self.game.findItem(target.upper())

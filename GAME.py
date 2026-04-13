@@ -18,6 +18,7 @@ class Game:
         self.counters = {}
         self.destroyed_items = []
         self.unborn_items = []
+        self.hidden_items = []
 
     #This will tell us whether we are in play or not
     def getPlayStatus(self):
