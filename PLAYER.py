@@ -95,6 +95,9 @@ class Player:
         for item in self.items:
             if item.matchesName(lookingFor):
                 return item
+        for item in self.companions:
+            if item.matchesName(lookingFor):
+                return item
         return None
 
     def getItem(self, noun):
@@ -121,8 +124,11 @@ class Player:
         room = self.game.getRoom(self.getRoom())
         thing = self.hasItem(noun)
         if thing is not None:
-            room.putIn(thing)
-            self.items.remove(thing)
+            if thing in self.companions:
+                self.companions.remove(thing)
+            else:
+                room.putIn(thing)
+                self.items.remove(thing)
             print('OK.')
         else:
             print('You do not have a', noun.lower(), 'to drop!')
