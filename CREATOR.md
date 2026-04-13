@@ -139,6 +139,7 @@ The puzzle engine connects player actions to game events. Each row is one effect
 | `condition_item_turns_eq` | `item_name:value` — named item's turns remaining must equal value (e.g. `lamp:50`). Fires on exactly that turn. Blank = no check |
 | `condition_location_dark` | `true` = only fire when the player's location is dark; `false` = only fire when lit. Blank = either |
 | `condition_counter_gte` | `counter_name:value` — named counter must be ≥ value (e.g. `dark_moves:2`). Blank = no check |
+| `condition_counter_is` | `counter_name:value` — named counter must equal this value exactly. Blank = no check |
 | `effect_type` | What happens (see below). Can be omitted if you only want to print a message |
 | `effect_target` | What the effect acts on. Use the special value `TRIGGER_ITEM` to act on whatever item the player typed (e.g. to destroy whichever treasure was thrown) |
 | `effect_value` | Value for the effect |
@@ -162,7 +163,10 @@ The puzzle engine connects player actions to game events. Each row is one effect
 | `SET_ITEM_STATE` | item name | state number | Set the state of all items with that name (controls which `room_desc` is shown) |
 | `SET_ITEM_SHORT_DESC` | item name | new short desc | Change an item's short (command) name |
 | `SET_ITEM_LONG_DESC` | item name | new long desc | Change an item's description |
+| `START_COUNTER` | counter name | starting value | Set a named counter to a specific value (creates it if it doesn't exist) |
 | `INCREMENT_COUNTER` | counter name | *(blank)* | Add 1 to a named counter (created at 0 if it doesn't exist) |
+| `INC_COUNTER` | counter name | amount (default 1) | Add a specific amount to a named counter |
+| `DEC_COUNTER` | counter name | amount (default 1) | Subtract a specific amount from a named counter |
 | `RESET_COUNTER` | counter name | *(blank)* | Reset a named counter to 0 |
 | `DESTROY_ITEM` | item name | *(blank)* | Remove an item from the game entirely, wherever it is (room or player inventory) |
 | `HIDE_ITEM` | item name | *(blank)* | Remove an item from play temporarily (not destroyed — can be brought back with `SHOW_ITEM`) |

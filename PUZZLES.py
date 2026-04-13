@@ -195,6 +195,13 @@ class PuzzleEngine:
             if self.game.counters.get(ccg_name, 0) < int(ccg_value):
                 return False
 
+        # condition_counter_is: counter_name:value — named counter must equal value exactly
+        cci = self._f(puzzle, 'condition_counter_is')
+        if cci:
+            cci_name, cci_value = cci.split(':')
+            if self.game.counters.get(cci_name, 0) != int(cci_value):
+                return False
+
         # chance_pct: integer 1-100 — percentage chance this row fires at all
         pct = self._f(puzzle, 'chance_pct')
         if pct and not random.randint(1, 100) <= int(pct):
@@ -342,6 +349,23 @@ class PuzzleEngine:
             self.game.counters[target] = 0
             if self.game.settings.get('debug', False):
                 print(f'  [counter] {target} = 0 (reset)')
+
+        elif effect == 'START_COUNTER':
+            self.game.counters[target] = int(value) if value else 0
+            if self.game.settings.get('debug', False):
+                print(f'  [counter] {target} = {self.game.counters[target]} (started)')
+
+        elif effect == 'INC_COUNTER':
+            amount = int(value) if value else 1
+            self.game.counters[target] = self.game.counters.get(target, 0) + amount
+            if self.game.settings.get('debug', False):
+                print(f'  [counter] {target} = {self.game.counters[target]} (+{amount})')
+
+        elif effect == 'DEC_COUNTER':
+            amount = int(value) if value else 1
+            self.game.counters[target] = self.game.counters.get(target, 0) - amount
+            if self.game.settings.get('debug', False):
+                print(f'  [counter] {target} = {self.game.counters[target]} (-{amount})')
 
         elif effect == 'SET_GETTABLE':
             for item in self.game.findAllItems(target.upper()):
