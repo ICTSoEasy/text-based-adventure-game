@@ -18,6 +18,7 @@ def execute(player, noun):
         print(f'Room {room_id} does not exist.')
         return
     player.setRoom(room_id)
+    player._move_companions()
     player.look()
 
 

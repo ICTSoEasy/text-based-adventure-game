@@ -219,6 +219,7 @@ class PuzzleEngine:
 
         elif effect == 'TELEPORT':
             player.setRoom(int(value))
+            player._move_companions()
             player.look()
 
         elif effect == 'SET_ITEM_STATE':
