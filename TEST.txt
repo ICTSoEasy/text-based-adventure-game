@@ -190,8 +190,39 @@ GET LAMP
 ON
 CHEAT 92
 GET EGGS
+; Back in room - no message
+FEE
+FIE
+FOE
+LOOK
+FOO
+LOOK
+; back when out of room - inventory - done!
+GET EGGS
+N
+FEE
+FIE
+FOE
+FOO
+S
+; on floor elsewhere - floor - vanished
+GET EGGS
+N
+DROP EGGS
+FEE
+FIE
+FOE
+FOO
+S
+; test against troll - done
+GET EGGS
 CHEAT 117
 OVER
 THROW EGGS
 DEBUG
 OVER
+FEE
+FIE
+FOE
+FOO
+CHEAT 92

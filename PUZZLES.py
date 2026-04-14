@@ -115,6 +115,11 @@ class PuzzleEngine:
         if tr and int(tr) != room_id:
             return False
 
+        # not_trigger_room: if specified, must NOT match
+        ntr = self._f(puzzle, 'not_trigger_room')
+        if ntr and int(ntr) == room_id:
+            return False
+
         # condition_item: player must be carrying this
         ci = self._f(puzzle, 'condition_item').upper()
         if ci and not player.hasItem(ci):
@@ -156,6 +161,18 @@ class PuzzleEngine:
             for name in [x.strip() for x in cnc.split(',')]:
                 if name and any(c.matchesName(name) for c in player.companions):
                     return False
+
+        # condition_hidden: item_name — named item must be in hidden_items
+        ch = self._f(puzzle, 'condition_hidden').upper()
+        if ch:
+            if not any(item.matchesName(ch) for item in self.game.hidden_items):
+                return False
+
+        # condition_not_hidden: item_name — named item must NOT be in hidden_items
+        cnh = self._f(puzzle, 'condition_not_hidden').upper()
+        if cnh:
+            if any(item.matchesName(cnh) for item in self.game.hidden_items):
+                return False
 
         # condition_item_state: item_name:state — named item must be in that state (comma-separated for multiple)
         cis = self._f(puzzle, 'condition_item_state')

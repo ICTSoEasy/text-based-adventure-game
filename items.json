@@ -2,7 +2,7 @@
   {"_comment": "=== BUILDING (room 3) ==="},
   {"id": 1, "id_words": ["KEYS", "KEY"], "short_desc": "set of keys", "room_desc": ["There are some keys on the ground here."], "gettable": true, "room_id": 3},
   {"id": 2, "id_words": ["LAMP", "HEADLAMP", "HEADL", "LANTERN", "LANTE"], "short_desc": "brass lantern", "room_desc": ["THERE IS A SHINY BRASS LAMP NEARBY.", "THERE IS A LAMP SHINING NEARBY."], "gettable": true, "room_id": 3, "light_turns": 330},
-  {"id": 20, "id_words": ["BOTTLE"], "short_desc": "small bottle", "room_desc": ["THERE IS A BOTTLE OF WATER HERE.", "THERE IS AN EMPTY BOTTLE HERE.", "THERE IS A BOTTLE OF OIL HERE."], "gettable": true, "room_id": 3},
+  {"id": 20, "id_words": ["BOTTLE", "BOTTL", "JAR"], "short_desc": "small bottle", "room_desc": ["THERE IS A BOTTLE OF WATER HERE.", "THERE IS AN EMPTY BOTTLE HERE.", "THERE IS A BOTTLE OF OIL HERE."], "gettable": true, "room_id": 3},
 
   {"_comment": "=== GRATE (rooms 8 and 9) ==="},
   {"id": 3, "id_words": ["GRATE"], "short_desc": "grate", "room_desc": ["THE GRATE IS LOCKED.", "THE GRATE IS OPEN."], "gettable": false, "room_id": 8},

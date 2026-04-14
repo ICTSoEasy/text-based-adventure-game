@@ -131,11 +131,14 @@ The puzzle engine connects player actions to game events. Each row is one effect
 | `trigger_verb` | Verb that activates this row (`USE`, `MOVE`, `GET`, `DROP`, compass directions `NORTH`/`SOUTH`/`EAST`/`WEST`/`NE`/`NW`/`SE`/`SW`/`UP`/`DOWN`, or blank for any). Compass direction triggers fire **before** movement — if any row fires, the movement is cancelled. |
 | `trigger_item` | Item noun that must be used (or blank for any). Comma-separated to accept multiple. Use `OIL>BOTTLE` to match typed word OIL but check BOTTLE exists; use `>BOTTLE` to match a bare verb (no noun) but check BOTTLE exists |
 | `trigger_room` | Room ID where this triggers (or blank for any room) |
+| `not_trigger_room` | Room ID where this must NOT trigger (or blank to ignore) |
 | `condition_item` | Player must be carrying this item |
 | `condition_not_item` | Player must NOT be carrying this item |
 | `condition_room_item` | This item must be present in the current room |
 | `condition_not_room_item` | This item must NOT be present in the current room (comma-separated for multiple) |
 | `condition_item_state` | `item_name:state` — named item must be in this state (e.g. `grate:0`). Blank = any state |
+| `condition_hidden` | Named item must currently be hidden (in the hidden items list) |
+| `condition_not_hidden` | Named item must NOT currently be hidden |
 | `condition_item_turns_eq` | `item_name:value` — named item's turns remaining must equal value (e.g. `lamp:50`). Fires on exactly that turn. Blank = no check |
 | `condition_location_dark` | `true` = only fire when the player's location is dark; `false` = only fire when lit. Blank = either |
 | `condition_counter_gte` | `counter_name:value` — named counter must be ≥ value (e.g. `dark_moves:2`). Blank = no check |
