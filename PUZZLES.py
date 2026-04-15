@@ -85,45 +85,60 @@ class PuzzleEngine:
         #   BOTTLE        → typed word must be BOTTLE, existence checked for BOTTLE
         #   OIL>BOTTLE    → typed word must be OIL, existence checked for BOTTLE
         #   >BOTTLE       → typed word must be absent (bare verb), existence checked for BOTTLE
+        # If trigger_item doesn't match, trigger_noun is tried as a fallback (word-only, no existence check).
+        # trigger_noun: comma-separated list of words. Typed noun must match one — no existence check.
+        # Use trigger_noun for nouns that are not game items (e.g. WATER).
         ti_raw = self._f(puzzle, 'trigger_item').upper()
-        if ti_raw:
+        tn_raw = self._f(puzzle, 'trigger_noun').upper()
+        if ti_raw or tn_raw:
             item_name_up = (item_name or '').upper()
-            room = self.game.getRoom(room_id)
             matched = False
-            for entry in [e.strip() for e in ti_raw.split(',')]:
-                if '>' in entry:
-                    ti_match, ti_check = entry.split('>', 1)
-                else:
-                    ti_match = ti_check = entry
-                # Check typed word matches
-                if ti_match == '' and item_name_up != '':
-                    continue  # empty left = bare verb only
-                if ti_match != '' and ti_match != item_name_up:
-                    continue
-                # Check item exists in room or inventory
-                in_room = room.ifContains(ti_check) if room and ti_check else None
-                in_inv = player.hasItem(ti_check) if ti_check else None
-                if ti_check and not in_room and not in_inv:
-                    continue
-                matched = True
-                break
+
+            if ti_raw:
+                room = self.game.getRoom(room_id)
+                for entry in [e.strip() for e in ti_raw.split(',')]:
+                    if '>' in entry:
+                        ti_match, ti_check = entry.split('>', 1)
+                    else:
+                        ti_match = ti_check = entry
+                    # Check typed word matches
+                    if ti_match == '' and item_name_up != '':
+                        continue  # empty left = bare verb only
+                    if ti_match != '' and ti_match != item_name_up:
+                        continue
+                    # Check item exists in room or inventory
+                    in_room = room.ifContains(ti_check) if room and ti_check else None
+                    in_inv = player.hasItem(ti_check) if ti_check else None
+                    if ti_check and not in_room and not in_inv:
+                        continue
+                    matched = True
+                    break
+
+            if not matched and tn_raw:
+                for word in [w.strip() for w in tn_raw.split(',')]:
+                    if word == item_name_up:
+                        matched = True
+                        break
+
             if not matched:
                 return False
 
-        # trigger_room: if specified, must match
+        # trigger_room: if specified, must match (comma-separated for multiple)
         tr = self._f(puzzle, 'trigger_room')
-        if tr and int(tr) != room_id:
+        if tr and room_id not in [int(r.strip()) for r in tr.split(',')]:
             return False
 
-        # not_trigger_room: if specified, must NOT match
+        # not_trigger_room: if specified, must NOT match (comma-separated for multiple)
         ntr = self._f(puzzle, 'not_trigger_room')
-        if ntr and int(ntr) == room_id:
+        if ntr and room_id in [int(r.strip()) for r in ntr.split(',')]:
             return False
 
-        # condition_item: player must be carrying this
+        # condition_item: player must be carrying all of these (comma-separated)
         ci = self._f(puzzle, 'condition_item').upper()
-        if ci and not player.hasItem(ci):
-            return False
+        if ci:
+            for name in [x.strip() for x in ci.split(',')]:
+                if name and not player.hasItem(name):
+                    return False
 
         # condition_not_item: player must NOT be carrying any of these (comma-separated)
         cni = self._f(puzzle, 'condition_not_item').upper()
@@ -172,6 +187,18 @@ class PuzzleEngine:
         cnh = self._f(puzzle, 'condition_not_hidden').upper()
         if cnh:
             if any(item.matchesName(cnh) for item in self.game.hidden_items):
+                return False
+
+        # condition_unborn: item_name — named item must be in unborn_items
+        cu = self._f(puzzle, 'condition_unborn').upper()
+        if cu:
+            if not any(item.matchesName(cu) for item in self.game.unborn_items):
+                return False
+
+        # condition_not_unborn: item_name — named item must NOT be in unborn_items
+        cnu = self._f(puzzle, 'condition_not_unborn').upper()
+        if cnu:
+            if any(item.matchesName(cnu) for item in self.game.unborn_items):
                 return False
 
         # condition_item_state: item_name:state — named item must be in that state (comma-separated for multiple)
@@ -398,6 +425,10 @@ class PuzzleEngine:
             if self.game.settings.get('debug', False):
                 print(f'  [counter] {target} = {self.game.counters[target]} (-{amount})')
 
+        elif effect == 'ADD_TURNS':
+            for item in self.game.findAllItems(target.upper()):
+                item.turns_remaining += int(value)
+
         elif effect == 'SET_GETTABLE':
             for item in self.game.findAllItems(target.upper()):
                 item.gettable = (value.upper() == 'TRUE')
@@ -424,3 +455,14 @@ class PuzzleEngine:
             debug = self.game.settings.get('debug', False)
             if debug:
                 print(f'[Unknown effect type: {effect}]')
+
+        # new_state: shortcut to set multiple item states in one row
+        # Format: "item_name:state,item_name:state,..."
+        ns = self._f(puzzle, 'new_state')
+        if ns:
+            for pair in [p.strip() for p in ns.split(',')]:
+                ns_name, ns_value = pair.split(':')
+                for item in self.game.findAllItems(ns_name.strip().upper()):
+                    item.setState(int(ns_value.strip()))
+                if self.game.settings.get('debug', False):
+                    print(f'  [new_state] {ns_name.strip()} = {ns_value.strip()}')

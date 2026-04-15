@@ -129,16 +129,19 @@ The puzzle engine connects player actions to game events. Each row is one effect
 | Column | Description |
 |--------|-------------|
 | `trigger_verb` | Verb that activates this row (`USE`, `MOVE`, `GET`, `DROP`, compass directions `NORTH`/`SOUTH`/`EAST`/`WEST`/`NE`/`NW`/`SE`/`SW`/`UP`/`DOWN`, or blank for any). Compass direction triggers fire **before** movement — if any row fires, the movement is cancelled. |
-| `trigger_item` | Item noun that must be used (or blank for any). Comma-separated to accept multiple. Use `OIL>BOTTLE` to match typed word OIL but check BOTTLE exists; use `>BOTTLE` to match a bare verb (no noun) but check BOTTLE exists |
-| `trigger_room` | Room ID where this triggers (or blank for any room) |
-| `not_trigger_room` | Room ID where this must NOT trigger (or blank to ignore) |
-| `condition_item` | Player must be carrying this item |
+| `trigger_item` | Item noun that must be used (or blank for any). Comma-separated to accept multiple. Use `OIL>BOTTLE` to match typed word OIL but check BOTTLE exists; use `>BOTTLE` to match a bare verb (no noun) but check BOTTLE exists. The named item **must exist** in the room or inventory to match. |
+| `trigger_noun` | Like `trigger_item` but the noun does **not** need to exist as a game item — it only checks what the player typed. Comma-separated to accept multiple words. Use this for nouns that have no corresponding item (e.g. `WATER`). If both `trigger_item` and `trigger_noun` are present on a row, `trigger_item` is checked first and `trigger_noun` is only tried if `trigger_item` doesn't match. |
+| `trigger_room` | Room ID where this triggers (or blank for any room). Comma-separated to match multiple rooms |
+| `not_trigger_room` | Room ID where this must NOT trigger (or blank to ignore). Comma-separated to exclude multiple rooms |
+| `condition_item` | Player must be carrying this item. Comma-separated to require multiple items (all must be carried) |
 | `condition_not_item` | Player must NOT be carrying this item |
 | `condition_room_item` | This item must be present in the current room |
 | `condition_not_room_item` | This item must NOT be present in the current room (comma-separated for multiple) |
 | `condition_item_state` | `item_name:state` — named item must be in this state (e.g. `grate:0`). Blank = any state |
 | `condition_hidden` | Named item must currently be hidden (in the hidden items list) |
 | `condition_not_hidden` | Named item must NOT currently be hidden |
+| `condition_unborn` | Named item must currently be unborn (not yet placed in the world) |
+| `condition_not_unborn` | Named item must NOT currently be unborn (i.e. it has been placed) |
 | `condition_item_turns_eq` | `item_name:value` — named item's turns remaining must equal value (e.g. `lamp:50`). Fires on exactly that turn. Blank = no check |
 | `condition_location_dark` | `true` = only fire when the player's location is dark; `false` = only fire when lit. Blank = either |
 | `condition_counter_gte` | `counter_name:value` — named counter must be ≥ value (e.g. `dark_moves:2`). Blank = no check |
@@ -167,6 +170,8 @@ The puzzle engine connects player actions to game events. Each row is one effect
 | `SET_ROOM_LONG_DESC` | room id | new description | Change a room's long description |
 | `SHOW_ROOM_LONG_DESC` | room id (or blank for current room) | *(blank)* | Print a room's long description |
 | `SET_ITEM_STATE` | item name | state number | Set the state of all items with that name (controls which `room_desc` is shown) |
+| *(any row)* | — | — | `new_state: "item:state,item:state"` — shortcut to set multiple item states on a single row without needing a separate `SET_ITEM_STATE` effect. Can be combined with any other effect. |
+| `ADD_TURNS` | item name | number of turns | Add turns to a light item's remaining lifetime (e.g. battery replacement) |
 | `SET_ITEM_SHORT_DESC` | item name | new short desc | Change an item's short (command) name |
 | `SET_ITEM_LONG_DESC` | item name | new long desc | Change an item's description |
 | `START_COUNTER` | counter name | starting value | Set a named counter to a specific value (creates it if it doesn't exist) |

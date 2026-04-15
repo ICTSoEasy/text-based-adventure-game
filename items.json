@@ -2,7 +2,7 @@
   {"_comment": "=== BUILDING (room 3) ==="},
   {"id": 1, "id_words": ["KEYS", "KEY"], "short_desc": "set of keys", "room_desc": ["There are some keys on the ground here."], "gettable": true, "room_id": 3},
   {"id": 2, "id_words": ["LAMP", "HEADLAMP", "HEADL", "LANTERN", "LANTE"], "short_desc": "brass lantern", "room_desc": ["THERE IS A SHINY BRASS LAMP NEARBY.", "THERE IS A LAMP SHINING NEARBY."], "gettable": true, "room_id": 3, "light_turns": 330},
-  {"id": 20, "id_words": ["BOTTLE", "BOTTL", "JAR"], "short_desc": "small bottle", "room_desc": ["THERE IS A BOTTLE OF WATER HERE.", "THERE IS AN EMPTY BOTTLE HERE.", "THERE IS A BOTTLE OF OIL HERE."], "gettable": true, "room_id": 3},
+  {"id": 20, "id_words": ["BOTTLE", "BOTTL", "JAR"], "short_desc": "small bottle", "room_desc": ["THERE IS A BOTTLE OF WATER HERE.", "THERE IS AN EMPTY BOTTLE HERE.", "THERE IS A BOTTLE OF OIL HERE."], "gettable": true, "room_id": 3, "state": 1},
 
   {"_comment": "=== GRATE (rooms 8 and 9) ==="},
   {"id": 3, "id_words": ["GRATE"], "short_desc": "grate", "room_desc": ["THE GRATE IS LOCKED.", "THE GRATE IS OPEN."], "gettable": false, "room_id": 8},
@@ -59,5 +59,26 @@
   {"id": 64, "id_words": ["CHAIN", "GOLDE", "GOLDEN"], "short_desc": "A GOLDEN CHAIN", "room_desc": ["THERE IS A GOLDEN CHAIN LYING IN A HEAP ON THE FLOOR.", "THE BEAR IS LOCKED TO THE WALL WITH A GOLDEN CHAIN!", "THERE IS A GOLDEN CHAIN LOCKED TO THE WALL."], "gettable": false, "room_id": 130, "state": 1, "finding_bonus": 2, "deposit_bonus": 14},
 
   {"_comment": "=== GOLDEN EGGS ==="},
-  {"id": 56, "id_words": ["EGGS","EGG","NEST"], "short_desc": "Golden Eggs", "room_desc": ["THERE IS A LARGE NEST HERE, FULL OF GOLDEN EGGS","THE NEST OF GOLDEN EGGS HAS VANISHED!","DONE!"], "gettable": true, "room_id": 92, "finding_bonus": 2, "deposit_bonus": 14}
+  {"id": 56, "id_words": ["EGGS","EGG","NEST"], "short_desc": "Golden Eggs", "room_desc": ["THERE IS A LARGE NEST HERE, FULL OF GOLDEN EGGS","THE NEST OF GOLDEN EGGS HAS VANISHED!","DONE!"], "gettable": true, "room_id": 92, "finding_bonus": 2, "deposit_bonus": 14},
+
+  {"_comment": "=== LARGE GOLD NUGGET ==="},
+  {"id": 50, "id_words": ["NUGGET", "GOLD", "NUGGE"], "short_desc": "LARGE GOLD NUGGET", "room_desc": ["THERE IS A LARGE SPARKLING NUGGET OF GOLD HERE!"], "gettable": true, "room_id": 18, "finding_bonus": 2, "deposit_bonus": 10},
+
+  {"_comment": "=== DIAMONDS ==="},
+  {"id": 51, "id_words": ["DIAMONDS", "DIAMO"], "short_desc": "SEVERAL DIAMONDS", "room_desc": ["THERE ARE DIAMONDS HERE!"], "gettable": true, "room_id": 27, "finding_bonus": 2, "deposit_bonus": 10},
+
+  {"_comment": "=== SILVER ==="},
+  {"id": 52, "id_words": ["SILVER", "SILVE", "BARS"], "short_desc": "BARS OF SILVER", "room_desc": ["THERE ARE BARS OF SILVER HERE!"], "gettable": true, "room_id": 28, "finding_bonus": 2, "deposit_bonus": 10},
+
+  {"_comment": "=== JEWELLERY ==="},
+  {"id": 53, "id_words": ["JEWELLERY", "JEWEL"], "short_desc": "PRECIOUS JEWELRY", "room_desc": ["THERE IS PRECIOUS JEWELRY HERE!"], "gettable": true, "room_id": 29, "finding_bonus": 2, "deposit_bonus": 10},
+
+  {"_comment": "=== VENDING MACHINE PUZZLE ==="},
+  {"id": 38, "id_words": ["VENDING", "MACHINE", "VENDI" ,"MACHI"], "short_desc": "VENDING MACHINE", "room_desc": ["THERE IS A MASSIVE VENDING MACHINE HERE.  THE INSTRUCTIONS ON IT READ: DROP COINS HERE TO RECEIVE FRESH BATTERIES."], "gettable": false, "room_id": 140},
+  {"id": 39, "id_words": ["BATTE", "BATTERIES", "BATTERY"], "short_desc": "BATTERIES", "room_desc": ["THERE ARE FRESH BATTERIES HERE.","SOME WORN-OUT BATTERIES HAVE BEEN DISCARDED NEARBY."], "gettable": true, "room_id": 0, "unborn": true},
+  {"id": 43, "id_words": ["COINS"], "short_desc": "RARE COINS", "room_desc": ["THERE ARE MANY COINS HERE! "], "gettable": true, "room_id": 30, "finding_bonus": 2, "deposit_bonus": 10},
+
+  {"_comment": "=== PLANT ==="},
+  {"id": 24, "id_words": ["PLANT", "BEANS"], "short_desc": "PLANT", "room_desc": ["THERE IS A TINY LITTLE PLANT IN THE PIT, MURMURING 'WATER, WATER, ...'", "THE PLANT SPURTS INTO FURIOUS GROWTH FOR A FEW SECONDS.", "THERE IS A 12-FOOT-TALL BEANSTALK STRETCHING UP OUT OF THE PIT, BELLOWING 'WATER!! WATER!!'",  "THE PLANT GROWS EXPLOSIVELY, ALMOST FILLING THE BOTTOM OF THE PIT.", "THERE IS A GIGANTIC BEANSTALK STRETCHING ALL THE WAY UP TO THE HOLE.", "YOU'VE OVER-WATERED THE PLANT! IT'S SHRIVELING UP! IT'S, IT'S..."], "gettable": false, "room_id": 25},
+  {"id": 25, "id_words": ["PHONY_PLANT"], "short_desc": "PHONY_PLANT", "room_desc": ["","THE TOP OF A 12-FOOT-TALL BEANSTALK IS POKING OUT OF THE WEST PIT.","THERE IS A HUGE BEANSTALK GROWING OUT OF THE WEST PIT UP TO THE HOLE."], "gettable": false, "room_id": 0, "unborn": true}
 ]
