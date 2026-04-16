@@ -65,13 +65,16 @@ class Player:
                     print('  '+str(thing.isGettable()))
             if self.game.settings.get('show_exits', True) or debug:
                 exits = room.getExits()
-                keys = ', '.join(exits.keys()) if exits else 'None!'
+                if debug:
+                    keys = ', '.join(f'{d}→{r}' for d, r in exits.items()) if exits else 'None!'
+                else:
+                    keys = ', '.join(exits.keys()) if exits else 'None!'
                 print('Exits:', keys)
         else:
             print(self.game.settings.get('dark_message'))
             if debug:
                 exits = room.getExits()
-                keys = ', '.join(exits.keys()) if exits else 'None!'
+                keys = ', '.join(f'{d}→{r}' for d, r in exits.items()) if exits else 'None!'
                 print('Exits:', keys)
 
     def lookItem(self, noun):

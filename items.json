@@ -80,5 +80,8 @@
 
   {"_comment": "=== PLANT ==="},
   {"id": 24, "id_words": ["PLANT", "BEANS"], "short_desc": "PLANT", "room_desc": ["THERE IS A TINY LITTLE PLANT IN THE PIT, MURMURING 'WATER, WATER, ...'", "THE PLANT SPURTS INTO FURIOUS GROWTH FOR A FEW SECONDS.", "THERE IS A 12-FOOT-TALL BEANSTALK STRETCHING UP OUT OF THE PIT, BELLOWING 'WATER!! WATER!!'",  "THE PLANT GROWS EXPLOSIVELY, ALMOST FILLING THE BOTTOM OF THE PIT.", "THERE IS A GIGANTIC BEANSTALK STRETCHING ALL THE WAY UP TO THE HOLE.", "YOU'VE OVER-WATERED THE PLANT! IT'S SHRIVELING UP! IT'S, IT'S..."], "gettable": false, "room_id": 25},
-  {"id": 25, "id_words": ["PHONY_PLANT"], "short_desc": "PHONY_PLANT", "room_desc": ["","THE TOP OF A 12-FOOT-TALL BEANSTALK IS POKING OUT OF THE WEST PIT.","THERE IS A HUGE BEANSTALK GROWING OUT OF THE WEST PIT UP TO THE HOLE."], "gettable": false, "room_id": 0, "unborn": true}
+  {"id": 25, "id_words": ["PHONY_PLANT"], "short_desc": "PHONY_PLANT", "room_desc": ["","THE TOP OF A 12-FOOT-TALL BEANSTALK IS POKING OUT OF THE WEST PIT.","THERE IS A HUGE BEANSTALK GROWING OUT OF THE WEST PIT UP TO THE HOLE."], "gettable": false, "room_id": 0, "unborn": true},
+
+  {"_comment": "=== STALACTITE ==="},
+  {"id": 26, "id_words": ["STALAGTITE", "STALA"], "short_desc": "STALAGTITE", "room_desc": ["NOTE: NOT USED - KEPT FOR POSTERITY"], "gettable": false, "room_id": 0, "unborn": true}
 ]
