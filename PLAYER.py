@@ -51,6 +51,8 @@ class Player:
     def look(self):
         room = self.game.getRoom(self.getRoom())
         debug = self.game.settings.get('debug', False)
+        if debug:
+            print(f'  [room {room.getId()}]')
         if self.isLocationLit():
             print(room.getLongDesc())
             for thing in room.getContains():
