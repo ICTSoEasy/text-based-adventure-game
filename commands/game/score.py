@@ -27,7 +27,7 @@ def execute(player, noun):
         if details:
             line = f'{item.getShortDesc().capitalize()} found ({item.finding_bonus})'
             if in_deposit_room and item.deposit_bonus:
-                room_name = dr.getShortDesc().lower() if dr else f'room {dr_id}'
+                room_name = game.settings.get('deposit_room_name', dr.getShortDesc().lower() if dr else f'room {dr_id}')
                 line += f' and deposited in {room_name} ({item.deposit_bonus})'
             print(line)
 

@@ -13,4 +13,4 @@ get_ok,Ok.,OK message when something can be got
 get_no,You can't be serious!,Failure message when something can't be got.
 lives,3,Number of lives to start with.
 allow_look_item,FALSE,Allow LOOK ITEM to show an item's long description (not in original CCA)
-deposit_room,3,Room ID where treasures must be deposited to score deposit points
+deposit_room,3,Room ID where treasures must be deposited to score deposit pointsdeposit_room_name,the building,Display name for the deposit room used in score details
