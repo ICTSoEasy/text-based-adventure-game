@@ -57,9 +57,11 @@ class Player:
             print(room.getLongDesc())
             for thing in room.getContains():
                 room_desc = thing.getRoomDesc()
-                if room_desc:
+                if thing.dont_show:
+                    pass
+                elif room_desc:
                     print(room_desc)
-                else:
+                elif thing.getShortDesc():
                     print('A', thing.getShortDesc(), 'is here.')
                 if debug:
                     print('  '+str(thing.isGettable()))
@@ -78,6 +80,8 @@ class Player:
                 print('Exits:', keys)
 
     def lookItem(self, noun):
+        if self.game.puzzles.trigger(self, 'LOOK', noun, self.room):
+            return
         if not self.game.settings.get('allow_look_item', False):
             print(self.game.messages.get('no_item_detail', 'Sorry but I am not allowed to give more detail.'))
             return
@@ -205,6 +209,10 @@ class Player:
                     self.doCommand(verb, n, _expanded=True)
                 return
 
+        # Check all puzzles before command modules — allows puzzles to intercept any command
+        if self.game.puzzles.trigger(self, verb.upper(), noun, self.room):
+            return
+
         # Remap Python keywords that can't be module names
         v = {'in': 'enter', 'return': 'back'}.get(verb.lower(), verb.lower())
         candidates = [
@@ -226,11 +234,9 @@ class Player:
             room = self.game.getRoom(self.room)
             exits = room.getExits()
             if exits and verb.upper() in exits:
-                if not self.game.puzzles.trigger(self, verb.upper(), None, self.room):
-                    self.move(verb.upper())
+                self.move(verb.upper())
                 return
-        # Try the puzzle engine — verb may be a known action even without a command file
-        if self.game.puzzles.trigger(self, verb.upper(), noun, self.room):
+        if self.game.puzzles.last_fired_any:
             return
         if self.game.puzzles.has_verb(verb.upper()):
             print('Nothing happens.')

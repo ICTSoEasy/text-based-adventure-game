@@ -83,5 +83,28 @@
   {"id": 25, "id_words": ["PHONY_PLANT"], "short_desc": "PHONY_PLANT", "room_desc": ["","THE TOP OF A 12-FOOT-TALL BEANSTALK IS POKING OUT OF THE WEST PIT.","THERE IS A HUGE BEANSTALK GROWING OUT OF THE WEST PIT UP TO THE HOLE."], "gettable": false, "room_id": 0, "unborn": true},
 
   {"_comment": "=== STALACTITE ==="},
-  {"id": 26, "id_words": ["STALAGTITE", "STALA"], "short_desc": "STALAGTITE", "room_desc": ["NOTE: NOT USED - KEPT FOR POSTERITY"], "gettable": false, "room_id": 0, "unborn": true}
+  {"id": 26, "id_words": ["STALAGTITE", "STALA"], "short_desc": "STALAGTITE", "room_desc": ["NOTE: NOT USED - KEPT FOR POSTERITY"], "gettable": false, "room_id": 0, "unborn": true},
+
+  {"_comment": "=== DRAGON ==="},
+  {"id": 31, "id_words": ["DRAGON", "DRAGO"], "short_desc": "DRAGON", "room_desc": ["A HUGE GREEN FIERCE DRAGON BARS THE WAY!","THE BODY OF A HUGE GREEN DEAD DRAGON IS LYING OFF TO ONE SIDE."], "gettable": false, "room_id": 119},
+  {"id": 1031, "id_words": ["DRAGON", "DRAGO"], "short_desc": "DRAGON", "room_desc": ["A HUGE GREEN FIERCE DRAGON BARS THE WAY!","THE BODY OF A HUGE GREEN DEAD DRAGON IS LYING OFF TO ONE SIDE."], "gettable": false, "room_id": 121},
+
+  {"_comment": "===DUMMY ITEM TO ENABLE INSTRUCTIONS"},
+  {"id": 0, "id_words": ["INSTRUCTIONS_SHOWN"], "short_desc": "INSTRUCTIONS SHOWN", "unborn": true},
+
+  {"_comment": "===RUG==="},
+  {"id": 62, "id_words": ["RUG","PERSI"], "short_desc": "PERSIAN RUG", "room_desc": ["THERE IS A PERSIAN RUG SPREAD OUT ON THE FLOOR!", "THE DRAGON IS SPRAWLED OUT ON A PERSIAN RUG!!"], "state": 1, "gettable": false, "finding_bonus": 2, "deposit_bonus": 14, "room_id": 119},
+  {"id": 1062, "id_words": ["RUG","PERSI"], "short_desc": "PERSIAN RUG", "room_desc": ["THERE IS A PERSIAN RUG SPREAD OUT ON THE FLOOR!", "THE DRAGON IS SPRAWLED OUT ON A PERSIAN RUG!!"], "state": 1, "gettable": false, "finding_bonus": 2, "deposit_bonus": 14, "room_id": 121},
+
+  {"_comment": "=== AXE ==="},
+  {"id": 28, "id_words": ["AXE"], "short_desc": "DWARF'S AXE", "room_desc": ["THERE IS A LITTLE AXE HERE.","THERE IS A LITTLE AXE LYING BESIDE THE BEAR."], "state": 0, "gettable": true, "room_id": 3},
+
+  {"_comment": "=== EMERALD ==="},
+  {"id": 59, "id_words": ["EMERA","EMERALD"], "short_desc": "EGG-SIZED EMERALD", "room_desc": ["THERE IS AN EMERALD HERE THE SIZE OF A PLOVER'S EGG!"], "gettable": true, "room_id": 100, "finding_bonus": 2, "deposit_bonus": 14},
+
+  {"_comment": "=== PLATINUM PYRAMID ==="},
+  {"id": 60, "id_words": ["PLATINUM","PYRAMID","PLATI","PYRAM"], "short_desc": "PLATINUM PYRAMID", "room_desc": ["THERE IS A PLATINUM PYRAMID HERE, 8 INCHES ON A SIDE!"], "gettable": true, "room_id": 101, "finding_bonus": 2, "deposit_bonus": 14},
+
+  {"_comment": "=== RARE SPICES ==="},
+  {"id": 63, "id_words": ["RARE SPICES", "SPICE", "SPICES"], "short_desc": "RARE SPICES", "room_desc": ["THERE ARE RARE SPICES HERE!"], "gettable": true, "room_id": 127, "finding_bonus": 2, "deposit_bonus": 14}
 ]

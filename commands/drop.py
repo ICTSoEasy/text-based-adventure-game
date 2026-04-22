@@ -7,6 +7,4 @@ def execute(player, noun):
     if not player.hasItem(noun):
         print('You do not have a', noun.lower(), 'to drop!')
         return
-    if player.game.puzzles.trigger(player, 'DROP', noun, player.getRoom()):
-        return
     player.dropItem(noun)

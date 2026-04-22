@@ -1,5 +1,6 @@
 id,text
 welcome,{sp:16}WELCOME TO ADVENTURE!!\n\n{sp:6}Original development by {^}W{/^}illie {^}C{/^}rowther\n{sp:9}Major features added by {^}D{/^}on {^}W{/^}oods.\n{sp:13}This port by {^}O{/^}li {^}H{/^}owson.\n\nWould you like instructions?
+want_instructions,"Please answer the question.  Would you like instructions?"
 unknown_command,I don't know that word.
 no_item_detail,Sorry but I am not allowed to give more detail.
 instructions,"Somewhere nearby is {^}C{/^}olossal Cave, where others have found fortunes in treasure and gold, though it is rumoured that some who enter are never seen again. Magic is said to work in the cave. I will be your eyes and hands. Direct me with commands of 1 or 2 words.\nShould you get stuck, type ""HELP"" for some hints. FOR INFORMATION ON HOW TO END YOUR ADVENTURE, ETC., TYPE ""INFO"".)\n{sp:16}- - -\nTHIS PROGRAM WAS ORIGINALLY DEVELOPED BY {^}W{/^}illie {^}C{/^}rowther}.  MOST OF THE FEATURES OF THE CURRENT PROGRAM WERE ADDED BY {^}D{/^}on {^}W{/^}oods. This port was developed by {^}O{/^}li {^}H{/^}owson (Oli.Howson@open.ac.uk) CONTACT {^}Oli{/^} IF YOU HAVE ANY QUESTIONS, COMMENTS, ETC.\n"
@@ -20,7 +21,6 @@ lamp_dim_have_batts,"YOUR LAMP IS GETTING DIM.  I'M TAKING THE LIBERTY OF REPLAC
 lamp_dim_batts_used,"YOUR LAMP IS GETTING DIM, AND YOU'RE OUT OF SPARE BATTERIES.  YOU'D BEST START WRAPPING THIS UP."
 
 
-
 ; === GRATE/KEYS === 
 grate_unlocked,THE GRATE IS NOW UNLOCKED.
 grate_already_unlocked,IT WAS ALREADY UNLOCKED.
@@ -28,14 +28,17 @@ grate_locked,THE GRATE IS NOW LOCKED.
 grate_already_locked,IT WAS ALREADY LOCKED.
 no_keys,YOU HAVE NO KEYS!
 
+
 ; === THE BIRD/CAGE/SNAKE === 
 afraid_bird,"THE BIRD WAS UNAFRAID WHEN YOU ENTERED, BUT AS YOU APPROACH IT BECOMES DISTURBED AND YOU CANNOT CATCH IT."
-cant_carry_bird,YOU CAN CATCH THE BIRD, BUT YOU CANNOT CARRY IT.
-bird_attacks,THE LITTLE BIRD ATTACKS THE GREEN SNAKE, AND IN AN ASTOUNDING FLURRY DRIVES THE SNAKE AWAY.
-snake_in_way,You can't get by the snake.
+cant_carry_bird,"YOU CAN CATCH THE BIRD, BUT YOU CANNOT CARRY IT."
+bird_attacks,"THE LITTLE BIRD ATTACKS THE GREEN SNAKE, AND IN AN ASTOUNDING FLURRY DRIVES THE SNAKE AWAY."
+snake_in_way,"You can't get by the snake."
 dead_bird,THE LITTLE BIRD IS NOW DEAD.  ITS BODY DISAPPEARS.
 attack_snake,ATTACKING THE SNAKE BOTH DOESN'T WORK AND IS VERY DANGEROUS.
 nothing_to_attack,THERE IS NOTHING HERE TO ATTACK.
+pining,"IT'S NOT HUNGRY (IT'S MERELY PININ' FOR THE FJORDS).  BESIDES, YOU HAVE NO BIRD SEED."
+feed_to_snake,THE SNAKE HAS NOW DEVOURED YOUR BIRD.
 
 ; === VASE/PILLOW ===
 vase_resting,"THE VASE IS NOW RESTING, DELICATELY, ON A VELVET PILLOW."
@@ -93,6 +96,8 @@ feed_troll,"GLUTTONY IS NOT ONE OF THE TROLL'S VICES.  AVARICE, HOWEVER, IS."
 no_cross,THE TROLL REFUSES TO LET YOU CROSS.
 thrown_treasure,THE TROLL CATCHES YOUR TREASURE AND SCURRIES AWAY OUT OF SIGHT.
 troll_steps_out,THE TROLL STEPS OUT FROM BENEATH THE BRIDGE AND BLOCKS YOUR WAY.
+troll_axe,"THE TROLL DEFTLY CATCHES THE AXE, EXAMINES IT CAREFULLY, AND TOSSES IT BACK, DECLARING, ""GOOD WORKMANSHIP, BUT IT'S NOT VALUABLE ENOUGH."""
+bear_axe,"THE AXE MISSES AND LANDS NEAR THE BEAR WHERE YOU CAN'T GET AT IT."
 
 ; === GOLDEN EGGS ===
 wrong_word,"WHAT'S THE MATTER, CAN'T YOU READ?  NOW YOU'D BEST START OVER."
@@ -111,7 +116,29 @@ water_with_oil,"THE PLANT INDIGNANTLY SHAKES THE OIL OFF ITS LEAVES AND ASKS, `W
 cant_get_plant,"THE PLANT HAS EXCEPTIONALLY DEEP ROOTS AND CANNOT BE PULLED FREE."
 hole_too_far,"IT IS TOO FAR UP FOR YOU TO REACH."
 
+; === SHADOW ===
+shadow_attention,"THE SHADOWY FIGURE SEEMS TO BE TRYING TO ATTRACT YOUR ATTENTION."
+
+; === DRAGON ===
+bare_hands,"WITH WHAT?  YOUR BARE HANDS?  AGAINST *HIS* BEAR HANDS??"
+dead_dragon,"CONGRATULATIONS!  YOU HAVE JUST VANQUISHED A DRAGON WITH YOUR BARE HANDS!	(UNBELIEVABLE, ISN'T IT?)"
+dragon_in_way,"THE DRAGON LOOKS RATHER NASTY.  YOU'D BEST NOT TRY TO GET BY."
+already_dead_dragon,"FOR CRYING OUT LOUD, THE POOR THING IS ALREADY DEAD."
+dragon_cant_eat,THERE'S NOTHING HERE IT WANTS TO EAT (EXCEPT PERHAPS YOU).
+dragon_dead_eat,DON'T BE RIDICULOUS!
+dragon_bird,"THE LITTLE BIRD ATTACKS THE GREEN DRAGON, AND IN AN ASTOUNDING FLURRY GETS BURNT TO A CINDER.  THE ASHES BLOW AWAY."
+axe_bounces_dragon,"THE AXE BOUNCES HARMLESSLY OFF THE DRAGON'S THICK SCALES."
+
+; === PLOVER ===
+plover_passage_fail,"SOMETHING YOU'RE CARRYING WON'T FIT THROUGH THE TUNNEL WITH YOU.  YOU'D BEST TAKE INVENTORY AND DROP SOMETHING."
+
 ; ===  ===  ===  ===  ===
 ; === ACTION DEFAULTS === 
 ; ===  ===  ===  ===  ===
 default_feed_no_food,THERE IS NOTHING HERE TO EAT.
+
+; ===  ===  ===  ===  === ===
+; ===  MOVEMENT DEFAULTS  ===
+; ===  ===  ===  ===  === ===
+
+unsure_facing,I AM UNSURE HOW YOU ARE FACING.  USE COMPASS POINTS OR NEARBY OBJECTS.

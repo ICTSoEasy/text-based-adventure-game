@@ -1,3 +1,1 @@
-def execute(player, noun):
-    if not player.game.puzzles.trigger(player, 'NORTH', None, player.getRoom()):
-        player.doCommand('MOVE', 'NORTH')
+def execute(player, noun): player.move('NORTH')

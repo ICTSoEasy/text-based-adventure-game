@@ -72,18 +72,21 @@ class Game:
 
     #Find ALL items matching a name across all rooms, player inventory, and hidden items (not destroyed)
     def findAllItems(self, name):
+        by_id = name.strip().lstrip('#').isdigit()
+        search_id = int(name.strip().lstrip('#')) if by_id else None
         name = name.upper()
         found = []
+        all_items = []
         for room in self.rooms.values():
-            for item in room.getContains():
-                if item.matchesName(name):
-                    found.append(item)
+            all_items.extend(room.getContains())
         if self.player:
-            for item in self.player.items:
-                if item.matchesName(name):
-                    found.append(item)
-        for item in self.hidden_items:
-            if item.matchesName(name):
+            all_items.extend(self.player.items)
+        all_items.extend(self.hidden_items)
+        all_items.extend(self.unborn_items)
+        for item in all_items:
+            if by_id and item.getId() == search_id:
+                found.append(item)
+            elif not by_id and item.matchesName(name):
                 found.append(item)
         return found
 

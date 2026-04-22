@@ -29,8 +29,11 @@ class PuzzleEngine:
         return any(verb.upper() in [v.strip() for v in self._f(p, 'trigger_verb').upper().split(',')] for p in self.puzzles)
 
     def trigger(self, player, verb, item_name, room_id):
-        """Check all puzzles for a matching trigger and apply effects. Returns True if anything fired."""
-        fired_any = False
+        """Check all puzzles for a matching trigger and apply effects.
+        Returns True if a stop:true puzzle fired (caller should halt).
+        Sets self.last_fired_any = True if any puzzle fired at all."""
+        stopped = False
+        self.last_fired_any = False
         keys_fired_this_call = set()
         debug = self.game.settings.get('debug', False)
 
@@ -59,25 +62,28 @@ class PuzzleEngine:
                 print(f'  [puzzle #{pid}] {tv} {ti} room={tr} → {ef}')
 
             self._apply(player, puzzle, item_name)
-            fired_any = True
+            self.last_fired_any = True
 
             if once is True or str(once).lower() == 'true':
                 keys_fired_this_call.add(key)
 
             stop = puzzle.get('stop', False)
             if stop is True or str(stop).lower() == 'true':
+                stopped = True
                 break
 
         # Mark once-only groups as fired after processing all rows
         self.fired.update(keys_fired_this_call)
-        return fired_any
+        return stopped
 
     def _matches(self, puzzle, player, verb, item_name, room_id):
         item_name = (item_name or '').upper()
 
         # Verb must match (comma-separated list allowed)
         tv = self._f(puzzle, 'trigger_verb').upper()
-        if verb.upper() not in [v.strip() for v in tv.split(',')]:
+        if tv == '*' and verb.upper() == 'FORCE':
+            return False
+        if tv != '*' and verb.upper() not in [v.strip() for v in tv.split(',')]:
             return False
 
         # trigger_item: comma-separated list of accepted noun patterns.
@@ -225,6 +231,14 @@ class PuzzleEngine:
             if not items or items[0].getTurnsRemaining() != int(cite_value):
                 return False
 
+        # condition_item_turns_leq: item_name:value — named item's turns_remaining must be <= value
+        citleq = self._f(puzzle, 'condition_item_turns_leq')
+        if citleq:
+            citleq_name, citleq_value = citleq.split(':')
+            items = self.game.findAllItems(citleq_name.upper())
+            if not items or items[0].getTurnsRemaining() > int(citleq_value):
+                return False
+
         # condition_location_dark: true/false — whether the player's location is dark
         cld = self._f(puzzle, 'condition_location_dark').lower()
         if cld == 'true' and player.isLocationLit():
@@ -263,6 +277,12 @@ class PuzzleEngine:
         if ccn:
             ccn_name, ccn_value = ccn.split(':')
             if self.game.counters.get(ccn_name, 0) == int(ccn_value):
+                return False
+
+        # condition_num_items_carried_eq: integer — player must be carrying exactly this many items
+        cnice = self._f(puzzle, 'condition_num_items_carried_eq')
+        if cnice:
+            if len(player.items) != int(cnice):
                 return False
 
         # chance_pct: integer 1-100 — percentage chance this row fires at all
@@ -369,16 +389,20 @@ class PuzzleEngine:
         elif effect == 'SHOW_ITEM':
             dest_id = int(value) if value else player.getRoom()
             name = target.upper()
+            by_id = name.lstrip('#').isdigit()
+            search_id = int(name.lstrip('#')) if by_id else None
+            def _matches(item):
+                return item.getId() == search_id if by_id else item.matchesName(name)
             placed = False
             for item in list(self.game.hidden_items):
-                if item.matchesName(name):
+                if _matches(item):
                     self.game.hidden_items.remove(item)
                     self.game.getRoom(dest_id).putIn(item)
                     placed = True
                     break
             if not placed:
                 for item in list(self.game.unborn_items):
-                    if item.matchesName(name):
+                    if _matches(item):
                         self.game.unborn_items.remove(item)
                         self.game.getRoom(dest_id).putIn(item)
                         break
@@ -444,6 +468,16 @@ class PuzzleEngine:
 
         elif effect == 'REMOVE_POINTS':
             self.game.score -= int(value)
+
+        elif effect == 'MOVE_ROOM_CONTENTS':
+            dest = self.game.getRoom(int(value))
+            if dest:
+                for src_id in [int(r.strip()) for r in target.split(',')]:
+                    src = self.game.getRoom(src_id)
+                    if src:
+                        for item in list(src.getContains()):
+                            src.remove(item)
+                            dest.putIn(item)
 
         elif effect == 'WIN':
             player.game.flipPlayStatus()

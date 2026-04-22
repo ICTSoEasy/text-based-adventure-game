@@ -1,5 +1,8 @@
 # Project Memory
 
+## Critical Rules
+- **Always verify room numbers, item IDs, and directions against actual files before stating them.** Check rooms.csv, items.json, and puzzles.json directly. Do not infer or assume — look it up. Getting these wrong wastes the user's time.
+
 ## Preferences
 - Use CLAUDE.md (this file) for all memory instead of the file-based memory system under ~/.claude/projects/
 - Do not add content (examples, documentation body, code) unless explicitly asked. If asked to add a section or heading, add only the heading and let the user fill it in.

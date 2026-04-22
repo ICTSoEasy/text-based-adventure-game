@@ -88,6 +88,7 @@ def Create(game):
         thing.deposit_bonus = row.get('deposit_bonus', 0)
         thing.deposit_room = row.get('deposit_room', None)
         thing.companion_message = row.get('companion_message', None)
+        thing.dont_show = row.get('dont_show', False)
         if row.get('unborn', False):
             game.unborn_items.append(thing)
         else:
