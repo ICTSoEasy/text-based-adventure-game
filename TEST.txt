@@ -21,6 +21,20 @@ CHEAT 3
 DROP PILLOW
 DROP VASE
 
+; test keys/grate
+NO
+ENTER
+GET LAMP
+ON
+GET KEYS
+CHEAT 8
+DOWN ;fail
+UNLOCK GRATE
+LOCK GRATE
+UNLOCK GRATE
+DOWN
+
+
 ; test snake and bird and rod and cage
 NO
 ENTER
@@ -33,12 +47,26 @@ GET ROD
 CHEAT 13
 GET BIRD
 DROP ROD
+DROP CAGE
+GET BIRD
+GET CAGE
 GET BIRD
 GET ROD
 CHEAT 19
 SOUTH
 WEST
 DROP BIRD
+
+; test killing bird and attacking snake
+NO
+ENTER
+GET LAMP
+ON
+CHEAT 13
+KILL BIRD
+CHEAT 19
+KILL SNAKE
+
 
 ; test vase
 NO
@@ -72,6 +100,42 @@ CHEAT 94
 NORTH
 POUR OIL
 NORTH
+
+; test watering plant
+NO
+ENTER
+GET LAMP
+GET BOTTLE
+ON
+CHEAT 7
+FILL BOTTLE
+CHEAT 25
+;0
+GET PLANT
+POUR
+;1
+GET PLANT
+CHEAT 23
+CHEAT 7
+FILL BOTTLE
+CHEAT 25
+POUR
+UP
+CHEAT 25
+;2
+GET PLANT
+CHEAT 23
+CHEAT 7
+FILL BOTTLE
+CHEAT 23
+CHEAT 25
+POUR
+;3
+GET PLANT
+CHEAT 23
+CHEAT 25
+FILL BOTTLE
+POUR
 
 ; test rod and crystal bridge over fissues
 NO
@@ -154,12 +218,15 @@ SCORE
 ; test bear and chain and troll and chasm
 NO
 ENTER
+GET AXE
 GET LAMP
 GET KEYS
 GET FOOD
 ON
 CHEAT 130
 DROP FOOD
+THROW AXE
+GET AXE
 FEED BEAR
 GET FOOD
 DROP KEYS
@@ -167,6 +234,7 @@ UNLOCK CHAIN
 GET KEYS
 UNLOCK CHAIN
 FEED BEAR
+GET AXE
 LOCK CHAIN
 UNLOCK CHAIN
 LOCK CHAIN
@@ -182,6 +250,9 @@ CHEAT 122
 ; get chain points
 CHEAT 3
 DROP CHAIN
+; check bridge collapses
+CHEAT 122
+OVER
 
 ; test golden eggs on troll
 NO
@@ -219,7 +290,7 @@ GET EGGS
 CHEAT 117
 OVER
 THROW EGGS
-DEBUG
+;DEBUG
 OVER
 FEE
 FIE
@@ -259,7 +330,7 @@ CHEAT 30
 DEBUG
 ; press enter lots
 
-; test vending machine and BATTERIES
+; test vending machine and BATTERIES - set lamp to 40 in items first
 NO
 ENTER
 GET LAMP
@@ -268,38 +339,197 @@ CHEAT 30
 GET COINS
 CHEAT 140
 DROP COINS
-GET BATTERIES
+;GET BATTERIES
 ; press enter lots
 
 
-; test watering plant
+; test shadowy figure
 NO
 ENTER
 GET LAMP
-GET BOTTLE
 ON
-CHEAT 7
-FILL BOTTLE
-CHEAT 25
-POUR
-;1
-GET PLANT
-CHEAT 23
-CHEAT 7
-FILL BOTTLE
-CHEAT 25
-POUR
-;2
-GET PLANT
-CHEAT 23
-CHEAT 7
-FILL BOTTLE
-CHEAT 23
-CHEAT 25
-POUR
-;3
-GET PLANT
-CHEAT 23
-CHEAT 25
-FILL BOTTLE
-POUR
+CHEAT 35
+LOOK FIGURE
+CHEAT 110
+EXAMINE FIGURE
+EXAMI FIGURE
+
+; test stalactite
+NO
+ENTER
+GET LAMP
+ON
+DEBUG
+; repeat this lot - you should end up in room 45, 50, 53
+CHEAT 111
+DOWN
+CHEAT 111
+D
+CHEAT 111
+JUMP
+CHEAT 111
+CLIMB
+
+; test DRAGON
+NO
+ENTER
+GET LAMP
+GET FOOD
+GET KEYS
+ON
+CHEAT 119
+EAST
+CHEAT 121
+WEST
+ATTACK DRAGON
+NO
+FEED DRAGON
+ATTACK
+YES
+ATTACK DRAGON
+LOOK
+FEED DRAGON
+
+; test dragon and bird
+NO
+ENTER
+GET LAMP
+ON
+CHEAT 10
+GET CAGE
+CHEAT 13
+GET BIRD
+; drop just bird
+CHEAT 121
+DROP BIRD
+; or... drop cage (and diff room)
+CHEAT 119
+DROP CAGE
+
+; test feeding the bird
+NO
+ENTER
+GET LAMP
+GET FOOD
+ON
+CHEAT 10
+GET CAGE
+CHEAT 13
+GET BIRD
+FEED BIRD
+
+; test feeding the bird to the snake
+NO
+ENTER
+GET LAMP
+ON
+CHEAT 10
+GET CAGE
+CHEAT 13
+GET BIRD
+CHEAT 19
+FEED SNAKE
+
+; test Rug
+NO
+ENTER
+GET LAMP
+ON
+CHEAT 119
+GET RUG
+ATTACK DRAGON
+YES
+GET RUG
+CHEAT 3
+DROP RUG
+SCORE DETAILS
+
+; test axe at dragon
+NO
+ENTER
+GET LAMP
+GET AXE
+ON
+CHEAT 119
+THROW AXE
+
+; test axe at troll
+NO
+ENTER
+GET LAMP
+GET AXE
+ON
+CHEAT 122
+THROW AXE
+
+; test volcano
+NO
+ENTER
+GET LAMP
+CHEAT 126
+CHEAT 3
+SCORE DETAILS
+
+;test plover and emerald
+x
+; test with an item not emerald
+cheat 100
+W
+cheat 99
+e
+; test with multiple items
+cheat 100
+get emerald
+W
+cheat 99
+e
+; test with just emerald
+cheat 100
+drop lamp
+w
+e
+; test with nothing
+drop emerald
+w
+e
+; test points
+GET EMERALD
+CHEAT 3
+DROP EMERALD
+SCORE DETAILS
+
+;test plover and pyramid
+x
+; test with an item not pyramid
+cheat 100
+W
+cheat 99
+e
+; test with multiple items
+cheat 101
+get pyramid
+cheat 100
+W
+cheat 99
+e
+; test with just pyramid
+cheat 100
+drop lamp
+w
+e
+; test with nothing
+drop pyramid
+w
+e
+; test points
+GET pyramid
+CHEAT 3
+DROP pyramid
+SCORE DETAILS
+
+; test spicea
+x
+CHEAT 127
+GET SPICES
+CHEAT 3
+SCORE DETAILS
