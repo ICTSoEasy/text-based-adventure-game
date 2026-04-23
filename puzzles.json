@@ -664,5 +664,14 @@
   {"id": 544, "trigger_verb": "CALM,PLACATE,TAME", "message_file": "calm"},
   {"id": 545, "trigger_verb": "DRINK", "message": ""},
   {"id": 546, "trigger_verb": "RUB", "message_file": "general_rub"},
-  {"id": 549, "trigger_verb": "WAKE", "message_file": "dont_be_ridiculous"}
+  {"id": 549, "trigger_verb": "WAKE", "message_file": "dont_be_ridiculous"},
+  {"id": 550, "trigger_verb": "BLAST", "message_file": "no_dynamite "},
+  {"id": 551, "trigger_verb": "SESAM,SESAME,ABRA,ABRACADABRA,ABRAC,SHAZA,SHAZAM,OPENS", "message_file": "wrong_magic"},
+  {"id": 552, "trigger_verb": "TREE,TREES", "message_file": "trees"},
+  {"id": 553, "trigger_verb": "DIG,EXCAV,EXCAVATE", "message_file": "try_to_dig"},
+  {"id": 554, "trigger_verb": "LOST", "message_file": "im_lost"},
+  {"id": 555, "trigger_verb": "MIST", "message_file": "mist"},
+  {"id": 556, "trigger_verb": "FUCK", "message_file": "fuck"},
+  {"id": 557, "trigger_verb": "STOP", "message_file": "stop"},
+  {"id": 558, "trigger_verb": "SWIM", "message_file": "swim"}
 ]
