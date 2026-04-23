@@ -72,7 +72,7 @@
   {"id": 50, "trigger_verb": "GET", "trigger_item": "BIRD", "condition_item": "CAGE", "condition_not_item": "ROD1", "effect_type": "SET_ITEM_STATE", "effect_target": "bird", "effect_value": "1"},
   {"id": 51, "trigger_verb": "GET", "trigger_item": "BIRD", "condition_item": "CAGE", "condition_not_item": "ROD1", "effect_type": "PRINT_MSG", "message": "OK.", "stop": true},
   {"_comment": "Bird can be killed."},
-  {"id": 52, "trigger_verb": "ATTACK", "trigger_item": "BIRD", "message_file": "dead_bird", "effect_type": "DESTROY_ITEM", "effect_target": "bird", "stop": true},
+  {"id": 52, "trigger_verb": "ATTACK,ATTAC", "trigger_item": "BIRD", "message_file": "dead_bird", "effect_type": "DESTROY_ITEM", "effect_target": "bird", "stop": true},
   {"id": 53, "trigger_verb": "KILL", "trigger_item": "BIRD", "message_file": "dead_bird", "effect_type": "DESTROY_ITEM", "effect_target": "bird", "stop": true},
   {"id": 54, "trigger_verb": "HIT", "trigger_item": "BIRD", "message_file": "dead_bird", "effect_type": "DESTROY_ITEM", "effect_target": "bird", "stop": true},
   {"_comment": "Snake in room 19 - blocks south/west exits. Drop bird (in cage) to drive it away."},
@@ -86,7 +86,7 @@
   {"id": 62, "trigger_verb": "SOUTH", "trigger_room": "19", "condition_room_item": "SNAKE", "effect_type": "PRINT_MSG", "message_file": "snake_in_way", "stop": true},
   {"id": 63, "trigger_verb": "WEST", "trigger_room": "19", "condition_room_item": "SNAKE", "effect_type": "PRINT_MSG", "message_file": "snake_in_way", "stop": true},
   {"_comment": "Attacking the snake just gives a warning."},
-  {"id": 64, "trigger_verb": "ATTACK", "trigger_item": "SNAKE", "message_file": "attack_snake", "stop": true},
+  {"id": 64, "trigger_verb": "ATTACK,ATTAC", "trigger_item": "SNAKE", "message_file": "attack_snake", "stop": true},
   {"id": 65, "trigger_verb": "KILL", "trigger_item": "SNAKE", "message_file": "attack_snake", "stop": true},
   {"id": 66, "trigger_verb": "HIT", "trigger_item": "SNAKE", "message_file": "attack_snake", "stop": true},
   {"_comment": "Feed it the bird."},
@@ -95,7 +95,7 @@
 
   {"_comment": "OIL/BOTTLE/DOOR/(WATER)"},
   {"_comment": "Bottle - FILL BOTTLE at oil pool (room 25) to collect oil - or a water room to collect water"},
-  {"id": 68,"trigger_verb": "FILL", "trigger_item": ">BOTTLE,BOTTLE", "condition_item": "BOTTLE", "condition_item_state": "bottle:0", "message_file": "bottle_full", "stop": true},
+  {"id": 68,"trigger_verb": "FILL", "trigger_item": "BOTTLE,BOTTLE", "condition_item": "BOTTLE", "condition_item_state": "bottle:0", "message_file": "bottle_full", "stop": true},
   {"id": 69,"trigger_verb": "FILL", "trigger_item": ">BOTTLE,BOTTLE", "condition_item": "BOTTLE", "condition_item_state": "bottle:2", "message_file": "bottle_full", "stop": true},
   {"id": 70,"trigger_verb": "FILL", "trigger_item": ">BOTTLE,BOTTLE", "trigger_room": "1,3,4,7,38,95,113", "condition_item": "BOTTLE", "condition_item_state": "bottle:1", "effect_type": "SET_ITEM_STATE", "effect_target": "bottle", "effect_value": "0", "message_file": "bottle_full_water", "stop": true},
   {"id": 71,"trigger_verb": "GET", "trigger_noun": "WATER,H2O,OIL", "condition_item": "BOTTLE", "condition_item_state": "bottle:0", "message_file": "bottle_full", "stop": true},
@@ -181,7 +181,7 @@
   {"id": 134, "trigger_verb": "OPEN", "trigger_item": "oyster,>oyster", "condition_room_item": "OYSTER", "condition_not_item": "trident", "message_file": "open_oyster_no_trident"},
   {"id": 135, "trigger_verb": "OPEN", "trigger_item": "oyster,>oyster", "condition_room_item": "OYSTER", "condition_item": "trident", "message_file": "oyster_insides"},
   {"_comment": "Attacking the shells just gives a warning."},
-  {"id": 136, "trigger_verb": "ATTACK", "trigger_item": "oyster,>oyster,>clam,clam", "message_file": "attack_shell", "stop": true},
+  {"id": 136, "trigger_verb": "ATTACK,ATTAC", "trigger_item": "oyster,>oyster,>clam,clam", "message_file": "attack_shell", "stop": true},
   {"id": 137, "trigger_verb": "KILL", "trigger_item": "oyster,>oyster,>clam,clam", "message_file": "attack_shell", "stop": true},
   {"id": 138, "trigger_verb": "HIT", "trigger_item": "oyster,>oyster,>clam,clam", "message_file": "attack_shell", "stop": true},
   
@@ -222,8 +222,8 @@
   {"id": 166, "trigger_verb": "FORCE", "trigger_room": 122, "condition_room_item": "BEAR,PHONY_TROLL,TROLL", "effect_type": "DESTROY_ITEM", "effect_target": "troll", "stop": true},
   {"id": 167, "trigger_verb": "FORCE", "trigger_room": 117, "condition_room_item": "BEAR,PHONY_TROLL", "effect_type": "ADD_EXIT", "effect_target": 117, "effect_value": "OVER:122,ACROSS:122,CROSS:122,NE:122"},
   {"id": 168, "trigger_verb": "FORCE", "trigger_room": 117, "condition_room_item": "BEAR,PHONY_TROLL", "effect_type": "ADD_EXIT", "effect_target": 122, "effect_value": "OVER:117,ACROSS:117,CROSS:117,SW:117", "stop": true},
-  {"id": 169, "trigger_verb": "ATTACK", "trigger_item": "troll,>troll", "trigger_room": 117, "message_file": "attack_troll"},
-  {"id": 170, "trigger_verb": "ATTACK", "trigger_item": "troll,>troll", "trigger_room": 122, "message_file": "attack_troll"},
+  {"id": 169, "trigger_verb": "ATTACK,ATTAC", "trigger_item": "troll,>troll", "trigger_room": 117, "message_file": "attack_troll"},
+  {"id": 170, "trigger_verb": "ATTACK,ATTAC", "trigger_item": "troll,>troll", "trigger_room": 122, "message_file": "attack_troll"},
   {"id": 171, "trigger_verb": "KILL", "trigger_item": "troll,>troll", "trigger_room": 117, "message_file": "attack_troll"},
   {"id": 172, "trigger_verb": "KILL", "trigger_item": "troll,>troll", "trigger_room": 122, "message_file": "attack_troll"},
   {"id": 173, "trigger_verb": "HIT", "trigger_item": "troll,>troll", "trigger_room": 117, "message_file": "attack_troll"},
@@ -342,11 +342,11 @@
 
 
   {"_comment": "Dragon"}, 
-  {"id": 262, "trigger_verb": "ATTACK", "trigger_item": ">DRAGON,DRAGON", "trigger_room": 121, "condition_item_state": "DRAGON:0", "message_file": "bare_hands", "stop": true, "effect_type": "SET_ITEM_STATE", "effect_target": "DRAGON", "effect_value": 2},
+  {"id": 262, "trigger_verb": "ATTACK,ATTAC", "trigger_item": ">DRAGON,DRAGON", "trigger_room": 121, "condition_item_state": "DRAGON:0", "message_file": "bare_hands", "stop": true, "effect_type": "SET_ITEM_STATE", "effect_target": "DRAGON", "effect_value": 2},
   {"id": 263, "trigger_verb": "YES", "trigger_room": 121, "condition_item_state": "DRAGON:2", "message_file": "dead_dragon", "stop": true, "effect_type": "SET_ITEM_STATE", "effect_target": "DRAGON", "effect_value": 1},
   {"id": 264, "trigger_verb": "*", "trigger_room": 121, "condition_item_state": "DRAGON:2", "stop": true, "effect_type": "SET_ITEM_STATE", "effect_target": "DRAGON", "effect_value": 0},
-  {"id": 265, "trigger_verb": "ATTACK", "trigger_item": ">DRAGON,DRAGON", "trigger_room": 119, "condition_item_state": "DRAGON:0", "message_file": "bare_hands", "stop": true, "effect_type": "SET_ITEM_STATE", "effect_target": "DRAGON", "effect_value": 2},
-  {"id": 266, "trigger_verb": "ATTACK", "trigger_item": ">DRAGON,DRAGON", "trigger_room": 120, "condition_item_state": "DRAGON:1", "message_file": "already_dead_dragon", "stop": true},
+  {"id": 265, "trigger_verb": "ATTACK,ATTAC", "trigger_item": ">DRAGON,DRAGON", "trigger_room": 119, "condition_item_state": "DRAGON:0", "message_file": "bare_hands", "stop": true, "effect_type": "SET_ITEM_STATE", "effect_target": "DRAGON", "effect_value": 2},
+  {"id": 266, "trigger_verb": "ATTACK,ATTAC", "trigger_item": ">DRAGON,DRAGON", "trigger_room": 120, "condition_item_state": "DRAGON:1", "message_file": "already_dead_dragon", "stop": true},
   {"id": 267, "trigger_verb": "YES", "trigger_room": 119, "condition_item_state": "DRAGON:2", "message_file": "dead_dragon", "stop": true, "effect_type": "SET_ITEM_STATE", "effect_target": "DRAGON", "effect_value": 1},
   {"id": 268, "trigger_verb": "*", "trigger_room": 119, "condition_item_state": "DRAGON:2", "stop": true, "effect_type": "SET_ITEM_STATE", "effect_target": "DRAGON", "effect_value": 0},
   {"id": 269, "trigger_verb": "EAST,E,FORWARD,FORWA,CONTINUE,CONTI,ONWARD,ONWAR", "trigger_room": 119, "message_file": "dragon_in_way", "stop": true},
@@ -366,7 +366,7 @@
   {"id": 282, "trigger_verb": "FORCE", "trigger_room": "119,121", "condition_item_state": "DRAGON:1", "once": true, "effect_type": "TELEPORT", "effect_value": "120", "stop": true},
   {"_comment": "Feed the dragon (or not) "}, 
   {"id": 283, "trigger_verb": "FEED", "trigger_item": "DRAGON", "condition_item": "FOOD", "condition_item_state": "DRAGON:0", "message_file": "dragon_cant_eat", "stop": true},
-  {"id": 284, "trigger_verb": "FEED", "trigger_item": "DRAGON", "condition_item": "FOOD", "condition_item_state": "DRAGON:1", "message_file": "dragon_dead_eat", "stop": true},
+  {"id": 284, "trigger_verb": "FEED", "trigger_item": "DRAGON", "condition_item": "FOOD", "condition_item_state": "DRAGON:1", "message_file": "dont_be_ridiculous", "stop": true},
   {"_comment": "The Bird "}, 
   {"id": 285, "trigger_verb": "DROP", "trigger_item": "BIRD", "condition_room_item": "DRAGON", "condition_item_state": "DRAGON:0", "effect_type": "DROP_ITEM", "effect_target": "BIRD"},
   {"id": 286, "trigger_verb": "DROP", "trigger_item": "BIRD", "condition_room_item": "DRAGON", "condition_item_state": "DRAGON:0", "effect_type": "DESTROY_ITEM", "effect_target": "BIRD", "message_file": "dragon_bird", "stop": true},
@@ -394,6 +394,18 @@
   {"id": 304, "trigger_verb": "EAST,E", "trigger_room": 99, "stop": true, "message_file": "plover_passage_fail"},
   {"id": 305, "trigger_verb": "PLOVER", "trigger_room": 101, "stop": true, "effect_type": "TELEPORT", "effect_value": 100},
 
+  {"id": 30501, "trigger_verb": "DRINK", "trigger_noun": "H2O>WATER,>WATER,BOTTLE>WATER,WATER", "condition_item": "BOTTLE", "condition_item_state": "bottle:0", "message_file": "drink_bottle", "stop": true, "new_state": "bottle:1"},
+  {"id": 30502, "trigger_verb": "DRINK", "trigger_noun": "H2O>WATER,>WATER,WATER", "trigger_room": "1,3,4,7,38,95,113,24", "message_file": "drink_stream", "stop": true},
+  {"id": 30503, "trigger_verb": "DRINK", "trigger_noun": "*", "message_file": "dont_be_ridiculous", "stop": true},
+
+  {"id": 30504, "trigger_verb": "RUB", "trigger_item": "LAMP", "message_file": "rub_lamp", "stop": true},
+  
+  {"_comment": "FIND / WHERE"},
+  {"id": 30505, "trigger_verb": "FIND", "trigger_noun": "*", "condition_item": "trigger_noun", "message_file": "find_carrying", "stop": true},
+  {"id": 30506, "trigger_verb": "FIND", "trigger_noun": "*", "condition_room_item": "trigger_noun", "message_file": "find_in_room", "stop": true},
+  {"id": 30507, "trigger_verb": "FIND", "trigger_noun": ">*,*", "message_file": "find_default", "stop": true},
+                                                                                                                         
+                                                                             
 
   {"_comment": "=========NOT CHECKED==================="},
  
@@ -406,7 +418,7 @@
   {"id": 308, "trigger_verb": "DROP", "trigger_item": "CAGE", "effect_type": "DROP_ITEM", "effect_target": "CAGE", "stop": true},
 
   {"_comment": "Attacking with no valid target in the room."},
-  {"id": 309, "trigger_verb": "ATTACK", "condition_not_room_item": "BIRD,SNAKE,OYSTER,CLAM,TROLL", "message_file": "nothing_to_attack", "stop": true},
+  {"id": 309, "trigger_verb": "ATTACK,ATTAC", "condition_not_room_item": "BIRD,SNAKE,OYSTER,CLAM,TROLL", "message_file": "nothing_to_attack", "stop": true},
   {"id": 310, "trigger_verb": "KILL", "condition_not_room_item": "BIRD,SNAKE,OYSTER,CLAM,TROLL", "message_file": "nothing_to_attack", "stop": true},
   {"id": 311, "trigger_verb": "HIT", "condition_not_room_item": "BIRD,SNAKE,OYSTER,CLAM,TROLL", "message_file": "nothing_to_attack", "stop": true},
   {"_comment": "Feeding without food"},
@@ -648,5 +660,9 @@
   {"id": 542, "trigger_verb": "OUT", "trigger_room": "140", "effect_type": "TELEPORT", "effect_value": "112", "stop": true},
 
   {"_comment": "Default but not quite default messages"},
-  {"id": 543, "trigger_verb": "FORWARD,FORWA,CONTINUE,CONTI,ONWARD,ONWAR,LEFT,RIGHT", "message_file": "unsure_facing"}
+  {"id": 543, "trigger_verb": "FORWARD,FORWA,CONTINUE,CONTI,ONWARD,ONWAR,LEFT,RIGHT", "message_file": "unsure_facing"},
+  {"id": 544, "trigger_verb": "CALM,PLACATE,TAME", "message_file": "calm"},
+  {"id": 545, "trigger_verb": "DRINK", "message": ""},
+  {"id": 546, "trigger_verb": "RUB", "message_file": "general_rub"},
+  {"id": 549, "trigger_verb": "WAKE", "message_file": "dont_be_ridiculous"}
 ]

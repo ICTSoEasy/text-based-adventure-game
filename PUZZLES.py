@@ -121,10 +121,19 @@ class PuzzleEngine:
                     break
 
             if not matched and tn_raw:
-                for word in [w.strip() for w in tn_raw.split(',')]:
-                    if word == item_name_up:
-                        matched = True
-                        break
+                for entry in [w.strip() for w in tn_raw.split(',')]:
+                    if '>' in entry:
+                        tn_match, _ = entry.split('>', 1)
+                    else:
+                        tn_match = entry
+                    if tn_match == '' and item_name_up != '':
+                        continue  # bare-verb entry, noun was typed
+                    if tn_match == '*' and item_name_up == '':
+                        continue  # wildcard entry, no noun was typed
+                    if tn_match != '' and tn_match != '*' and tn_match != item_name_up:
+                        continue  # specific word, doesn't match
+                    matched = True
+                    break
 
             if not matched:
                 return False
@@ -139,10 +148,13 @@ class PuzzleEngine:
         if ntr and room_id in [int(r.strip()) for r in ntr.split(',')]:
             return False
 
-        # condition_item: player must be carrying all of these (comma-separated)
+        # condition_item: player must be carrying all of these (comma-separated).
+        # Special values: "trigger_item" or "trigger_noun" resolve to whatever noun was typed.
         ci = self._f(puzzle, 'condition_item').upper()
         if ci:
             for name in [x.strip() for x in ci.split(',')]:
+                if name in ('TRIGGER_ITEM', 'TRIGGER_NOUN'):
+                    name = item_name_up
                 if name and not player.hasItem(name):
                     return False
 
@@ -153,11 +165,14 @@ class PuzzleEngine:
                 if ni and player.hasItem(ni):
                     return False
 
-        # condition_room_item: all listed items must be in the current room
+        # condition_room_item: all listed items must be in the current room.
+        # Special values: "trigger_item" or "trigger_noun" resolve to whatever noun was typed.
         cri = self._f(puzzle, 'condition_room_item').upper()
         if cri:
             room = self.game.getRoom(room_id)
             for ri in [x.strip() for x in cri.split(',')]:
+                if ri in ('TRIGGER_ITEM', 'TRIGGER_NOUN'):
+                    ri = item_name_up
                 if ri and not room.ifContains(ri):
                     return False
 
@@ -304,7 +319,7 @@ class PuzzleEngine:
 
         if not message:
             message = self.game.messages.get(self._f(puzzle,'message_file'))
-        if message:
+        if message is not None and message.strip() != '':
             print(message)
         if delay:
             time.sleep(delay)

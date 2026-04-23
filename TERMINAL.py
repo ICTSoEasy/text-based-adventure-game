@@ -19,6 +19,7 @@ class Terminal:
         self._line_buffer = []   # all committed display lines
         self._current_line = ''  # line currently being written (not yet committed)
         self._scroll_offset = 0  # lines scrolled up from bottom (0 = live view)
+        self._after_input = False
 
     def setup(self, stdscr):
         global _instance
@@ -89,6 +90,9 @@ class Terminal:
         sep = kwargs.get('sep', ' ')
         end = kwargs.get('end', '\n')
         text = sep.join(str(a) for a in args) + end
+        if self._after_input:
+            text = '\n' + text
+            self._after_input = False
 
         # Extract {^}...{/^} forced-uppercase sections before case conversion
         forced = []
@@ -243,9 +247,9 @@ class Terminal:
         self._commit_line()  # commit any pending partial line
         echo = f'> {result}'
         self._line_buffer.append(echo)
-        self._line_buffer.append('')
+        self._after_input = True
         try:
-            self.text_win.addstr(f'\n{echo}\n\n', curses.color_pair(1))
+            self.text_win.addstr(f'\n{echo}\n', curses.color_pair(1))
         except curses.error:
             pass
         self.text_win.refresh()
