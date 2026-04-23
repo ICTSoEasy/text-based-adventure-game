@@ -130,7 +130,7 @@ The puzzle engine connects player actions to game events. Each row is one effect
 |--------|-------------|
 | `trigger_verb` | Verb that activates this row (`USE`, `MOVE`, `GET`, `DROP`, compass directions `NORTH`/`SOUTH`/`EAST`/`WEST`/`NE`/`NW`/`SE`/`SW`/`UP`/`DOWN`, or blank for any). Compass direction triggers fire **before** movement — if any row fires, the movement is cancelled. |
 | `trigger_item` | Item noun that must be used (or blank for any). Comma-separated to accept multiple. Use `OIL>BOTTLE` to match typed word OIL but check BOTTLE exists; use `>BOTTLE` to match a bare verb (no noun) but check BOTTLE exists. The named item **must exist** in the room or inventory to match. |
-| `trigger_noun` | Like `trigger_item` but the noun does **not** need to exist as a game item — it only checks what the player typed. Comma-separated to accept multiple words. Use this for nouns that have no corresponding item (e.g. `WATER`). If both `trigger_item` and `trigger_noun` are present on a row, `trigger_item` is checked first and `trigger_noun` is only tried if `trigger_item` doesn't match. |
+| `trigger_noun` | Like `trigger_item` but the noun does **not** need to exist as a game item — it only checks what the player typed. Comma-separated to accept multiple words. Use `*` to match any non-empty noun; use `>*` to match a bare verb (no noun typed); use `>*,*` to match anything (noun or no noun). Use this for nouns that have no corresponding item (e.g. `WATER`). If both `trigger_item` and `trigger_noun` are present on a row, `trigger_item` is checked first and `trigger_noun` is only tried if `trigger_item` doesn't match. |
 | `trigger_room` | Room ID where this triggers (or blank for any room). Comma-separated to match multiple rooms |
 | `not_trigger_room` | Room ID where this must NOT trigger (or blank to ignore). Comma-separated to exclude multiple rooms |
 | `condition_item` | Player must be carrying this item. Comma-separated to require multiple items (all must be carried). Use the special value `trigger_noun` or `trigger_item` to check whatever noun the player typed (e.g. for `FIND LAMP`, checks if the player is carrying the lamp) |
@@ -149,6 +149,9 @@ The puzzle engine connects player actions to game events. Each row is one effect
 | `condition_counter_not` | `counter_name:value` — named counter must NOT equal this value. Blank = no check |
 | `condition_counter_exists` | `counter_name` — named counter must exist (has been set at least once) |
 | `condition_counter_not_exists` | `counter_name` — named counter must NOT exist |
+| `condition_num_items_carried_eq` | Integer — player must be carrying exactly this many items (e.g. `1` to allow passage only when holding a single item) |
+| `condition_trigger_item_min_deposit` | Integer — the item named by the player must have a `deposit_bonus` of at least this value. Useful for puzzles that only apply to treasures |
+| `condition_item_turns_leq` | `item_name:value` — named item's turns remaining must be ≤ value. Blank = no check |
 | `effect_type` | What happens (see below). Can be omitted if you only want to print a message |
 | `effect_target` | What the effect acts on. Use the special value `TRIGGER_ITEM` to act on whatever item the player typed (e.g. to destroy whichever treasure was thrown). For effects that look up items by name, you can also use a numeric item ID (e.g. `31` or `#31`) to target by ID instead of name |
 | `effect_value` | Value for the effect |
