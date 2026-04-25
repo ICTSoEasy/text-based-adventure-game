@@ -300,6 +300,17 @@ class PuzzleEngine:
             if len(player.items) != int(cnice):
                 return False
 
+        # condition_trigger_noun_is_item: true/false — whether the typed noun matches a known game item
+        # (anywhere in the game: rooms, inventory, hidden, unborn). Use true to distinguish
+        # "item exists but not here" from "completely unknown word".
+        ctni = self._f(puzzle, 'condition_trigger_noun_is_item')
+        if ctni:
+            is_item = bool(item_name_up and self.game.findAllItems(item_name_up))
+            if ctni.lower() == 'true' and not is_item:
+                return False
+            if ctni.lower() == 'false' and is_item:
+                return False
+
         # chance_pct: integer 1-100 — percentage chance this row fires at all
         pct = self._f(puzzle, 'chance_pct')
         if pct and not random.randint(1, 100) <= int(pct):

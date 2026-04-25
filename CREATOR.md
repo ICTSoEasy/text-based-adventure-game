@@ -152,6 +152,7 @@ The puzzle engine connects player actions to game events. Each row is one effect
 | `condition_num_items_carried_eq` | Integer — player must be carrying exactly this many items (e.g. `1` to allow passage only when holding a single item) |
 | `condition_trigger_item_min_deposit` | Integer — the item named by the player must have a `deposit_bonus` of at least this value. Useful for puzzles that only apply to treasures |
 | `condition_item_turns_leq` | `item_name:value` — named item's turns remaining must be ≤ value. Blank = no check |
+| `condition_trigger_noun_is_item` | `true` or `false` — whether the typed noun matches a known game item anywhere in the game (rooms, inventory, hidden, unborn). Use `true` to distinguish "item exists but not here" from "completely unknown word" |
 | `effect_type` | What happens (see below). Can be omitted if you only want to print a message |
 | `effect_target` | What the effect acts on. Use the special value `TRIGGER_ITEM` to act on whatever item the player typed (e.g. to destroy whichever treasure was thrown). For effects that look up items by name, you can also use a numeric item ID (e.g. `31` or `#31`) to target by ID instead of name |
 | `effect_value` | Value for the effect |
