@@ -1,4 +1,5 @@
 import json
+import re
 import time
 import random
 
@@ -61,7 +62,7 @@ class PuzzleEngine:
                 ef = self._f(puzzle, 'effect_type')
                 print(f'  [puzzle #{pid}] {tv} {ti} room={tr} → {ef}')
 
-            self._apply(player, puzzle, item_name)
+            self._apply(player, puzzle, item_name, verb)
             self.last_fired_any = True
 
             if once is True or str(once).lower() == 'true':
@@ -318,7 +319,8 @@ class PuzzleEngine:
 
         return True
 
-    def _apply(self, player, puzzle, item_name=None):
+    def _apply(self, player, puzzle, item_name=None, verb=None):
+        noun = item_name
         effect = self._f(puzzle, 'effect_type').upper()
         target = self._f(puzzle, 'effect_target')
         if target and target.upper() == 'TRIGGER_ITEM':
@@ -331,6 +333,9 @@ class PuzzleEngine:
         if not message:
             message = self.game.messages.get(self._f(puzzle,'message_file'))
         if message is not None and message.strip() != '':
+            message = re.sub(r'\{noun\}', (noun or '').lower(), message, flags=re.IGNORECASE)
+            message = re.sub(r'\{verb\}', (verb or '').lower(), message, flags=re.IGNORECASE)
+            message = re.sub(r'\{item\}', (noun or '').lower(), message, flags=re.IGNORECASE)
             print(message)
         if delay:
             time.sleep(delay)
